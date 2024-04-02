@@ -34,3 +34,8 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Design Resources
+
+- [Apple Design Resources - macOS](https://www.figma.com/file/Ew1Fxs1UbzI8bl4NUIfDc2/Apple-Design-Resources---macOS-(Community))
+- [Apple Design Resources - iOS 17 and iPadOS ](https://www.figma.com/file/SQwsgVpHtOnL07VarNy6jc/Apple-Design-Resources-%E2%80%93-iOS-17-and-iPadOS-17-(Community))
