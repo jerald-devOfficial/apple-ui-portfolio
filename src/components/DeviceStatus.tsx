@@ -5,7 +5,7 @@ import WifiStatus from './WifiStatus'
 
 const DeviceStatus = () => {
   return (
-    <div className='flex gap-x-2 xl:gap-x-4 items-center'>
+    <div className='flex gap-x-2 lg:gap-x-4 items-center'>
       <WifiStatus />
       <BatteryStatus />
     </div>
