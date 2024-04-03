@@ -19,10 +19,10 @@ const DisplayTime = () => {
   const formattedTimeDesktop = format(currentTime, 'EEE MMM d h:mm a')
 
   return (
-    <div className='text-center font-medium text-white lg:text-black text-base gap-x-2 lg:gap-x-4'>
-      <div className='hidden sm:block lg:hidden'>{formattedTimeTablet}</div>
-      <div className='hidden lg:block'>{formattedTimeDesktop}</div>
-      <div className='sm:hidden lg:hidden'>{formattedTimeMobile}</div>
+    <div className='text-center font-medium text-white xl:text-black text-base gap-x-2 xl:gap-x-4'>
+      <div className='hidden sm:block xl:hidden'>{formattedTimeTablet}</div>
+      <div className='hidden xl:block'>{formattedTimeDesktop}</div>
+      <div className='sm:hidden xl:hidden'>{formattedTimeMobile}</div>
     </div>
   )
 }

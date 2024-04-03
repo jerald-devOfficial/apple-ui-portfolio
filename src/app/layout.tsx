@@ -58,7 +58,7 @@ export default function RootLayout({
           />
           <Image
             src={'/images/bg/ipadOS-light.png'}
-            className='object-cover object-center hidden sm:block lg:hidden'
+            className='object-cover object-center hidden sm:block xl:hidden'
             sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw'
             fill
             priority
@@ -66,7 +66,7 @@ export default function RootLayout({
           />
           <Image
             src={'/images/bg/macOS-light.jpeg'}
-            className='object-cover object-center hidden lg:block'
+            className='object-cover object-center hidden xl:block'
             fill
             priority
             sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw'

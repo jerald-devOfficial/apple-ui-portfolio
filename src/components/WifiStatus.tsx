@@ -24,7 +24,7 @@ const WifiStatus = () => {
 
   return wifiStrength <= 33 ? (
     <svg
-      className='text-white lg:text-black'
+      className='text-white xl:text-black'
       width='18'
       height='13'
       viewBox='0 0 18 13'
@@ -40,7 +40,7 @@ const WifiStatus = () => {
     </svg>
   ) : wifiStrength >= 33 && wifiStrength <= 66 ? (
     <svg
-      className='text-white lg:text-black'
+      className='text-white xl:text-black'
       width='18'
       height='13'
       viewBox='0 0 18 13'
@@ -56,7 +56,7 @@ const WifiStatus = () => {
     </svg>
   ) : wifiStrength > 66 ? (
     <svg
-      className='text-white lg:text-black'
+      className='text-white xl:text-black'
       width='18'
       height='13'
       viewBox='0 0 18 13'
