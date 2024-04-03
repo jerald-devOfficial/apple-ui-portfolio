@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import Image from 'next/image'
+
+import Wallpapers from '@/components/Wallpapers'
+import ResponsiveUI from '@/components/layouts'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -47,33 +49,8 @@ export default function RootLayout({
       <body
         className={`${inter.className} flex min-h-screen flex-col items-center justify-between relative`}
       >
-        <div className='absolute block h-full w-full -z-20'>
-          <Image
-            src={'/images/bg/iOS-light.png'}
-            className='object-cover object-center sm:hidden block'
-            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw'
-            fill
-            priority
-            alt='iOS'
-          />
-          <Image
-            src={'/images/bg/ipadOS-light.png'}
-            className='object-cover object-center hidden sm:block xl:hidden'
-            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw'
-            fill
-            priority
-            alt='iOS'
-          />
-          <Image
-            src={'/images/bg/macOS-light.jpeg'}
-            className='object-cover object-center hidden xl:block'
-            fill
-            priority
-            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw'
-            alt='iOS'
-          />
-        </div>
-        {children}
+        <Wallpapers />
+        <ResponsiveUI>{children}</ResponsiveUI>
       </body>
     </html>
   )
