@@ -258,3 +258,7 @@ export const education = {
     }
   ]
 }
+
+export const contact = {
+  phoneNumber: '09667652125'
+}
