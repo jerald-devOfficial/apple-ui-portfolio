@@ -39,10 +39,10 @@ const Portfolio = () => {
 
   return (
     <main
-      className={`flex overflow-hidden h-full w-full place-content-center place-items-center xl:max-w-[1024px] xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 ${montserrat.className}`}
+      className={`flex overflow-hidden h-full w-full place-content-center place-items-center xl:max-w-[1024px] sm:pt-6 xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 ${montserrat.className}`}
     >
       <div className='flex flex-grow h-full rounded-xl bg-stone-200 flex-col'>
-        <div className='px-4 pt-5 pb-3 flex gap-x-4 items-center hover:bg-[#F5F5F5]'>
+        <div className='px-4 xs:pt-5 xs:pb-3 flex gap-x-4 items-center hover:bg-[#F5F5F5]'>
           <Image
             sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
             src={'/images/icons/portfolio-thumbnail.png'}
@@ -64,7 +64,7 @@ const Portfolio = () => {
             <div className='flex flex-row md:flex-col py-1 items-baseline gap-x-6 justify-evenly w-full'>
               {icons.map((icon, index) => (
                 <div
-                  className='grid place-content-center place-items-center gap-y-1.5 w-[62px] cursor-pointer md:flex md:items-center md:justify-between group md:w-full md:flex-row-reverse md:p-6 md:border-b-[0.3px] md:border-gray-300 md:border-solid'
+                  className='grid place-content-center place-items-center gap-y-1.5 xs:w-[62px] cursor-pointer md:flex md:items-center md:justify-between group md:w-full md:flex-row-reverse md:p-6 md:border-b-[0.3px] md:border-gray-300 md:border-solid'
                   key={icon.title}
                   onClick={() =>
                     activeCategory === index
@@ -72,7 +72,7 @@ const Portfolio = () => {
                       : setActiveCategory(index)
                   }
                 >
-                  <span className='rounded-full bg-white group-hover:bg-stone-50 grid place-items-center p-4 w-[62px] h-[62px]'>
+                  <span className='rounded-full bg-white group-hover:bg-stone-50 grid place-items-center p-4 xs:w-[62px] xs:h-[62px] w-10 h-10 place-content-center'>
                     <icon.icon
                       className={`${
                         activeCategory === index
@@ -94,10 +94,13 @@ const Portfolio = () => {
           </div>
           <hr className='border-[0.3px] border-gray-300 border-solid sm:order-1 md:hidden' />
           {activeCategory !== null ? (
-            <div className='flex flex-col py-10 px-12 gap-y-10 relative overflow-y-auto h-full w-full md:flex-1'>
+            <div className='flex flex-col py-5 sm:py-10 px-4 sm:px-12 gap-y-5 sm:gap-y-10 relative overflow-y-auto h-full w-full md:flex-1'>
               {activeCategory === 0 &&
                 skills.map((item) => (
-                  <div key={item.url} className='flex gap-x-10 w-full h-auto'>
+                  <div
+                    key={item.url}
+                    className='flex gap-x-5 sm:gap-x-10 w-full h-auto'
+                  >
                     <div className='relative'>
                       {item.url ? (
                         <a
@@ -161,7 +164,7 @@ const Portfolio = () => {
               {activeCategory === 1 &&
                 projects.map((item) => (
                   <div key={item.title} className='flex gap-x-10 w-full h-auto'>
-                    <div className='relative sm:block hidden'>
+                    <div className='relative sm:block hidden md:hidden lg:block'>
                       {item.url ? (
                         <a
                           href={`https://${item.url}`}
@@ -201,7 +204,7 @@ const Portfolio = () => {
                       <h3 className='text-base font-semibold text-black'>
                         {item.title}
                       </h3>
-                      <div className='relative sm:hidden block'>
+                      <div className='relative sm:hidden block md:block lg:hidden'>
                         {item.url ? (
                           <a
                             href={`https://${item.url}`}
@@ -336,7 +339,7 @@ const Portfolio = () => {
                     key={certificate.title}
                     className='flex sm:gap-x-10 w-full h-auto'
                   >
-                    <div className='relative sm:block hidden'>
+                    <div className='relative sm:block md:hidden lg:block hidden'>
                       <a
                         href={`https://ude.my/${certificate.credentialID}`}
                         className='h-auto w-52 block'
@@ -359,7 +362,7 @@ const Portfolio = () => {
                       <h3 className='text-base font-semibold text-black'>
                         {certificate.title}
                       </h3>
-                      <div className='relative block sm:hidden'>
+                      <div className='relative block sm:hidden md:block lg:hidden'>
                         <a
                           href={`https://ude.my/${certificate.credentialID}`}
                           className='h-auto w-full block'

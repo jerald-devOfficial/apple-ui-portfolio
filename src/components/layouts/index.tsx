@@ -82,7 +82,7 @@ const ResponsiveUI = ({
       <footer className='flex overflow-hidden w-full xs:w-[unset] xs:gap-x-[30px] sm:gap-x-4 py-5 px-5 sm:px-7 sm:py-4 before:absolute before:content-[""] before:bg-[#BFBFBF70]/44 before:backdrop-blur-[50px] before:-z-10 bg-white/30 hover:bg-white/40 rounded-none xs:rounded-[40px] sm:rounded-[30px] before:content items-center justify-around xs:justify-center my-0 xs:my-3 sm:my-4 xl:hidden'>
         {dock.map((item) => (
           <Link href={`${item.path}`} key={item.name} className='block'>
-            <div className='relative xs:h-[60px] xs:w-[60px] h-10 w-10 hover:ring-2 hover:ring-offset-2 hover:ring-rose-500 hover:rounded-[15px]'>
+            <div className='relative xs:h-[60px] xs:w-[60px] h-10 w-10'>
               <Image alt={item.name} src={item.img} fill priority />
             </div>
           </Link>
