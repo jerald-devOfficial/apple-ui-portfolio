@@ -60,7 +60,7 @@ const Portfolio = () => {
         <hr className='border-[0.3px] border-gray-300 border-solid' />
         {/* start  */}
         <div className='flex-col flex md:flex-row sm:justify-between h-full overflow-hidden'>
-          <div className='flex items-center justify-between sm:order-2 md:order-[initial] md:w-1/3 lg:w-1/4 md:justify-center md:border-[0.3px] md:border-gray-300 md:border-solid md:items-baseline'>
+          <div className='flex items-center justify-between sm:order-2 md:order-[initial] md:w-1/3 lg:w-1/4 md:justify-center md:border-r-[0.3px] md:border-r-gray-300 md:items-baseline'>
             <div className='flex flex-row md:flex-col py-1 items-baseline gap-x-6 justify-evenly w-full'>
               {icons.map((icon, index) => (
                 <div
