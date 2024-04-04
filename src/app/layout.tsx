@@ -47,7 +47,7 @@ export default function RootLayout({
     <html lang='en'>
       <meta name='theme-color' content='currentColor' />
       <body
-        className={`${inter.className} flex min-h-screen flex-col items-center justify-between relative`}
+        className={`${inter.className} flex h-screen flex-col items-center justify-between relative`}
       >
         <Wallpapers />
         <ResponsiveUI>{children}</ResponsiveUI>
