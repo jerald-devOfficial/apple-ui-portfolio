@@ -1,5 +1,6 @@
 'use client'
 
+import { XMarkIcon } from '@heroicons/react/24/outline'
 import React, { useState, useEffect } from 'react'
 
 interface BatteryManagerEventMap {
@@ -60,7 +61,18 @@ const BatteryStatus = () => {
   return (
     <div className='flex items-center gap-x-1.5'>
       {isIOS ? (
-        <span className='text-gray-500'>Battery status not available</span>
+        <>
+          <span className='outline-2 outline outline-white/50 xl:outline-black/50 outline-offset-2 rounded-sm h-2 w-5 relative'>
+            {/* Percentage white bar */}
+            <span
+              className='w-full h-full bg-white xl:bg-black absolute rounded-sm flex items-center justify-center'
+              style={{ width: `100%` }}
+            >
+              <XMarkIcon className='text-red-600 h-3 w-3' />
+            </span>
+          </span>
+          <span className='rounded-r-full h-1 w-0.5 bg-white/50 xl:bg-black/50' />
+        </>
       ) : (
         <>
           <span className='outline-2 outline outline-white/50 xl:outline-black/50 outline-offset-2 rounded-sm h-2 w-5 relative'>
