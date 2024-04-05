@@ -77,7 +77,9 @@ export default function Home() {
                   />
                 </div>
               </div>
-              <span className='text-sm font-normal'>{item.name}</span>
+              <span className='text-sm font-normal text-white'>
+                {item.name}
+              </span>
             </div>
           ) : (
             <div
@@ -95,7 +97,9 @@ export default function Home() {
                   />
                 </div>
               </div>
-              <span className='text-sm font-normal'>{item.name}</span>
+              <span className='text-sm font-normal text-white'>
+                {item.name}
+              </span>
             </div>
           )
         )}
