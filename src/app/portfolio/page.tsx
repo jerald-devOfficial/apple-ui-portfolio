@@ -43,18 +43,22 @@ const Portfolio = () => {
     >
       <div className='flex flex-grow h-full rounded-xl bg-stone-200 flex-col'>
         <div className='px-4 xs:pt-5 xs:pb-3 flex gap-x-4 items-center hover:bg-[#F5F5F5]'>
-          <Image
-            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-            src={'/images/icons/portfolio-thumbnail.png'}
-            height={60}
-            width={60}
-            alt='Portfolio Thumbnail'
-          />
+          <div className='block'>
+            <div className='relative h-[60px] w-[60px]'>
+              <Image
+                sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                src={'/images/icons/portfolio-thumbnail.png'}
+                fill
+                priority
+                alt='Portfolio Thumbnail'
+              />
+            </div>
+          </div>
           <div className='flex flex-col'>
-            <h1 className='font-normal text-base text-black'>Portfolio</h1>
-            <h3 className='font-medium text-xs text-[#3C3C43]/60 tracking-tight'>
+            <h1 className='font-medium text-base text-black'>Portfolio</h1>
+            <p className='font-normal text-xs text-gray-700 tracking-tight'>
               Get to know about Jerald here.
-            </h3>
+            </p>
           </div>
         </div>
         <hr className='border-[0.3px] border-gray-300 border-solid' />
@@ -83,8 +87,8 @@ const Portfolio = () => {
                   </span>
                   <span
                     className={`${
-                      activeCategory === index ? 'text-blue-600' : 'text-black'
-                    } text-wrap text-center text-xs group-hover:text-blue-400 md:text-base`}
+                      activeCategory === index ? 'text-blue-800' : 'text-black'
+                    } text-wrap text-center text-xs group-hover:text-blue-600 md:text-base`}
                   >
                     {icon.title}
                   </span>
@@ -301,9 +305,9 @@ const Portfolio = () => {
                     </div>
                     <div className='flex flex-col gap-y-2'>
                       <div className='flex flex-col'>
-                        <h3 className='text-base font-semibold text-black'>
+                        <h2 className='text-base font-semibold text-black'>
                           {item.company}
-                        </h3>
+                        </h2>
                         <h5 className='text-xs font-normal text-gray-600'>
                           {item.startDate} -{' '}
                           {item.isPresent ? 'Present' : item.endDate}
@@ -396,10 +400,10 @@ const Portfolio = () => {
             </div>
           ) : (
             <div className='flex items-center flex-col justify-center gap-y-2 flex-1'>
-              <h4 className='text-base font-medium text-slate-600'>
+              <h2 className='text-base font-medium text-slate-800'>
                 Nothing to see here.
-              </h4>
-              <p className='text-xs font-normal text-slate-500'>
+              </h2>
+              <p className='text-xs font-normal text-slate-700'>
                 Please select one of the sidebar categories.
               </p>
             </div>

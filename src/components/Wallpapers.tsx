@@ -8,7 +8,7 @@ const Wallpapers = () => {
         className='object-cover object-center sm:hidden block'
         sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw'
         fill
-        priority
+        loading='lazy'
         alt='iOS'
       />
       <Image
@@ -16,14 +16,14 @@ const Wallpapers = () => {
         className='object-cover object-center hidden sm:block xl:hidden'
         sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw'
         fill
-        priority
+        loading='lazy'
         alt='iOS'
       />
       <Image
         src={'/images/bg/macOS-light.jpeg'}
         className='object-cover object-center hidden xl:block'
         fill
-        priority
+        loading='lazy'
         sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw'
         alt='iOS'
       />
