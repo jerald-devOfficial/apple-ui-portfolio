@@ -98,7 +98,7 @@ const Portfolio = () => {
               {activeCategory === 0 &&
                 skills.map((item) => (
                   <div
-                    key={item.url}
+                    key={item.title}
                     className='flex gap-x-5 sm:gap-x-10 w-full h-auto'
                   >
                     <div className='relative'>

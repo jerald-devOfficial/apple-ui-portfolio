@@ -68,7 +68,13 @@ export default function Home() {
             >
               <div className='block'>
                 <div className='relative xs:h-[60px] xs:w-[60px] h-10 w-10 cursor-pointer'>
-                  <Image alt={item.name} src={item.img} fill priority />
+                  <Image
+                    alt={item.name}
+                    src={item.img}
+                    fill
+                    priority
+                    sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                  />
                 </div>
               </div>
               <span className='text-sm font-normal'>{item.name}</span>
@@ -80,7 +86,13 @@ export default function Home() {
             >
               <div className='block'>
                 <div className='relative xs:h-[60px] xs:w-[60px] h-10 w-10 cursor-pointer'>
-                  <Image alt={item.name} src={item.img} fill priority />
+                  <Image
+                    alt={item.name}
+                    src={item.img}
+                    fill
+                    priority
+                    sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                  />
                 </div>
               </div>
               <span className='text-sm font-normal'>{item.name}</span>
