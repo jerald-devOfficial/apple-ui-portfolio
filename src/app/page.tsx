@@ -2,6 +2,7 @@
 
 import { contact } from '@/constants'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Home() {
   const icons = [
@@ -11,98 +12,88 @@ export default function Home() {
       click: () => (window.location.href = `tel:${contact.phoneNumber}`)
     },
     {
-      name: 'FaceTime',
-      img: '/images/icons/facetime.png'
-    },
-    {
-      name: 'Calendar',
-      img: '/images/icons/calendar.png'
-    },
-    {
-      name: 'Photos',
-      img: '/images/icons/photos.png'
-    },
-    {
-      name: 'Camera',
-      img: '/images/icons/camera.png'
-    },
-    {
-      name: 'Notes',
-      img: '/images/icons/notes.png'
-    },
-    {
-      name: 'Reminders',
-      img: '/images/icons/reminders.png'
-    },
-    {
-      name: 'Clock',
-      img: '/images/icons/clock.png'
-    },
-    {
-      name: 'TV',
-      img: '/images/icons/tv.png'
-    },
-    {
-      name: 'Podcasts',
-      img: '/images/icons/podcasts.png'
-    },
-    {
-      name: 'App Store',
-      img: '/images/icons/app-store.png'
-    },
-    {
-      name: 'Music',
-      img: '/images/icons/music.png'
+      name: 'Resume',
+      img: '/images/icons/resume.png',
+      path: '/pdfs/updated-resume.pdf'
     }
   ]
 
   return (
     <main className='py-9 sm:py-12 flex-grow w-full flex flex-col items-center'>
       <section className='grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-y-5 sm:gap-y-12 px-5 sm:px-12 md:px-0 xl:hidden max-w-[955px] place-content-center w-full'>
-        {icons.map((item) =>
-          item.click ? (
-            <button
-              key={item.name}
-              className='grid place-items-center gap-y-1 w-full'
-              onClick={item.click}
-            >
-              <div className='block'>
-                <div className='relative xs:h-[60px] xs:w-[60px] h-10 w-10 cursor-pointer'>
-                  <Image
-                    alt={item.name}
-                    src={item.img}
-                    fill
-                    priority
-                    sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                  />
+        {icons.map((item) => (
+          <>
+            {item.click && item.name !== 'Resume' && (
+              <button
+                key={item.name}
+                className='grid place-items-center gap-y-1 w-full'
+                onClick={item.click}
+              >
+                <div className='block'>
+                  <div className='relative xs:h-[60px] xs:w-[60px] h-10 w-10 cursor-pointer'>
+                    <Image
+                      alt={item.name}
+                      src={item.img}
+                      fill
+                      priority
+                      sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                    />
+                  </div>
                 </div>
-              </div>
-              <span className='text-sm font-normal text-white'>
-                {item.name}
-              </span>
-            </button>
-          ) : (
-            <div
-              key={item.name}
-              className='grid place-items-center gap-y-1 w-full'
-            >
-              <div className='block'>
-                <div className='relative xs:h-[60px] xs:w-[60px] h-10 w-10 cursor-pointer'>
-                  <Image
-                    alt={item.name}
-                    src={item.img}
-                    fill
-                    priority
-                    sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                  />
+                <span className='text-sm font-normal text-white'>
+                  {item.name}
+                </span>
+              </button>
+            )}
+
+            {!item.click && item.name !== 'Resume' && (
+              <div
+                key={item.name}
+                className='grid place-items-center gap-y-1 w-full'
+              >
+                <div className='block'>
+                  <div className='relative xs:h-[60px] xs:w-[60px] h-10 w-10 cursor-pointer'>
+                    <Image
+                      alt={item.name}
+                      src={item.img}
+                      fill
+                      priority
+                      sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                    />
+                  </div>
                 </div>
+                <span className='text-sm font-normal text-white'>
+                  {item.name}
+                </span>
               </div>
-              <span className='text-sm font-normal text-white'>
-                {item.name}
-              </span>
-            </div>
-          )
-        )}
+            )}
+
+            {!item.click && item.name === 'Resume' && (
+              <Link
+                key={item.name}
+                className='grid place-items-center gap-y-1 w-full'
+                href={`${item.path}`}
+                target={'_blank'}
+                download
+              >
+                <div className='block'>
+                  <div className='relative xs:h-[60px] xs:w-[60px] h-10 w-10 cursor-pointer'>
+                    <Image
+                      alt={item.name}
+                      src={item.img}
+                      fill
+                      priority
+                      sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                    />
+                  </div>
+                </div>
+                <span className='text-sm font-normal text-white'>
+                  {item.name}
+                </span>
+              </Link>
+            )}
+          </>
+        ))}
       </section>
     </main>
   )

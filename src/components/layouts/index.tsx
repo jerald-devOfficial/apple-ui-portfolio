@@ -52,6 +52,11 @@ const ResponsiveUI = ({
       path: '/news'
     },
     {
+      name: 'Resume',
+      img: '/images/icons/macOS-resume.png',
+      path: '/pdfs/updated-resume.pdf'
+    },
+    {
       name: 'Contact',
       img: '/images/icons/macOS-mail.png',
       path: '/contact'
@@ -100,19 +105,41 @@ const ResponsiveUI = ({
         ))}
       </footer>
       <footer className='hidden xl:flex  xl:gap-x-0.5 xl:px-1.5 xl:py-1.5 before:absolute before:content-[""] before:bg-[#F6F6F6]/36 before:backdrop-blur-[135px] before:blur-[6px] before:-z-10 bg-lime-300/40 rounded-2xl before:content items-baseline justify-center xl:my-2 ring-1 ring-white/30 ring-inset shadow shadow-black/15'>
-        {dockMacOS.map((item, index) => (
-          <Link
-            href={`${item.path}`}
-            className='flex flex-col items-center justify-center h-[60px] transition-transform transform-gpu hover:scale-150 cursor-pointer'
-            key={item.name}
-            style={{ transition: 'transform 0.3s', transformOrigin: 'bottom' }}
-          >
-            <Image alt={item.name} src={item.img} height={50} width={50} />
-            {dockMacOS[index].path === pathname && (
-              <span className='h-1 w-1 bg-[#808080] rounded-full' />
-            )}
-          </Link>
-        ))}
+        {dockMacOS.map((item, index) =>
+          item.name === 'Resume' ? (
+            <Link
+              href={`${item.path}`}
+              target={'_blank'}
+              download
+              className='flex flex-col items-center justify-center h-[60px] transition-transform transform-gpu hover:scale-150 cursor-pointer'
+              key={item.name}
+              style={{
+                transition: 'transform 0.3s',
+                transformOrigin: 'bottom'
+              }}
+            >
+              <Image alt={item.name} src={item.img} height={50} width={50} />
+              {dockMacOS[index].path === pathname && (
+                <span className='h-1 w-1 bg-[#808080] rounded-full' />
+              )}
+            </Link>
+          ) : (
+            <Link
+              href={`${item.path}`}
+              className='flex flex-col items-center justify-center h-[60px] transition-transform transform-gpu hover:scale-150 cursor-pointer'
+              key={item.name}
+              style={{
+                transition: 'transform 0.3s',
+                transformOrigin: 'bottom'
+              }}
+            >
+              <Image alt={item.name} src={item.img} height={50} width={50} />
+              {dockMacOS[index].path === pathname && (
+                <span className='h-1 w-1 bg-[#808080] rounded-full' />
+              )}
+            </Link>
+          )
+        )}
       </footer>
     </>
   )
