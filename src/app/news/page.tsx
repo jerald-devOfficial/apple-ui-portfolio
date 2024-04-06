@@ -44,16 +44,15 @@ const News = () => {
 
   const fetcher: Fetcher<Results[], any> = async (url: string) => {
     if (currentPage !== '') {
-      url += `/${currentPage}`
+      url += `&page=${currentPage}`
     }
 
     const response = await fetch(url)
     if (!response.ok) {
       throw new Error(`Failed to fetch news. Status: ${response.status}`)
     }
-    const data: Data = await response.json()
 
-    console.log('Next Page:', data.nextPage) // Add this line to check nextPage value
+    const data: Data = await response.json()
 
     // Filter out articles without necessary fields and with invalid image URLs
     const filteredNews = data.results.filter(
@@ -75,13 +74,16 @@ const News = () => {
     return uniqueNews
   }
 
-  const { data, mutate, error, isLoading } = useSWR('/api/news', fetcher)
+  const { data, mutate, error, isLoading } = useSWR(
+    `https://newsdata.io/api/1/news?apikey=${process.env.NEXT_PUBLIC_NEWS_DATA_API_KEY}&q=Programming,%20software%20development,%20Technology`,
+    fetcher
+  )
 
   const handleNextPage = async () => {
-    await setCurrentPage(nextPage) // Set currentPage to nextPage
-    setNextPage('') // Wait for nextPage to be set
-    mutate() // Trigger data fetching with the updated currentPage
+    await setCurrentPage(nextPage)
+    mutate()
   }
+
   return (
     <main
       className={`flex overflow-hidden h-full w-full xl:max-w-[1024px] sm:pt-6 xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 py-2 sm:py-0`}
