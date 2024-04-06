@@ -50,6 +50,11 @@ const ResponsiveUI = ({
       name: 'News',
       img: '/images/icons/macOS-news.png',
       path: '/news'
+    },
+    {
+      name: 'Contact',
+      img: '/images/icons/macOS-mail.png',
+      path: '/contact'
     }
   ]
   return (

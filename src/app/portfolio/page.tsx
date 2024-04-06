@@ -39,10 +39,10 @@ const Portfolio = () => {
 
   return (
     <main
-      className={`flex overflow-hidden h-full w-full place-content-center place-items-center xl:max-w-[1024px] sm:pt-6 xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 ${montserrat.className}`}
+      className={`flex overflow-hidden h-full w-full xl:max-w-[1024px] sm:pt-6 xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 ${montserrat.className} my-2 sm:my-0`}
     >
-      <div className='flex flex-grow h-full rounded-xl bg-stone-200 flex-col'>
-        <div className='px-4 xs:pt-5 xs:pb-3 flex gap-x-4 items-center hover:bg-[#F5F5F5]'>
+      <div className='flex flex-grow h-full rounded-xl bg-stone-200 flex-col shadow-xl'>
+        <div className='px-4 xs:pt-5 hidden xs:pb-3 xs:flex gap-x-4 items-center hover:bg-[#F5F5F5]'>
           <div className='block'>
             <div className='relative h-[60px] w-[60px]'>
               <Image
@@ -61,13 +61,13 @@ const Portfolio = () => {
             </p>
           </div>
         </div>
-        <hr className='border-[0.3px] border-gray-300 border-solid' />
+        <hr className='border-[0.3px] border-gray-300 border-solid hidden xs:block' />
         {/* start  */}
         <div className='flex-col flex md:flex-row sm:justify-between h-full overflow-hidden'>
           <div className='flex items-center justify-between sm:order-2 md:order-[initial] md:w-1/3 lg:w-1/4 md:justify-center md:border-r-[0.3px] md:border-r-gray-300 md:items-baseline'>
             <div className='flex flex-row md:flex-col py-1 items-baseline gap-x-6 justify-evenly w-full'>
               {icons.map((icon, index) => (
-                <div
+                <button
                   className='grid place-content-center place-items-center gap-y-1.5 xs:w-[62px] cursor-pointer md:flex md:items-center md:justify-between group md:w-full md:flex-row-reverse md:p-6 md:border-b-[0.3px] md:border-gray-300 md:border-solid'
                   key={icon.title}
                   onClick={() =>
@@ -92,7 +92,7 @@ const Portfolio = () => {
                   >
                     {icon.title}
                   </span>
-                </div>
+                </button>
               ))}
             </div>
           </div>

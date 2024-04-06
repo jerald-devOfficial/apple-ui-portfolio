@@ -61,7 +61,7 @@ export default function Home() {
       <section className='grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-y-5 sm:gap-y-12 px-5 sm:px-12 md:px-0 xl:hidden max-w-[955px] place-content-center w-full'>
         {icons.map((item) =>
           item.click ? (
-            <div
+            <button
               key={item.name}
               className='grid place-items-center gap-y-1 w-full'
               onClick={item.click}
@@ -80,7 +80,7 @@ export default function Home() {
               <span className='text-sm font-normal text-white'>
                 {item.name}
               </span>
-            </div>
+            </button>
           ) : (
             <div
               key={item.name}
