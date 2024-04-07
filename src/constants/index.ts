@@ -199,21 +199,6 @@ export const workExperiences = [
         ]
       }
     ]
-  },
-  {
-    startDate: 'Feb 2024',
-    isPresent: true,
-    company: 'Edfolio',
-    logo: '/images/jobs/edfolio.jpg',
-    projects: [
-      {
-        title: 'Front End Developer',
-        name: 'Skooltek',
-        desc: [
-          'Front end developer of version 2 of Skooltek web application using Vue.js, Nuxt.js, and Tailwind CSS.'
-        ]
-      }
-    ]
   }
 ]
 
