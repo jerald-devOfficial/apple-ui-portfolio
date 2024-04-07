@@ -30,7 +30,7 @@ const contactSchema = new Schema({
     required: [true, "Subject is required."],
     trim: true,
     minLength: [2, "Subject must be larger than 2 characters"],
-    maxLength: [100, "Subject must be lesser than 100 characters"],
+    maxLength: [80, "Subject must be lesser than 80 characters"],
   },
 
   read: {
@@ -47,6 +47,8 @@ const contactSchema = new Schema({
   message: {
     type: String,
     required: [true, "Message is required."],
+    minLength: [2, "Message must be larger than 2 characters"],
+    maxLength: [800, "Message maximum is 800 characters"],
   },
 
   date: {
