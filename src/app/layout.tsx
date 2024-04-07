@@ -4,6 +4,7 @@ import './globals.css'
 
 import Wallpapers from '@/components/Wallpapers'
 import ResponsiveUI from '@/components/layouts'
+import AuthProvider from '@/components/Auth/AuthProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -50,7 +51,9 @@ export default function RootLayout({
         className={`${inter.className} flex h-screen flex-col items-center justify-between relative`}
       >
         <Wallpapers />
-        <ResponsiveUI>{children}</ResponsiveUI>
+        <AuthProvider>
+          <ResponsiveUI>{children}</ResponsiveUI>
+        </AuthProvider>
       </body>
     </html>
   )

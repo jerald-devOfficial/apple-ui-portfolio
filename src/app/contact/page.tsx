@@ -86,6 +86,7 @@ const Contact = () => {
             <input
               onChange={(e) => setEmail(e.target.value)}
               value={email}
+              maxLength={50}
               type='email'
               id='email'
               className='flex-1 focus:outline-none'
@@ -97,6 +98,7 @@ const Contact = () => {
             <input
               onChange={(e) => setFullName(e.target.value)}
               value={fullName}
+              maxLength={50}
               type='text'
               id='fullName'
               className='flex-1 focus:outline-none'
@@ -108,6 +110,7 @@ const Contact = () => {
             <input
               onChange={(e) => setSubject(e.target.value)}
               value={subject}
+              maxLength={80}
               type='text'
               id='subject'
               className='flex-1 focus:outline-none'
@@ -117,6 +120,7 @@ const Contact = () => {
           <textarea
             onChange={(e) => setMessage(e.target.value)}
             value={message}
+            maxLength={800}
             id='message'
             placeholder='Please type your message'
             className='w-full h-full border-b border-[#3C3C43]/36 border-solid p-4 focus:outline-none'
