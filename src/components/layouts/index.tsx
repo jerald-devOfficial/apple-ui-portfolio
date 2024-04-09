@@ -2,7 +2,7 @@
 
 import DeviceStatus from '@/components/DeviceStatus'
 import DisplayTime from '@/components/DisplayTime'
-import { signIn, signOut, useSession, SignInResponse } from 'next-auth/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -43,37 +43,51 @@ const ResponsiveUI = ({
 
   const dockMacOS = [
     {
-      name: 'Home',
+      name: 'home',
+      title: 'Home',
       img: '/images/icons/macOS-finder.png',
       path: '/'
     },
     {
-      name: 'Portfolio',
+      name: 'portfolio',
+      title: 'Portfolio',
       img: '/images/icons/macOS-contacts.png',
       path: '/portfolio'
     },
     {
-      name: 'News',
+      name: 'news',
+      title: 'News',
       img: '/images/icons/macOS-news.png',
       path: '/news'
     },
     {
-      name: 'Resume',
+      name: 'resume',
+      title: 'Download Resume',
       img: '/images/icons/macOS-resume.png',
       path: '/pdfs/updated-resume.pdf'
     },
     {
-      name: 'Contact',
+      name: 'contact',
+      title: 'Contact',
       img: '/images/icons/macOS-mail.png',
       path: '/contact'
     },
     {
-      name: 'Mails',
+      name: 'mails',
+      title: 'Mails',
       img: '/images/icons/macOS-gmail.png',
       path: '/mails'
     },
     {
-      name: 'Auth',
+      name: 'web3',
+      title: 'Web3',
+      img: '/images/icons/macOS-metamask.png',
+      path: '/web3'
+    },
+    {
+      name: 'admin',
+      title:
+        session.status === 'authenticated' ? 'Logout Admin' : 'Login as Admin',
       img: `/images/icons/macOS-${
         session.status === 'authenticated' ? 'logout' : 'login'
       }.png`,
@@ -99,7 +113,7 @@ const ResponsiveUI = ({
             />
           </Link>
           <span className='text-black font-semibold text-base'>
-            {dockMacOS.find((dock) => dock?.path === pathname)?.name}
+            {dockMacOS.find((dock) => dock?.path === pathname)?.title}
           </span>
         </div>
         <div className='flex items-center gap-x-4'>
@@ -140,75 +154,114 @@ const ResponsiveUI = ({
         )}
       </footer>
       <footer className='hidden xl:flex  xl:gap-x-0.5 xl:px-1.5 xl:py-1.5 before:absolute before:content-[""] before:bg-[#F6F6F6]/36 before:backdrop-blur-[135px] before:blur-[6px] before:-z-10 bg-lime-300/40 rounded-2xl before:content items-baseline justify-center xl:my-2 ring-1 ring-white/30 ring-inset shadow shadow-black/15'>
-        {dockMacOS.map((item, index) =>
-          item.click ? (
-            <button
-              onClick={item.click}
-              key={item.name}
-              className='flex flex-col items-center justify-center h-[60px] transition-transform transform-gpu hover:scale-150 cursor-pointer'
-              style={{
-                transition: 'transform 0.3s',
-                transformOrigin: 'bottom'
-              }}
-            >
-              <Image src={item.img} alt={item.name} height={50} width={50} />
-            </button>
-          ) : item.name === 'Resume' ? (
-            <Link
-              href={`${item.path}`}
-              target={'_blank'}
-              download
-              className='flex flex-col items-center justify-center h-[60px] transition-transform transform-gpu hover:scale-150 cursor-pointer'
-              key={item.name}
-              style={{
-                transition: 'transform 0.3s',
-                transformOrigin: 'bottom'
-              }}
-            >
-              <Image alt={item.name} src={item.img} height={50} width={50} />
-              {dockMacOS[index]?.path === pathname && (
-                <span className='h-1 w-1 bg-[#808080] rounded-full' />
-              )}
-            </Link>
-          ) : item.name === 'Mails' ? (
-            session.status === 'authenticated' ? (
-              <Link
-                href={`${item.path}`}
-                className='flex flex-col items-center justify-center h-[60px] transition-transform transform-gpu hover:scale-150 cursor-pointer'
+        {dockMacOS.map((item, index) => (
+          <>
+            {item.click && (
+              <button
+                onClick={item.click}
                 key={item.name}
-                style={{
-                  transition: 'transform 0.3s',
-                  transformOrigin: 'bottom'
-                }}
+                className='flex flex-col items-center justify-center h-[60px] group cursor-pointer relative'
               >
+                <span className='hidden -top-8 absolute group-hover:block text-gray-800 text-sm font-semibold transition-transform transform-gpu text-nowrap'>
+                  {item.title}
+                </span>
+
                 <Image
-                  alt={item.name!}
-                  src={item.img!}
+                  src={item.img}
+                  alt={item.name}
                   height={50}
                   width={50}
+                  className='transition-transform transform-gpu group-hover:scale-150'
+                  style={{
+                    transition: 'transform 0.3s',
+                    transformOrigin: 'bottom'
+                  }}
+                />
+              </button>
+            )}
+
+            {item.name === 'resume' && (
+              <Link
+                href={`${item.path}`}
+                target={'_blank'}
+                download
+                key={item.name}
+                className='flex flex-col items-center justify-center h-[60px] group cursor-pointer relative'
+              >
+                <span className='hidden -top-8 absolute group-hover:block text-gray-800 text-sm font-semibold transition-transform transform-gpu text-nowrap'>
+                  {item.title}
+                </span>
+                <Image
+                  alt={item.name}
+                  src={item.img}
+                  height={50}
+                  width={50}
+                  className='transition-transform transform-gpu group-hover:scale-150'
+                  style={{
+                    transition: 'transform 0.3s',
+                    transformOrigin: 'bottom'
+                  }}
                 />
                 {dockMacOS[index]?.path === pathname && (
                   <span className='h-1 w-1 bg-[#808080] rounded-full' />
                 )}
               </Link>
-            ) : null
-          ) : (
-            <Link
-              href={`${item.path}`}
-              className='flex flex-col items-center justify-center h-[60px] transition-transform transform-gpu hover:scale-150 cursor-pointer'
-              key={item.name}
-              style={{
-                transition: 'transform 0.3s',
-                transformOrigin: 'bottom'
-              }}
-            >
-              <Image alt={item.name!} src={item.img!} height={50} width={50} />
-              {dockMacOS[index]?.path === pathname && (
-                <span className='h-1 w-1 bg-[#808080] rounded-full' />
-              )}
-            </Link>
-          )
-        )}
+            )}
+
+            {item.name === 'mails' &&
+              (session.status === 'authenticated' ? (
+                <Link
+                  href={`${item.path}`}
+                  key={item.name}
+                  className='flex flex-col items-center justify-center h-[60px] group cursor-pointer relative'
+                >
+                  <span className='hidden -top-8 absolute group-hover:block text-gray-800 text-sm font-semibold transition-transform transform-gpu text-nowrap'>
+                    {item.title}
+                  </span>
+                  <Image
+                    alt={item.name}
+                    src={item.img}
+                    height={50}
+                    width={50}
+                    className='transition-transform transform-gpu group-hover:scale-150'
+                    style={{
+                      transition: 'transform 0.3s',
+                      transformOrigin: 'bottom'
+                    }}
+                  />
+                  {dockMacOS[index]?.path === pathname && (
+                    <span className='h-1 w-1 bg-[#808080] rounded-full' />
+                  )}
+                </Link>
+              ) : null)}
+
+            {!item.click && !['resume', 'mails'].includes(item.name) && (
+              <Link
+                href={`${item.path}`}
+                key={item.name}
+                className='flex flex-col items-center justify-center h-[60px] group cursor-pointer relative'
+              >
+                <span className='hidden -top-8 absolute group-hover:block text-gray-800 text-sm font-semibold transition-transform transform-gpu text-nowrap'>
+                  {item.title}
+                </span>
+                <Image
+                  alt={item.name}
+                  src={item.img}
+                  height={50}
+                  width={50}
+                  className='transition-transform transform-gpu group-hover:scale-150'
+                  style={{
+                    transition: 'transform 0.3s',
+                    transformOrigin: 'bottom'
+                  }}
+                />
+                {dockMacOS[index]?.path === pathname && (
+                  <span className='h-1 w-1 bg-[#808080] rounded-full' />
+                )}
+              </Link>
+            )}
+          </>
+        ))}
       </footer>
     </>
   )

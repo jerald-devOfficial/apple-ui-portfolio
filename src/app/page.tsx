@@ -28,6 +28,11 @@ export default function Home() {
       name: 'Mails',
       img: '/images/icons/gmail.png',
       path: '/mails'
+    },
+    {
+      name: 'Web3',
+      img: '/images/icons/metamask.png',
+      path: '/web3'
     }
   ]
 
@@ -104,8 +109,8 @@ export default function Home() {
               </Link>
             )}
 
-            {item.name === 'Mails' ? (
-              session.status === 'authenticated' ? (
+            {item.name === 'Mails' &&
+              (session.status === 'authenticated' ? (
                 <Link
                   href={`${item.path}`}
                   className='grid place-items-center gap-y-1 w-full'
@@ -125,8 +130,7 @@ export default function Home() {
                     {item.name}
                   </span>
                 </Link>
-              ) : null
-            ) : null}
+              ) : null)}
           </Fragment>
         ))}
       </section>
