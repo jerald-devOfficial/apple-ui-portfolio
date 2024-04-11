@@ -35,7 +35,6 @@ const Web3Page = () => {
   const MobileComponent =
     mobileCategory !== null ? sides[mobileCategory].component : () => <></>
 
-  console.log('mobileCategory: ', mobileCategory)
   return (
     <main
       className={`flex overflow-hidden h-full w-full md:max-w-[700px] sm:pt-6 xl:pt-12  mx-auto sm:px-12 md:px-0 ${montserrat.className} my-2 sm:my-0`}

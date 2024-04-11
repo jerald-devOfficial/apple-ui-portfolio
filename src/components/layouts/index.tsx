@@ -6,6 +6,7 @@ import { signIn, signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { Fragment } from 'react'
 
 const ResponsiveUI = ({
   children
@@ -155,11 +156,10 @@ const ResponsiveUI = ({
       </footer>
       <footer className='hidden xl:flex  xl:gap-x-0.5 xl:px-1.5 xl:py-1.5 before:absolute before:content-[""] before:bg-[#F6F6F6]/36 before:backdrop-blur-[135px] before:blur-[6px] before:-z-10 bg-lime-300/40 rounded-2xl before:content items-baseline justify-center xl:my-2 ring-1 ring-white/30 ring-inset shadow shadow-black/15'>
         {dockMacOS.map((item, index) => (
-          <>
+          <Fragment key={item.name}>
             {item.click && (
               <button
                 onClick={item.click}
-                key={item.name}
                 className='flex flex-col items-center justify-center h-[60px] group cursor-pointer relative'
               >
                 <span className='hidden -top-8 absolute group-hover:block text-gray-800 text-sm font-semibold transition-transform transform-gpu text-nowrap'>
@@ -185,7 +185,6 @@ const ResponsiveUI = ({
                 href={`${item.path}`}
                 target={'_blank'}
                 download
-                key={item.name}
                 className='flex flex-col items-center justify-center h-[60px] group cursor-pointer relative'
               >
                 <span className='hidden -top-8 absolute group-hover:block text-gray-800 text-sm font-semibold transition-transform transform-gpu text-nowrap'>
@@ -212,7 +211,6 @@ const ResponsiveUI = ({
               (session.status === 'authenticated' ? (
                 <Link
                   href={`${item.path}`}
-                  key={item.name}
                   className='flex flex-col items-center justify-center h-[60px] group cursor-pointer relative'
                 >
                   <span className='hidden -top-8 absolute group-hover:block text-gray-800 text-sm font-semibold transition-transform transform-gpu text-nowrap'>
@@ -238,7 +236,6 @@ const ResponsiveUI = ({
             {!item.click && !['resume', 'mails'].includes(item.name) && (
               <Link
                 href={`${item.path}`}
-                key={item.name}
                 className='flex flex-col items-center justify-center h-[60px] group cursor-pointer relative'
               >
                 <span className='hidden -top-8 absolute group-hover:block text-gray-800 text-sm font-semibold transition-transform transform-gpu text-nowrap'>
@@ -260,7 +257,7 @@ const ResponsiveUI = ({
                 )}
               </Link>
             )}
-          </>
+          </Fragment>
         ))}
       </footer>
     </>

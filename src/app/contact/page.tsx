@@ -22,11 +22,6 @@ const Contact = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    console.log('Full name: ', fullName)
-    console.log('Subject: ', subject)
-    console.log('Email: ', email)
-    console.log('Message: ', message)
-
     const res = await fetch('/api/contact', {
       method: 'POST',
       headers: {
