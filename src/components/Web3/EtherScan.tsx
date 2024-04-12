@@ -96,7 +96,33 @@ const EtherScan = () => {
         </div>
         {error && (
           <div className='flex flex-col justify-between flex-1 p-4'>
-            <p className='text-xs font-bold text-rose-600'>{error}</p>
+            <div className='flex flex-col gap-y-2'>
+              <p className='text-xs font-bold text-rose-600'>{error}</p>
+
+              <p className='text-xs font-medium text-left text-wrap leading-6 text-blue-600'>
+                Fix when error is about{' '}
+                <code className='text-rose-600'>window.ethereum.enable</code>:
+              </p>
+              <ul className='indent-1 text-xs list-inside list-decimal leading-6'>
+                <li>
+                  Access this site using a desktop browser, not from a mobile
+                  device.
+                </li>
+                <li>Have MetaMask browser extension installed.</li>
+                <li>
+                  Go to <code className='text-blue-600'>YourMetaMask</code>{' '}
+                  section.
+                </li>
+                <li>Login to your MetaMask account.</li>
+                <li>
+                  Allow{' '}
+                  <code className='text-violet-600'>jeraldbaroro.xyz</code> to
+                  have read-only access to your profile
+                </li>
+                <li>And get back to this section.</li>
+                <li>Paste the Txn Hash, and submit.</li>
+              </ul>
+            </div>
             <button
               className='rounded-md flex items-center justify-center px-2 py-1 text-sm text-white bg-blue-600 font-medium'
               onClick={handleClear}

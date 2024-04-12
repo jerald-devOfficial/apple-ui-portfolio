@@ -152,10 +152,10 @@ const YourMetaMask = () => {
       <div className='flex flex-col px-4 py-6'>
         {error && (
           <div className='overflow-x-hidden overflow-y-auto px-4 space-y-2'>
-            <p className='text-sm font-medium text-left text-wrap leading-6 text-blue-600'>
+            <p className='text-xs font-medium text-left text-wrap leading-6 text-blue-600'>
               Please make sure to:
             </p>
-            <ul className='indent-1 text-sm list-inside list-decimal leading-6'>
+            <ul className='indent-1 text-xs list-inside list-decimal leading-6'>
               <li>
                 Access this site using a desktop browser, not from a mobile
                 device.
@@ -163,8 +163,8 @@ const YourMetaMask = () => {
               <li>Have MetaMask browser extension installed.</li>
               <li>Once installed, login to your MetaMask account.</li>
               <li>
-                Allow <strong>jeraldbaroro.xyz</strong> to have read-only access
-                to your profile
+                Allow <code className='text-violet-600'>jeraldbaroro.xyz</code>{' '}
+                to have read-only access to your profile
               </li>
               <li>{`And it will display your MetaMask here.`}</li>
             </ul>
