@@ -6,8 +6,8 @@ import {
   XOutlineIcon
 } from '@/components/svg-icons'
 import { ArrowUpCircleIcon } from '@heroicons/react/24/solid'
-import React, { FormEvent, useState } from 'react'
 import { Montserrat } from 'next/font/google'
+import { FormEvent, useState } from 'react'
 
 const montserrat = Montserrat({ subsets: ['latin'], display: 'swap' })
 
@@ -138,9 +138,15 @@ const Contact = () => {
         <div className='flex justify-between w-full py-4 px-8 bg-white gap-y-1 items-center'>
           <h4 className='font-medium text-base text-blue-600'>Follow me on</h4>
           <div className='flex items-center gap-x-2'>
-            <XOutlineIcon className='text-blue-600 h-5 w-5 hover:text-blue-800' />
-            <FacebookOutlineIcon className='text-blue-600 h-5 w-5 hover:text-blue-800 mr-0.5' />
-            <LinkedInOutlineIcon className='text-blue-600 h-5 w-5 hover:text-blue-800' />
+            <a href='https://www.x.com/spaueOfficial'>
+              <XOutlineIcon className='text-blue-600 h-5 w-5 hover:text-blue-800' />
+            </a>
+            <a href='https://www.facebook.com/spaueOfficial'>
+              <FacebookOutlineIcon className='text-blue-600 h-5 w-5 hover:text-blue-800 mr-0.5' />
+            </a>
+            <a href='https://www.linkedin.com/in/jerald-baroro-562aab20a'>
+              <LinkedInOutlineIcon className='text-blue-600 h-5 w-5 hover:text-blue-800' />
+            </a>
           </div>
         </div>
       </form>
