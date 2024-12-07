@@ -1,8 +1,8 @@
 import {
-  CodeBracketIcon,
-  SquaresPlusIcon,
+  BookOpenIcon,
   BriefcaseIcon,
-  BookOpenIcon
+  CodeBracketIcon,
+  SquaresPlusIcon
 } from '@heroicons/react/24/outline'
 
 export const sideIcons = [
@@ -235,11 +235,15 @@ export const education = {
       issued: 'Sep 2022',
       credentialID: 'UC-30cf8a1d-fe54-4df7-baa8-6c8acdab5055'
     },
-
     {
       title: 'Mastering TypeScript - 2022 Edition',
       issued: 'Sep 2022',
       credentialID: 'UC-c58082c1-462c-4e57-a0bb-3757f9aec968'
+    },
+    {
+      title: "Ethereum and Solidity: The Complete Developer's Guide",
+      issued: 'Dec 2024',
+      credentialID: 'UC-ec48e60a-df16-48b2-bf57-a065022eb57a'
     }
   ]
 }
