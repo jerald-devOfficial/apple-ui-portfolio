@@ -2,9 +2,14 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 
+import AuthProvider from '@/components/Auth/AuthProvider'
 import Wallpapers from '@/components/Wallpapers'
 import ResponsiveUI from '@/components/layouts'
-import AuthProvider from '@/components/Auth/AuthProvider'
+
+import { Providers } from '@/app/providers'
+import { getConfig } from '@/wagmi'
+import { headers } from 'next/headers'
+import { cookieToInitialState } from 'wagmi'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -39,11 +44,16 @@ export const metadata: Metadata = {
   }
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const headersList = await headers()
+  const initialState = cookieToInitialState(
+    getConfig(),
+    headersList.get('cookie')
+  )
   return (
     <html lang='en'>
       <meta name='theme-color' content='currentColor' />
@@ -52,7 +62,9 @@ export default function RootLayout({
       >
         <Wallpapers />
         <AuthProvider>
-          <ResponsiveUI>{children}</ResponsiveUI>
+          <Providers initialState={initialState}>
+            <ResponsiveUI>{children}</ResponsiveUI>
+          </Providers>
         </AuthProvider>
       </body>
     </html>
