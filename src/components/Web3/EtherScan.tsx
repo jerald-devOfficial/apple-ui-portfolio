@@ -2,14 +2,22 @@
 
 import { hashShortener, toFixedFour } from '@/utils'
 import { Inter } from 'next/font/google'
-import React, { FormEvent, useState } from 'react'
-import { IoSearchSharp } from 'react-icons/io5'
 import Image from 'next/image'
+import { FormEvent, useState } from 'react'
+import { IoSearchSharp } from 'react-icons/io5'
 import Web3 from 'web3'
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
+type Transaction = {
+  blockHash?: string
+  from: string
+  to?: string | null
+  value: string
+  // Add other properties as needed
+}
+
 const EtherScan = () => {
-  const [transaction, setTransaction] = useState<any>(null)
+  const [transaction, setTransaction] = useState<Transaction | null>(null)
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
   const [transactionHash, setTransactionHash] = useState<string>('')
   const [isLoading, setIsLoading] = useState(false)
@@ -23,11 +31,14 @@ const EtherScan = () => {
       setIsLoading(true)
       if (
         typeof window !== 'undefined' &&
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (window as any).ethereum !== 'undefined'
       ) {
         // Initialize web3 with MetaMask provider
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const web3 = new Web3((window as any).ethereum)
         // Request account access if needed
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (window as any).ethereum.enable()
 
         // Fetch transaction details
@@ -174,9 +185,9 @@ const EtherScan = () => {
                 </div>
 
                 <div className='flex flex-col flex-1'>
-                  <span>{hashShortener(transaction.blockHash, 10)}</span>
-                  <span>{hashShortener(transaction.from, 10)}</span>
-                  <span>{hashShortener(transaction.to, 10)}</span>
+                  <span>{hashShortener(transaction.blockHash ?? '', 10)}</span>
+                  <span>{hashShortener(transaction.from ?? '', 10)}</span>
+                  <span>{hashShortener(transaction.to ?? '', 10)}</span>
                   <span>
                     {toFixedFour(
                       Web3.utils.fromWei(transaction.value.toString(), 'ether')
