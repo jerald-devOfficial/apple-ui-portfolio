@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { FormEvent, useState } from 'react'
 import { IoSearchSharp } from 'react-icons/io5'
 import Web3 from 'web3'
+
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
 type Transaction = {
@@ -13,7 +14,16 @@ type Transaction = {
   from: string
   to?: string | null
   value: string
-  // Add other properties as needed
+  gas: string
+  gasPrice: string
+  hash: string
+  nonce: string
+  blockNumber?: string
+  transactionIndex?: string
+  input: string
+  v?: string
+  r: string
+  s: string
 }
 
 const EtherScan = () => {
@@ -25,32 +35,25 @@ const EtherScan = () => {
 
   const fetchTransaction = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setIsLoading(true)
+    setError(null)
     setIsSubmitted(true)
 
     try {
-      setIsLoading(true)
-      if (
-        typeof window !== 'undefined' &&
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (window as any).ethereum !== 'undefined'
-      ) {
-        // Initialize web3 with MetaMask provider
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const web3 = new Web3((window as any).ethereum)
-        // Request account access if needed
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await (window as any).ethereum.enable()
+      const apiKey = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY
+      const response = await fetch(
+        `https://api.etherscan.io/api?module=proxy&action=eth_getTransactionByHash&txhash=${transactionHash}&apikey=${apiKey}`
+      )
+      const data = await response.json()
 
-        // Fetch transaction details
-        const transaction = await web3.eth.getTransaction(transactionHash)
-        setTransaction(transaction)
+      if (data.result) {
+        setTransaction(data.result)
       } else {
-        console.error('MetaMask extension not detected.')
-        setError('MetaMask browser extension not detected, please install.')
+        setError('Transaction not found.')
       }
     } catch (error) {
       console.error('Error fetching transaction:', error)
-      setError(`Error from fetching transaction: ${error}`)
+      setError('An error occurred while fetching the transaction.')
     } finally {
       setIsLoading(false)
     }
@@ -105,6 +108,7 @@ const EtherScan = () => {
             </form>
           </div>
         </div>
+
         {error && (
           <div className='flex flex-col justify-between flex-1 p-4'>
             <div className='flex flex-col gap-y-2'>
@@ -142,9 +146,10 @@ const EtherScan = () => {
             </button>
           </div>
         )}
+
         {isLoading && (
           <p className='text-xs font-bold flex-1 text-yellow-600 text-center w-full'>
-            Fetching data from https://etherscan.io...
+            Fetching data from Etherscan...
           </p>
         )}
 
@@ -172,10 +177,11 @@ const EtherScan = () => {
             </ul>
           </div>
         )}
+
         {!isLoading && transaction ? (
           <div className='flex justify-between flex-col flex-1 p-4'>
             <div className={`${inter.className} flex flex-col gap-y-2`}>
-              <h4 className='text-base font-medium'>Transcation Details</h4>
+              <h4 className='text-base font-medium'>Transaction Details</h4>
               <div className='flex gap-x-4 text-sm'>
                 <div className='flex flex-col text-gray-500'>
                   <span className='text-nowrap'>Transaction Hash:</span>
@@ -183,14 +189,13 @@ const EtherScan = () => {
                   <span>To:</span>
                   <span>Value:</span>
                 </div>
-
                 <div className='flex flex-col flex-1'>
                   <span>{hashShortener(transaction.blockHash ?? '', 10)}</span>
                   <span>{hashShortener(transaction.from ?? '', 10)}</span>
                   <span>{hashShortener(transaction.to ?? '', 10)}</span>
                   <span>
                     {toFixedFour(
-                      Web3.utils.fromWei(transaction.value.toString(), 'ether')
+                      Web3.utils.fromWei(transaction.value, 'ether')
                     )}{' '}
                     ETH
                   </span>
