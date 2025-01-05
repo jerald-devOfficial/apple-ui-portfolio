@@ -13,12 +13,13 @@ import { HiOutlineEllipsisVertical } from 'react-icons/hi2'
 import { LuLoader } from 'react-icons/lu'
 import { RiLineChartLine } from 'react-icons/ri'
 import { formatEther } from 'viem'
-import { useAccount, useBalance } from 'wagmi'
+import { useBalance } from 'wagmi'
 
 const MyMetaMask = () => {
-  const { address, isConnected } = useAccount()
+  const address = process.env.NEXT_PUBLIC_METAMASK_ADDRESS
+
   const { data: balanceData, isLoading: isLoadingBalance } = useBalance({
-    address
+    address: address as `0x${string}`
   })
 
   const fetchBalanceUSD = async () => {
@@ -38,7 +39,7 @@ const MyMetaMask = () => {
   return (
     <section className='flex-grow h-full bg-white'>
       <div className='h-16 w-full shadow-md shadow-gray-200 flex justify-between items-center px-4'>
-        {isConnected && address ? (
+        {address ? (
           <>
             <span className='rounded-full bg-gray-100 border border-solid border-gray-200 py-2 px-4'>
               <EthereumIcon className='h-3 w-3' />
@@ -61,7 +62,7 @@ const MyMetaMask = () => {
         ) : null}
       </div>
       <div className='flex flex-col px-4 py-6'>
-        {isConnected && address ? (
+        {address ? (
           <div className='my-4 flex flex-col items-center gap-y-10'>
             {isLoadingBalance ? (
               <h3 className='text-3xl font-medium text-center w-full flex gap-x-2 items-center justify-center'>
@@ -70,7 +71,6 @@ const MyMetaMask = () => {
             ) : (
               <h3 className='font-medium text-3xl'>${ethBalanceInUSD} USD</h3>
             )}
-
             <div className='grid place-items-center gap-1'>
               <span className='bg-sky-600 rounded-full p-2'>
                 <RiLineChartLine className='text-white' size={20} />
