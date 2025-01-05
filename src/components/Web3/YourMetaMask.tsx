@@ -8,6 +8,7 @@ import {
   toFixedFour
 } from '@/utils'
 import { useQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
 import { BiSolidCopy } from 'react-icons/bi'
 import { HiOutlineEllipsisVertical } from 'react-icons/hi2'
 import { LuLoader } from 'react-icons/lu'
@@ -20,6 +21,16 @@ const YourMetaMask = () => {
   const { data: balanceData, isLoading: isLoadingBalance } = useBalance({
     address
   })
+
+  const [error, setError] = useState<null | string>(null)
+
+  useEffect(() => {
+    if (!isConnected) {
+      setError('MetaMask browser extension not detected or not connected.')
+    } else {
+      setError(null)
+    }
+  }, [isConnected])
 
   const fetchBalanceUSD = async () => {
     if (balanceData) {
@@ -38,6 +49,7 @@ const YourMetaMask = () => {
   return (
     <section className='flex-grow h-full bg-white'>
       <div className='h-16 w-full shadow-md shadow-gray-200 flex justify-between items-center px-4'>
+        {error && <p className='text-xs font-bold text-rose-600'>{error}</p>}
         {isConnected && address ? (
           <>
             <span className='rounded-full bg-gray-100 border border-solid border-gray-200 py-2 px-4'>
@@ -61,6 +73,26 @@ const YourMetaMask = () => {
         ) : null}
       </div>
       <div className='flex flex-col px-4 py-6'>
+        {error && (
+          <div className='overflow-x-hidden overflow-y-auto px-4 space-y-2'>
+            <p className='text-xs font-medium text-left text-wrap leading-6 text-blue-600'>
+              Please make sure to:
+            </p>
+            <ul className='indent-1 text-xs list-inside list-decimal leading-6'>
+              <li>
+                Access this site using a desktop browser, not from a mobile
+                device.
+              </li>
+              <li>Have MetaMask browser extension installed.</li>
+              <li>Once installed, login to your MetaMask account.</li>
+              <li>
+                Allow <code className='text-violet-600'>jeraldbaroro.xyz</code>{' '}
+                to have read-only access to your profile
+              </li>
+              <li>{`And it will display your MetaMask here.`}</li>
+            </ul>
+          </div>
+        )}
         {isConnected && address ? (
           <div className='my-4 flex flex-col items-center gap-y-10'>
             {isLoadingBalance ? (
