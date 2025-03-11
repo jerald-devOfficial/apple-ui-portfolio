@@ -52,5 +52,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## Design Resources
 
-- [Apple Design Resources - macOS](https://www.figma.com/file/Ew1Fxs1UbzI8bl4NUIfDc2/Apple-Design-Resources---macOS-(Community))
-- [Apple Design Resources - iOS 17 and iPadOS ](https://www.figma.com/file/SQwsgVpHtOnL07VarNy6jc/Apple-Design-Resources-%E2%80%93-iOS-17-and-iPadOS-17-(Community))
+- [Apple Design Resources - macOS](https://www.figma.com/community/file/1251588934545918753/apple-design-resources-macos)
+- [Apple Design Resources - iOS 18 and iPadOS 18](https://www.figma.com/community/file/1385659531316001292/ios-18-and-ipados-18)
