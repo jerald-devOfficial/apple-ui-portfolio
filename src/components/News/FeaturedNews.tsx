@@ -1,14 +1,19 @@
 import { Result } from '@/app/news/page'
 import { formatDate } from '@/utils'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type FeaturedNewsProps = {
   featured: Result
 }
 
 const FeaturedNews = ({ featured }: FeaturedNewsProps) => {
-  const [featuredImg, setFeaturedImg] = useState(featured.image_url!)
+  const [featuredImg, setFeaturedImg] = useState(featured.image_url || '')
+
+  useEffect(() => {
+    setFeaturedImg(featured.image_url || '')
+  }, [featured.image_url])
+
   return (
     <a
       target='_blank'
