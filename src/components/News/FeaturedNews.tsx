@@ -8,17 +8,23 @@ type FeaturedNewsProps = {
 }
 
 const FeaturedNews = ({ featured }: FeaturedNewsProps) => {
-  const [featuredImg, setFeaturedImg] = useState(featured.image_url || '')
+  const [featuredImg, setFeaturedImg] = useState(featured?.image_url || '')
 
   useEffect(() => {
-    setFeaturedImg(featured.image_url || '')
-  }, [featured.image_url])
+    if (featured?.image_url) {
+      setFeaturedImg(featured.image_url)
+    } else {
+      setFeaturedImg(
+        `https://placehold.co/600x400/000000/FFFFFF.png?text=No+Image`
+      )
+    }
+  }, [featured?.image_url])
 
   return (
     <a
       target='_blank'
       rel='noopener noreferrer'
-      href={featured.link}
+      href={featured?.link || '#'}
       className='flex flex-col bg-white rounded-xl shadow-lg group cursor-pointer hover:bg-gray-200'
     >
       <header className='relative rounded-t-[inherit] bg-slate-600'>
@@ -32,7 +38,7 @@ const FeaturedNews = ({ featured }: FeaturedNewsProps) => {
             height: 'auto',
             width: '100%'
           }}
-          alt={featured.title}
+          alt={featured?.title || 'No title'}
           className='object-cover object-center rounded-[inherit]'
           onError={() =>
             setFeaturedImg(
@@ -43,15 +49,15 @@ const FeaturedNews = ({ featured }: FeaturedNewsProps) => {
       </header>
       <main className='flex flex-col gap-y-1 p-2'>
         <h5 className='text-base text-gray-800 truncate font-medium'>
-          {featured.creator}
+          {featured?.creator || 'Unknown Creator'}
         </h5>
         <h4 className='font-bold text-black text-2xl tracking-tighter'>
-          {featured.title}
+          {featured?.title || 'No Title'}
         </h4>
       </main>
       <footer className='border-t border-solid border-slate-200 group-hover:border-gray-100 px-2 py-1'>
         <span className='text-sm text-gray-400 font-medium'>
-          {formatDate(featured.pubDate)}
+          {formatDate(featured?.pubDate || new Date())}
         </span>
       </footer>
     </a>
