@@ -244,6 +244,11 @@ export const education = {
       title: "Ethereum and Solidity: The Complete Developer's Guide",
       issued: 'Dec 2024',
       credentialID: 'UC-ec48e60a-df16-48b2-bf57-a065022eb57a'
+    },
+    {
+      title: 'React Native - The Practical Guide [2025]',
+      issued: 'Feb 2025',
+      credentialID: 'UC-fe7bafac-a828-4c17-b5ce-5b22ea5f6922'
     }
   ]
 }
