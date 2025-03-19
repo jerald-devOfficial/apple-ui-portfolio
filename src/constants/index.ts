@@ -199,6 +199,59 @@ export const workExperiences = [
         ]
       }
     ]
+  },
+  {
+    startDate: 'Apr 2024',
+    endDate: 'Aug 2024',
+    isPresent: false,
+    company: 'Prostrive',
+    logo: '/images/jobs/prostrive.png',
+    projects: [
+      {
+        title: 'Senior JavaScript Developer',
+        name: 'Deelscootmobiel',
+        desc: [
+          'One of the full-stack devs of Deelscootmobiel in web, mobile, and kiosk apps using Next.js, TypeScript, React.js, Nest.js, PostgreSQL, and Prisma.',
+          'Implemented AWS Cloud Solutions with Fargate, S3, EC2, ECS, and Nginx, with purposes like cloud security and reverse proxy.'
+        ]
+      }
+    ]
+  },
+  {
+    startDate: 'May 2024',
+    endDate: 'Jul 2024',
+    isPresent: false,
+    company: 'Narrasoft',
+    logo: '/images/jobs/narrasoft.png',
+    projects: [
+      {
+        title: 'Next.js Developer',
+        name: 'Metaverse Project',
+        desc: [
+          'Worked with a Metaverse project using Next.js, TypeScript, PostgreSQL, and Nest.js.'
+        ]
+      }
+    ]
+  },
+  {
+    startDate: 'Jul 2024',
+    endDate: 'Dec 2024',
+    isPresent: false,
+    company: 'Coral Sourcing, LLC',
+    logo: '/images/jobs/found-no-logo.png',
+    projects: [
+      {
+        title: 'Next.js Developer',
+        name: 'Web3 Application',
+        desc: [
+          'Developed and maintained web applications using Next.js framework.',
+          'Integrated blockchain functionalities into gaming platforms, focusing on NFT transactions and management.',
+          'Collaborated with blockchain developers to design and implement seamless user experiences for NFT-based games.',
+          'Optimized applications for maximum speed and scalability, ensuring high performance across devices.',
+          'Stayed updated with emerging trends in blockchain technology, especially in relation to the gaming industry.'
+        ]
+      }
+    ]
   }
 ]
 
