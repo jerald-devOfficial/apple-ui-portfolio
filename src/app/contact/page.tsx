@@ -84,7 +84,7 @@ const Contact = () => {
               maxLength={50}
               type='email'
               id='email'
-              className='flex-1 focus:outline-none'
+              className='flex-1 focus:outline-hidden'
               placeholder='Your email address'
             />
           </div>
@@ -96,7 +96,7 @@ const Contact = () => {
               maxLength={50}
               type='text'
               id='fullName'
-              className='flex-1 focus:outline-none'
+              className='flex-1 focus:outline-hidden'
               placeholder='Your full name'
             />
           </div>
@@ -108,7 +108,7 @@ const Contact = () => {
               maxLength={80}
               type='text'
               id='subject'
-              className='flex-1 focus:outline-none'
+              className='flex-1 focus:outline-hidden'
               placeholder='Email Subject'
             />
           </div>
@@ -118,7 +118,7 @@ const Contact = () => {
             maxLength={800}
             id='message'
             placeholder='Please type your message'
-            className='w-full h-full border-b border-[#3C3C43]/36 border-solid p-4 focus:outline-none'
+            className='w-full h-full border-b border-[#3C3C43]/36 border-solid p-4 focus:outline-hidden'
           />
         </div>
         <div className='w-full h-10 flex items-center justify-center bg-white'>

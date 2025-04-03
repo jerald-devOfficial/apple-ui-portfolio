@@ -122,7 +122,7 @@ const Mails = () => {
     <main
       className={`flex overflow-hidden h-full w-full xl:max-w-[1024px] sm:pt-6 xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 ${montserrat.className} my-2 sm:my-0`}
     >
-      <div className='flex flex-grow h-full rounded-xl shadow-xl overflow-hidden'>
+      <div className='flex grow h-full rounded-xl shadow-xl overflow-hidden'>
         <div className='sm:w-[200px] bg-[#F5F5F5] opacity-[97%] lg:w-[300px] w-full relative sidebar overflow-hidden shadow-inner flex flex-col rounded-l-[inherit] sm:rounded-r-none rounded-r-[inherit]'>
           <div className='border-b border-[#3C3C43]/36 border-solid px-4 pt-5 pb-3 hidden sm:flex gap-x-4 items-center hover:bg-[#F5F5F5]'>
             <Image
@@ -441,7 +441,7 @@ const Mails = () => {
               </div>
             </div>
           ) : (
-            <div className='flex items-center flex-col justify-center gap-y-2 flex-grow'>
+            <div className='flex items-center flex-col justify-center gap-y-2 grow'>
               <h4 className='text-base font-medium text-slate-600'>
                 Nothing to see here.
               </h4>

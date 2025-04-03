@@ -84,8 +84,8 @@ const EtherScan = () => {
         </div>
       </div>
       <div className='flex flex-col flex-1 gap-y-4'>
-        <div className='h-[100px] bg-gradient-to-b from-eth-bg-top to-eth-bg-bottom relative overflow-hidden w-full flex'>
-          <div className='absolute overflow-hidden inset-0 h-[inherit] wave px-4 flex flex-grow justify-center items-center w-full'>
+        <div className='h-[100px] bg-linear-to-b from-eth-bg-top to-eth-bg-bottom relative overflow-hidden w-full flex'>
+          <div className='absolute overflow-hidden inset-0 h-[inherit] wave px-4 flex grow justify-center items-center w-full'>
             <form
               onSubmit={fetchTransaction}
               className='flex w-full h-8 bg-white items-center rounded-md p-1 gap-x-2 justify-between'
@@ -93,7 +93,7 @@ const EtherScan = () => {
               <div className='relative flex items-center justify-center flex-1 h-[inherit] overflow-hidden'>
                 <input
                   type='text'
-                  className={`${inter.className} absolute block m-auto text-sm flex-1 focus:rounded-md p-2 focus:outline-gray-400 text-black w-full outline-none`}
+                  className={`${inter.className} absolute block m-auto text-sm flex-1 focus:rounded-md p-2 focus:outline-gray-400 text-black w-full outline-hidden`}
                   value={transactionHash}
                   onChange={(e) => setTransactionHash(e.target.value)}
                   placeholder='Enter Transaction Hash'

@@ -39,7 +39,7 @@ const Web3Page = () => {
     <main
       className={`flex overflow-hidden h-full w-full md:max-w-[700px] sm:pt-6 xl:pt-12  mx-auto sm:px-12 md:px-0 ${montserrat.className} my-2 sm:my-0`}
     >
-      <div className='flex flex-grow h-full rounded-xl shadow-xl overflow-hidden bg-white/90'>
+      <div className='flex grow h-full rounded-xl shadow-xl overflow-hidden bg-white/90'>
         <section className='md:w-[300px] sm:w-[200px] w-full h-full flex flex-col'>
           <div className='border-b border-gray-300 border-solid h-16 hover:bg-white/90 flex items-center justify-between px-4 shadow-md shadow-gray-200 w-full overflow-hidden'>
             <div className='hidden sm:block overflow-hidden md:w-2/3 h-auto sm:w-full'>

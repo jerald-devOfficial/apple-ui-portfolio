@@ -68,10 +68,10 @@ const BatteryStatus = () => {
     <div className='flex items-center gap-x-1.5'>
       {isIOS ? (
         <>
-          <span className='outline-2 outline outline-white/50 xl:outline-black/50 outline-offset-2 rounded-sm h-2 w-5 relative'>
+          <span className='outline-2 outline outline-white/50 xl:outline-black/50 outline-offset-2 rounded-xs h-2 w-5 relative'>
             {/* Percentage white bar */}
             <span
-              className='w-full h-full bg-white xl:bg-black absolute rounded-sm flex items-center justify-center'
+              className='w-full h-full bg-white xl:bg-black absolute rounded-xs flex items-center justify-center'
               style={{ width: `100%` }}
             >
               <XMarkIcon className='text-red-600 h-3 w-3' />
@@ -81,10 +81,10 @@ const BatteryStatus = () => {
         </>
       ) : (
         <>
-          <span className='outline-2 outline outline-white/50 xl:outline-black/50 outline-offset-2 rounded-sm h-2 w-5 relative'>
+          <span className='outline-2 outline outline-white/50 xl:outline-black/50 outline-offset-2 rounded-xs h-2 w-5 relative'>
             {/* Percentage white bar */}
             <span
-              className='w-full h-full bg-white xl:bg-black absolute rounded-sm'
+              className='w-full h-full bg-white xl:bg-black absolute rounded-xs'
               style={{ width: `${batteryPercentage}%` }}
             />
           </span>

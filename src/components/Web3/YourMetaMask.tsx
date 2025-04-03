@@ -47,7 +47,7 @@ const YourMetaMask = () => {
   })
 
   return (
-    <section className='flex-grow h-full bg-white'>
+    <section className='grow h-full bg-white'>
       <div className='h-16 w-full shadow-md shadow-gray-200 flex justify-between items-center px-4'>
         {error && <p className='text-xs font-bold text-rose-600'>{error}</p>}
         {isConnected && address ? (

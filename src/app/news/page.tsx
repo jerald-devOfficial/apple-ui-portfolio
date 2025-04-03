@@ -112,14 +112,14 @@ const News = () => {
           </div>
         </div>
         {isLoading && (
-          <div className='flex items-center flex-col justify-center gap-y-2 flex-grow'>
+          <div className='flex items-center flex-col justify-center gap-y-2 grow'>
             <h4 className='text-base font-medium text-slate-600'>
               Fetching news...
             </h4>
           </div>
         )}
         {error && (
-          <div className='flex items-center flex-col justify-center gap-y-2 flex-grow'>
+          <div className='flex items-center flex-col justify-center gap-y-2 grow'>
             <h4 className='text-base font-medium text-red-600'>
               {error.message}
             </h4>
