@@ -46,9 +46,9 @@ const Portfolio = () => {
     <main
       className={`flex overflow-hidden h-full w-full xl:max-w-[1024px] sm:pt-6 xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 ${montserrat.className} my-2 sm:my-0`}
     >
-      <div className='flex flex-grow h-full rounded-xl bg-stone-200/95 flex-col shadow-xl overflow-hidden'>
+      <div className='flex grow h-full rounded-xl bg-stone-200/95 flex-col shadow-xl overflow-hidden'>
         <div className='flex border-b-[0.3px] border-gray-400/60 sm:border-gray-300/90 border-solid'>
-          <div className='px-4 xs:pt-5 hidden xs:pb-3 xs:flex gap-x-4 items-center hover:bg-[#F5F5F5] md:w-1/3 shadow-sm'>
+          <div className='px-4 xs:pt-5 hidden xs:pb-3 xs:flex gap-x-4 items-center hover:bg-[#F5F5F5] md:w-1/3 shadow-xs'>
             <div className='block'>
               <div className='relative h-[60px] w-[60px]'>
                 <Image
@@ -69,7 +69,7 @@ const Portfolio = () => {
           </div>
           <div
             className={`flex-1 px-4 pt-2.5 pb-3 hidden md:flex gap-x-4 h-[92px] flex-col justify-between items-center bg-white/95 overflow-hidden ${
-              activeCategory !== null ? 'shadow' : ''
+              activeCategory !== null ? 'shadow-sm' : ''
             }`}
           >
             <div className='flex gap-1'>

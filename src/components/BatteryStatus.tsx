@@ -1,7 +1,7 @@
 'use client'
 
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import React, { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 interface BatteryManagerEventMap {
   chargingchange: Event
@@ -10,23 +10,27 @@ interface BatteryManagerEventMap {
   levelchange: Event
 }
 
+interface NavigatorWithBattery extends Navigator {
+  getBattery: () => Promise<BatteryManager>
+}
+
 interface BatteryManager extends EventTarget {
   charging: boolean
   chargingTime: number
   dischargingTime: number
   level: number
-  onchargingchange: ((this: BatteryManager, ev: Event) => any) | null
-  onchargingtimechange: ((this: BatteryManager, ev: Event) => any) | null
-  ondischargingtimechange: ((this: BatteryManager, ev: Event) => any) | null
-  onlevelchange: ((this: BatteryManager, ev: Event) => any) | null
+  onchargingchange: ((this: BatteryManager, ev: Event) => void) | null
+  onchargingtimechange: ((this: BatteryManager, ev: Event) => void) | null
+  ondischargingtimechange: ((this: BatteryManager, ev: Event) => void) | null
+  onlevelchange: ((this: BatteryManager, ev: Event) => void) | null
   addEventListener<K extends keyof BatteryManagerEventMap>(
     type: K,
-    listener: (this: BatteryManager, ev: BatteryManagerEventMap[K]) => any,
+    listener: (this: BatteryManager, ev: BatteryManagerEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void
   removeEventListener<K extends keyof BatteryManagerEventMap>(
     type: K,
-    listener: (this: BatteryManager, ev: BatteryManagerEventMap[K]) => any,
+    listener: (this: BatteryManager, ev: BatteryManagerEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void
 }
@@ -38,15 +42,17 @@ const BatteryStatus = () => {
   useEffect(() => {
     // Check if the Battery Status API is supported
     if ('getBattery' in navigator) {
-      ;(navigator as any).getBattery().then((battery: BatteryManager) => {
-        // Update battery percentage
-        updateBatteryPercentage(battery)
-
-        // Listen for changes in battery level
-        battery.addEventListener('levelchange', () => {
+      ;(navigator as NavigatorWithBattery)
+        .getBattery()
+        .then((battery: BatteryManager) => {
+          // Update battery percentage
           updateBatteryPercentage(battery)
+
+          // Listen for changes in battery level
+          battery.addEventListener('levelchange', () => {
+            updateBatteryPercentage(battery)
+          })
         })
-      })
     } else if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
       // Check if the user agent indicates iOS
       setIsIOS(true)
@@ -62,10 +68,10 @@ const BatteryStatus = () => {
     <div className='flex items-center gap-x-1.5'>
       {isIOS ? (
         <>
-          <span className='outline-2 outline outline-white/50 xl:outline-black/50 outline-offset-2 rounded-sm h-2 w-5 relative'>
+          <span className='outline-2 outline outline-white/50 xl:outline-black/50 outline-offset-2 rounded-xs h-2 w-5 relative'>
             {/* Percentage white bar */}
             <span
-              className='w-full h-full bg-white xl:bg-black absolute rounded-sm flex items-center justify-center'
+              className='w-full h-full bg-white xl:bg-black absolute rounded-xs flex items-center justify-center'
               style={{ width: `100%` }}
             >
               <XMarkIcon className='text-red-600 h-3 w-3' />
@@ -75,10 +81,10 @@ const BatteryStatus = () => {
         </>
       ) : (
         <>
-          <span className='outline-2 outline outline-white/50 xl:outline-black/50 outline-offset-2 rounded-sm h-2 w-5 relative'>
+          <span className='outline-2 outline outline-white/50 xl:outline-black/50 outline-offset-2 rounded-xs h-2 w-5 relative'>
             {/* Percentage white bar */}
             <span
-              className='w-full h-full bg-white xl:bg-black absolute rounded-sm'
+              className='w-full h-full bg-white xl:bg-black absolute rounded-xs'
               style={{ width: `${batteryPercentage}%` }}
             />
           </span>

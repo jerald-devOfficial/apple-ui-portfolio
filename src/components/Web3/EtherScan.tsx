@@ -2,14 +2,32 @@
 
 import { hashShortener, toFixedFour } from '@/utils'
 import { Inter } from 'next/font/google'
-import React, { FormEvent, useState } from 'react'
-import { IoSearchSharp } from 'react-icons/io5'
 import Image from 'next/image'
+import { FormEvent, useState } from 'react'
+import { IoSearchSharp } from 'react-icons/io5'
 import Web3 from 'web3'
+
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
+type Transaction = {
+  blockHash?: string
+  from: string
+  to?: string | null
+  value: string
+  gas: string
+  gasPrice: string
+  hash: string
+  nonce: string
+  blockNumber?: string
+  transactionIndex?: string
+  input: string
+  v?: string
+  r: string
+  s: string
+}
+
 const EtherScan = () => {
-  const [transaction, setTransaction] = useState<any>(null)
+  const [transaction, setTransaction] = useState<Transaction | null>(null)
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
   const [transactionHash, setTransactionHash] = useState<string>('')
   const [isLoading, setIsLoading] = useState(false)
@@ -17,29 +35,25 @@ const EtherScan = () => {
 
   const fetchTransaction = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setIsLoading(true)
+    setError(null)
     setIsSubmitted(true)
 
     try {
-      setIsLoading(true)
-      if (
-        typeof window !== 'undefined' &&
-        (window as any).ethereum !== 'undefined'
-      ) {
-        // Initialize web3 with MetaMask provider
-        const web3 = new Web3((window as any).ethereum)
-        // Request account access if needed
-        await (window as any).ethereum.enable()
+      const apiKey = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY
+      const response = await fetch(
+        `https://api.etherscan.io/api?module=proxy&action=eth_getTransactionByHash&txhash=${transactionHash}&apikey=${apiKey}`
+      )
+      const data = await response.json()
 
-        // Fetch transaction details
-        const transaction = await web3.eth.getTransaction(transactionHash)
-        setTransaction(transaction)
+      if (data.result) {
+        setTransaction(data.result)
       } else {
-        console.error('MetaMask extension not detected.')
-        setError('MetaMask browser extension not detected, please install.')
+        setError('Transaction not found.')
       }
     } catch (error) {
       console.error('Error fetching transaction:', error)
-      setError(`Error from fetching transaction: ${error}`)
+      setError('An error occurred while fetching the transaction.')
     } finally {
       setIsLoading(false)
     }
@@ -70,8 +84,8 @@ const EtherScan = () => {
         </div>
       </div>
       <div className='flex flex-col flex-1 gap-y-4'>
-        <div className='h-[100px] bg-gradient-to-b from-eth-bg-top to-eth-bg-bottom relative overflow-hidden w-full flex'>
-          <div className='absolute overflow-hidden inset-0 h-[inherit] wave px-4 flex flex-grow justify-center items-center w-full'>
+        <div className='h-[100px] bg-linear-to-b from-eth-bg-top to-eth-bg-bottom relative overflow-hidden w-full flex'>
+          <div className='absolute overflow-hidden inset-0 h-[inherit] wave px-4 flex grow justify-center items-center w-full'>
             <form
               onSubmit={fetchTransaction}
               className='flex w-full h-8 bg-white items-center rounded-md p-1 gap-x-2 justify-between'
@@ -79,7 +93,7 @@ const EtherScan = () => {
               <div className='relative flex items-center justify-center flex-1 h-[inherit] overflow-hidden'>
                 <input
                   type='text'
-                  className={`${inter.className} absolute block m-auto text-sm flex-1 focus:rounded-md p-2 focus:outline-gray-400 text-black w-full outline-none`}
+                  className={`${inter.className} absolute block m-auto text-sm flex-1 focus:rounded-md p-2 focus:outline-gray-400 text-black w-full outline-hidden`}
                   value={transactionHash}
                   onChange={(e) => setTransactionHash(e.target.value)}
                   placeholder='Enter Transaction Hash'
@@ -94,34 +108,11 @@ const EtherScan = () => {
             </form>
           </div>
         </div>
+
         {error && (
           <div className='flex flex-col justify-between flex-1 p-4'>
             <div className='flex flex-col gap-y-2'>
               <p className='text-xs font-bold text-rose-600'>{error}</p>
-
-              <p className='text-xs font-medium text-left text-wrap leading-6 text-blue-600'>
-                Fix when error is about{' '}
-                <code className='text-rose-600'>window.ethereum.enable</code>:
-              </p>
-              <ul className='indent-1 text-xs list-inside list-decimal leading-6'>
-                <li>
-                  Access this site using a desktop browser, not from a mobile
-                  device.
-                </li>
-                <li>Have MetaMask browser extension installed.</li>
-                <li>
-                  Go to <code className='text-blue-600'>YourMetaMask</code>{' '}
-                  section.
-                </li>
-                <li>Login to your MetaMask account.</li>
-                <li>
-                  Allow{' '}
-                  <code className='text-violet-600'>jeraldbaroro.xyz</code> to
-                  have read-only access to your profile
-                </li>
-                <li>And get back to this section.</li>
-                <li>Paste the Txn Hash, and submit.</li>
-              </ul>
             </div>
             <button
               className='rounded-md flex items-center justify-center px-2 py-1 text-sm text-white bg-blue-600 font-medium'
@@ -131,9 +122,10 @@ const EtherScan = () => {
             </button>
           </div>
         )}
+
         {isLoading && (
           <p className='text-xs font-bold flex-1 text-yellow-600 text-center w-full'>
-            Fetching data from https://etherscan.io...
+            Fetching data from Etherscan...
           </p>
         )}
 
@@ -161,10 +153,11 @@ const EtherScan = () => {
             </ul>
           </div>
         )}
+
         {!isLoading && transaction ? (
           <div className='flex justify-between flex-col flex-1 p-4'>
             <div className={`${inter.className} flex flex-col gap-y-2`}>
-              <h4 className='text-base font-medium'>Transcation Details</h4>
+              <h4 className='text-base font-medium'>Transaction Details</h4>
               <div className='flex gap-x-4 text-sm'>
                 <div className='flex flex-col text-gray-500'>
                   <span className='text-nowrap'>Transaction Hash:</span>
@@ -172,14 +165,13 @@ const EtherScan = () => {
                   <span>To:</span>
                   <span>Value:</span>
                 </div>
-
                 <div className='flex flex-col flex-1'>
-                  <span>{hashShortener(transaction.blockHash, 10)}</span>
-                  <span>{hashShortener(transaction.from, 10)}</span>
-                  <span>{hashShortener(transaction.to, 10)}</span>
+                  <span>{hashShortener(transaction.blockHash ?? '', 10)}</span>
+                  <span>{hashShortener(transaction.from ?? '', 10)}</span>
+                  <span>{hashShortener(transaction.to ?? '', 10)}</span>
                   <span>
                     {toFixedFour(
-                      Web3.utils.fromWei(transaction.value.toString(), 'ether')
+                      Web3.utils.fromWei(transaction.value, 'ether')
                     )}{' '}
                     ETH
                   </span>

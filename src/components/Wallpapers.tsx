@@ -12,20 +12,20 @@ const Wallpapers = () => {
         alt="iOS"
       />
       <Image
-        src={'/images/bg/ipadOS-light.png'}
-        className="object-cover object-center hidden sm:block xl:hidden"
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
+        src={'/images/bg/iPadOS-light.png'}
+        className='object-cover object-center hidden sm:block xl:hidden'
+        sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw'
         fill
-        loading="lazy"
-        alt="iOS"
+        loading='lazy'
+        alt='iPadOS'
       />
       <Image
-        src={'/images/bg/macOS-light.jpeg'}
-        className="object-cover object-center hidden xl:block"
+        src={'/images/bg/macOS-light.jpg'}
+        className='object-cover object-center hidden xl:block'
         fill
-        loading="lazy"
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw"
-        alt="iOS"
+        loading='lazy'
+        sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw'
+        alt='macOS'
       />
     </div>
   )

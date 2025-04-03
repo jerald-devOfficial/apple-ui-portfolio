@@ -1,49 +1,88 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-xs: 390px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
+  --background-image-gradient-conic: conic-gradient(
+    from 180deg at 50% 50%,
+    var(--tw-gradient-stops)
+  );
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+@utility from-eth-bg-top {
+  background-color: #081d35;
+}
+
+@utility to-eth-bg-bottom {
+  background-color: #182c42;
+}
+
+@utility sidebar {
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #5c5c5c;
+    opacity: 5%;
+    filter: blur(20px);
+    z-index: -1;
+    -webkit-filter: blur(20px);
+  }
+}
+
+@utility panel {
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: black;
+    filter: blur(50px);
+    z-index: -1;
+    -webkit-filter: blur(50px);
+  }
+}
+
+@utility wave {
+  position: relative;
+  height: 100%;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#182c42" fill-opacity="1" d="M0,96L48,117.3C96,139,192,181,288,186.7C384,192,480,160,576,144C672,128,768,128,864,122.7C960,117,1056,107,1152,122.7C1248,139,1344,181,1392,202.7L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>')
+    repeat-x bottom center;
+  z-index: 10;
+  animation: wave-animation 20s infinite linear;
+}
 
 @layer utilities {
-    .from-eth-bg-top {
-      background-color: #081d35;
-    }
-    .to-eth-bg-bottom {
-      background-color: #182c42;
-    }
-  
-    .sidebar::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: #5c5c5c;
-      opacity: 5%;
-      filter: blur(20px);
-      z-index: -1;
-      -webkit-filter: blur(20px);
-    }
-  
-    .panel::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: black;
-      filter: blur(50px);
-      z-index: -1;
-      -webkit-filter: blur(50px);
-    }
-
-    .wave {
-        position: relative;
-        height: 100%;
-        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#182c42" fill-opacity="1" d="M0,96L48,117.3C96,139,192,181,288,186.7C384,192,480,160,576,144C672,128,768,128,864,122.7C960,117,1056,107,1152,122.7C1248,139,1344,181,1392,202.7L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x bottom center;
-        z-index: 10;
-        animation: wave-animation 20s infinite linear;
-      }
       
       @keyframes wave-animation {
         0% {

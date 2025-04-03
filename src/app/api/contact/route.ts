@@ -1,18 +1,17 @@
 import { Contact } from '@/models/Contact'
-import connect from '@/utils/db'
-import { NextResponse } from 'next/server'
-import mongoose from 'mongoose'
 import { getRandomHexColor } from '@/utils'
+import connect from '@/utils/db'
+import mongoose from 'mongoose'
+import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
   const { fullName, email, message, subject } = await req.json()
 
-  const avatarColor = getRandomHexColor()
-  + '/' + getRandomHexColor();
+  const avatarColor = getRandomHexColor() + '/' + getRandomHexColor()
 
   try {
     await connect()
-  
+
     await Contact.create({ fullName, email, message, avatarColor, subject })
 
     return NextResponse.json({
@@ -21,8 +20,8 @@ export async function POST(req: Request) {
     })
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
-      let errorList = []
-      for (let e in error.errors) {
+      const errorList = []
+      for (const e in error.errors) {
         errorList.push(error.errors[e].message)
       }
       console.log(errorList)
@@ -41,6 +40,7 @@ export async function GET() {
 
     return new NextResponse(JSON.stringify(contact), { status: 200 })
   } catch (err) {
+    console.log(err)
     return new NextResponse('Database Error', { status: 500 })
   }
 }

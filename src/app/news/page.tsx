@@ -1,34 +1,35 @@
 'use client'
 
-import Image from 'next/image'
-import useSWR, { Fetcher } from 'swr'
-import React, { useState } from 'react'
-import { formatDate } from '@/utils'
+import FeaturedNews from '@/components/News/FeaturedNews'
+import NonFeaturedNews from '@/components/News/NonFeaturedNews'
 import { format } from 'date-fns'
+import Image from 'next/image'
+import { useState } from 'react'
+import useSWR, { Fetcher } from 'swr'
+
+export type Result = {
+  article_id: string
+  title: string
+  link: string
+  category: string[]
+  country: string[]
+  description: string | null
+  image_url: string | null
+  language: string
+  pubDate: Date
+  creator: string
+}
+
+type Data = {
+  status: string
+  totalResults: number
+  results: Result[]
+  nextPage: string
+}
 
 const News = () => {
   const [currentPage, setCurrentPage] = useState('')
   const [nextPage, setNextPage] = useState('')
-
-  type Results = {
-    article_id: string
-    title: string
-    link: string
-    category: string[]
-    country: string[]
-    description: string | null
-    image_url: string | null
-    language: string
-    pubDate: Date
-    creator: string
-  }
-
-  type Data = {
-    status: string
-    totalResults: number
-    results: Results[]
-    nextPage: string
-  }
 
   const isValidImageUrl = (url: string): boolean => {
     // Regular expression to match image file extensions
@@ -42,7 +43,7 @@ const News = () => {
     return imageExtensions.test(url) && !excludedDomains.test(url)
   }
 
-  const fetcher: Fetcher<Results[], any> = async (url: string) => {
+  const fetcher: Fetcher<Result[], string> = async (url: string) => {
     if (currentPage !== '') {
       url += `&page=${currentPage}`
     }
@@ -111,14 +112,14 @@ const News = () => {
           </div>
         </div>
         {isLoading && (
-          <div className='flex items-center flex-col justify-center gap-y-2 flex-grow'>
+          <div className='flex items-center flex-col justify-center gap-y-2 grow'>
             <h4 className='text-base font-medium text-slate-600'>
               Fetching news...
             </h4>
           </div>
         )}
         {error && (
-          <div className='flex items-center flex-col justify-center gap-y-2 flex-grow'>
+          <div className='flex items-center flex-col justify-center gap-y-2 grow'>
             <h4 className='text-base font-medium text-red-600'>
               {error.message}
             </h4>
@@ -128,76 +129,10 @@ const News = () => {
         {data && (
           <div className='flex flex-col w-full h-full px-4 py-6 bg-white gap-y-10 overflow-y-auto justify-between'>
             <h2 className='font-black text-3xl text-rose-500'>Top Stories</h2>
-            <a
-              target='_blank'
-              rel='noopener noreferrer'
-              href={data[0].link}
-              className='flex flex-col bg-white rounded-xl shadow-lg group cursor-pointer hover:bg-gray-200'
-            >
-              <header className='relative rounded-t-[inherit] bg-slate-600'>
-                <Image
-                  sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                  src={data[0].image_url!}
-                  width={1}
-                  height={1}
-                  loading='lazy'
-                  style={{
-                    height: 'auto',
-                    width: '100%'
-                  }}
-                  alt={data[0].title}
-                  className='object-cover object-center rounded-[inherit]'
-                />
-              </header>
-              <main className='flex flex-col gap-y-1 p-2'>
-                <h5 className='text-base text-gray-800 truncate font-medium'>
-                  {data[0].creator}
-                </h5>
-                <h4 className='font-bold text-black text-2xl tracking-tighter'>
-                  {data[0].title}
-                </h4>
-              </main>
-              <footer className='border-t border-solid border-slate-200 group-hover:border-gray-100 px-2 py-1'>
-                <span className='text-sm text-gray-400 font-medium'>
-                  {formatDate(data[0].pubDate)}
-                </span>
-              </footer>
-            </a>
+            <FeaturedNews featured={data[0]} />
             <div className='grid grid-cols-2 gap-4'>
               {data.slice(1).map((item) => (
-                <a
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  href={item.link}
-                  key={item.article_id}
-                  className='flex flex-col cursor-pointer bg-white rounded-xl shadow-lg justify-between group'
-                >
-                  <header className='relative rounded-t-[inherit] h-28 sm:h-52 block bg-slate-600'>
-                    <Image
-                      sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                      src={item.image_url!}
-                      loading='lazy'
-                      fill
-                      alt={item.title}
-                      className='object-cover object-center rounded-[inherit] grayscale group-hover:grayscale-0'
-                    />
-                  </header>
-                  <div className='flex-1 flex justify-between flex-col'>
-                    <main className='flex flex-col gap-y-1 p-2'>
-                      <h5 className='text-xs sm:text-base text-gray-800 truncate font-medium'>
-                        {item.creator ?? 'Author not specified'}
-                      </h5>
-                      <h4 className='font-bold text-black text-base sm:text-2xl tracking-tighter'>
-                        {item.title}
-                      </h4>
-                    </main>
-                    <footer className='border-t border-solid border-slate-200 px-2 py-1'>
-                      <span className='text-sm text-gray-400 font-medium'>
-                        {formatDate(item.pubDate)}
-                      </span>
-                    </footer>
-                  </div>
-                </a>
+                <NonFeaturedNews news={item} key={item.article_id} />
               ))}
             </div>
 

@@ -1,15 +1,15 @@
 'use client'
 
 import { IContact } from '@/models/Contact'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import useSWR, { Fetcher } from 'swr'
-import Image from 'next/image'
 import { formatDate, getInitials, hoursAgo } from '@/utils'
-import { useState } from 'react'
 import { TrashIcon } from '@heroicons/react/24/outline'
-import { Montserrat } from 'next/font/google'
 import { ChevronLeftIcon } from '@heroicons/react/24/solid'
+import { useSession } from 'next-auth/react'
+import { Montserrat } from 'next/font/google'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { Fragment, useState } from 'react'
+import useSWR, { Fetcher } from 'swr'
 
 const montserrat = Montserrat({ subsets: ['latin'], display: 'swap' })
 
@@ -122,7 +122,7 @@ const Mails = () => {
     <main
       className={`flex overflow-hidden h-full w-full xl:max-w-[1024px] sm:pt-6 xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 ${montserrat.className} my-2 sm:my-0`}
     >
-      <div className='flex flex-grow h-full rounded-xl shadow-xl overflow-hidden'>
+      <div className='flex grow h-full rounded-xl shadow-xl overflow-hidden'>
         <div className='sm:w-[200px] bg-[#F5F5F5] opacity-[97%] lg:w-[300px] w-full relative sidebar overflow-hidden shadow-inner flex flex-col rounded-l-[inherit] sm:rounded-r-none rounded-r-[inherit]'>
           <div className='border-b border-[#3C3C43]/36 border-solid px-4 pt-5 pb-3 hidden sm:flex gap-x-4 items-center hover:bg-[#F5F5F5]'>
             <Image
@@ -201,9 +201,8 @@ const Mails = () => {
               {/* hidden sm */}
               <div className='bg-white py-2 gap-y-2 relative w-full hidden sm:flex flex-col'>
                 {data.map((mail, index) => (
-                  <>
+                  <Fragment key={mail._id}>
                     <button
-                      key={mail._id}
                       className='flex px-4 gap-x-2 cursor-pointer py-2 w-full relative overflow-hidden'
                       onClick={() => handleMailClick(mail._id)}
                     >
@@ -251,7 +250,7 @@ const Mails = () => {
                       </div>
                     </button>
                     {data.length > 1 && index < data.length - 1 && <hr />}
-                  </>
+                  </Fragment>
                 ))}
               </div>
 
@@ -306,9 +305,8 @@ const Mails = () => {
               ) : (
                 <div className='bg-white py-2 gap-y-2 relative w-full flex flex-col sm:hidden h-full overflow-y-auto'>
                   {data.map((mail, index) => (
-                    <>
+                    <Fragment key={mail._id}>
                       <button
-                        key={mail._id}
                         className='flex px-4 gap-x-2 cursor-pointer py-2 w-full relative'
                         onClick={() => handleMailClick(mail._id)}
                       >
@@ -353,7 +351,7 @@ const Mails = () => {
                         </div>
                       </button>
                       {data.length > 1 && index < data.length - 1 && <hr />}
-                    </>
+                    </Fragment>
                   ))}
                 </div>
               )}
@@ -443,7 +441,7 @@ const Mails = () => {
               </div>
             </div>
           ) : (
-            <div className='flex items-center flex-col justify-center gap-y-2 flex-grow'>
+            <div className='flex items-center flex-col justify-center gap-y-2 grow'>
               <h4 className='text-base font-medium text-slate-600'>
                 Nothing to see here.
               </h4>
