@@ -14,7 +14,7 @@ const Diaries = () => {
   const fetcher: Fetcher<IDiary[], string> = (url) =>
     fetch(url).then((res) => res.json())
 
-  const { data, error, isLoading, mutate } = useSWR('/api/diary', fetcher)
+  const { data } = useSWR('/api/diary', fetcher)
 
   console.log('data: ', data)
 
