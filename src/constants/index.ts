@@ -1,8 +1,8 @@
 import {
-  CodeBracketIcon,
-  SquaresPlusIcon,
+  BookOpenIcon,
   BriefcaseIcon,
-  BookOpenIcon
+  CodeBracketIcon,
+  SquaresPlusIcon
 } from '@heroicons/react/24/outline'
 
 export const sideIcons = [
@@ -199,6 +199,59 @@ export const workExperiences = [
         ]
       }
     ]
+  },
+  {
+    startDate: 'Apr 2024',
+    endDate: 'Aug 2024',
+    isPresent: false,
+    company: 'Prostrive',
+    logo: '/images/jobs/prostrive.png',
+    projects: [
+      {
+        title: 'Senior JavaScript Developer',
+        name: 'Deelscootmobiel',
+        desc: [
+          'One of the full-stack devs of Deelscootmobiel in web, mobile, and kiosk apps using Next.js, TypeScript, React.js, Nest.js, PostgreSQL, and Prisma.',
+          'Implemented AWS Cloud Solutions with Fargate, S3, EC2, ECS, and Nginx, with purposes like cloud security and reverse proxy.'
+        ]
+      }
+    ]
+  },
+  {
+    startDate: 'May 2024',
+    endDate: 'Jul 2024',
+    isPresent: false,
+    company: 'Narrasoft',
+    logo: '/images/jobs/narrasoft.png',
+    projects: [
+      {
+        title: 'Next.js Developer',
+        name: 'Metaverse Project',
+        desc: [
+          'Worked with a Metaverse project using Next.js, TypeScript, PostgreSQL, and Nest.js.'
+        ]
+      }
+    ]
+  },
+  {
+    startDate: 'Jul 2024',
+    endDate: 'Dec 2024',
+    isPresent: false,
+    company: 'Coral Sourcing, LLC',
+    logo: '/images/jobs/found-no-logo.png',
+    projects: [
+      {
+        title: 'Next.js Developer',
+        name: 'Web3 Application',
+        desc: [
+          'Developed and maintained web applications using Next.js framework.',
+          'Integrated blockchain functionalities into gaming platforms, focusing on NFT transactions and management.',
+          'Collaborated with blockchain developers to design and implement seamless user experiences for NFT-based games.',
+          'Optimized applications for maximum speed and scalability, ensuring high performance across devices.',
+          'Stayed updated with emerging trends in blockchain technology, especially in relation to the gaming industry.'
+        ]
+      }
+    ]
   }
 ]
 
@@ -235,11 +288,20 @@ export const education = {
       issued: 'Sep 2022',
       credentialID: 'UC-30cf8a1d-fe54-4df7-baa8-6c8acdab5055'
     },
-
     {
       title: 'Mastering TypeScript - 2022 Edition',
       issued: 'Sep 2022',
       credentialID: 'UC-c58082c1-462c-4e57-a0bb-3757f9aec968'
+    },
+    {
+      title: "Ethereum and Solidity: The Complete Developer's Guide",
+      issued: 'Dec 2024',
+      credentialID: 'UC-ec48e60a-df16-48b2-bf57-a065022eb57a'
+    },
+    {
+      title: 'React Native - The Practical Guide [2025]',
+      issued: 'Feb 2025',
+      credentialID: 'UC-fe7bafac-a828-4c17-b5ce-5b22ea5f6922'
     }
   ]
 }

@@ -56,6 +56,12 @@ const ResponsiveUI = ({
       path: '/portfolio'
     },
     {
+      name: 'diaries',
+      title: 'Diaries',
+      img: '/images/icons/macOS-diary.png',
+      path: '/diaries'
+    },
+    {
       name: 'news',
       title: 'News',
       img: '/images/icons/macOS-news.png',
@@ -99,12 +105,12 @@ const ResponsiveUI = ({
 
   return (
     <>
-      <header className='flex justify-between items-center px-5 xs:px-12 py-4 sm:px-4 sm:py-1.5 w-full xl:hidden'>
+      <header className="flex justify-between items-center px-5 xs:px-12 py-4 sm:px-4 sm:py-1.5 w-full xl:hidden">
         <DisplayTime />
         <DeviceStatus />
       </header>
-      <header className='xl:flex justify-between items-center px-4 py-1.5 w-full hidden bg-white/50 backdrop-blur-[50px]'>
-        <div className='flex items-center gap-x-4'>
+      <header className="xl:flex justify-between items-center px-4 py-1.5 w-full hidden bg-white/50 backdrop-blur-[50px]">
+        <div className="flex items-center gap-x-4">
           <Link href={'/'}>
             <Image
               src={'/images/logo/logo.png'}
@@ -113,56 +119,56 @@ const ResponsiveUI = ({
               width={24}
             />
           </Link>
-          <span className='text-black font-semibold text-base'>
+          <span className="text-black font-semibold text-base">
             {dockMacOS.find((dock) => dock?.path === pathname)?.title}
           </span>
         </div>
-        <div className='flex items-center gap-x-4'>
+        <div className="flex items-center gap-x-4">
           <DeviceStatus />
           <DisplayTime />
         </div>
       </header>
       {children}
-      <footer className='flex w-full xs:w-[unset] xs:gap-x-[30px] sm:gap-x-4 py-5 px-5 sm:px-7 sm:py-4 before:absolute before:content-[""] before:bg-[#BFBFBF70]/44 before:backdrop-blur-[50px] before:-z-10 bg-white/30 hover:bg-white/40 rounded-none xs:rounded-[40px] sm:rounded-[30px] before:content items-center justify-around xs:justify-center my-0 xs:my-3 sm:my-4 xl:hidden'>
+      <footer className='flex w-full xs:w-[unset] xs:gap-x-[30px] sm:gap-x-4 py-5 px-5 sm:px-7 sm:py-4 before:absolute before:content-[""] before:bg-[#BFBFBF70]/44 before:backdrop-blur-[50px] before:-z-10 bg-white/20 hover:bg-white/30 rounded-none xs:rounded-[40px] sm:rounded-[30px] before:content items-center justify-around xs:justify-center my-0 xs:my-3 sm:my-4 xl:hidden'>
         {dock.map((item) =>
           item.click ? (
             <button
               onClick={item.click}
               key={item.name}
-              className='relative xs:h-[60px] xs:w-[60px] h-10 w-10'
+              className="relative xs:h-[60px] xs:w-[60px] h-10 w-10"
             >
               <Image
                 alt={item.name}
                 src={item.img}
                 fill
-                loading='lazy'
-                sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                loading="lazy"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             </button>
           ) : (
-            <Link href={`${item.path}`} key={item.name} className='block'>
-              <div className='relative xs:h-[60px] xs:w-[60px] h-10 w-10'>
+            <Link href={`${item.path}`} key={item.name} className="block">
+              <div className="relative xs:h-[60px] xs:w-[60px] h-10 w-10">
                 <Image
                   alt={item.name}
                   src={item.img}
                   fill
-                  loading='lazy'
-                  sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                  loading="lazy"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
               </div>
             </Link>
           )
         )}
       </footer>
-      <footer className='hidden xl:flex  xl:gap-x-0.5 xl:px-1.5 xl:py-1.5 before:absolute before:content-[""] before:bg-[#F6F6F6]/36 before:backdrop-blur-[135px] before:blur-[6px] before:-z-10 bg-lime-300/40 rounded-2xl before:content items-baseline justify-center xl:my-2 ring-1 ring-white/30 ring-inset shadow shadow-black/15'>
+      <footer className='hidden xl:flex  xl:gap-x-0.5 xl:px-1.5 xl:py-1.5 before:absolute before:content-[""] before:bg-[#F6F6F6]/36 before:backdrop-blur-[135px] before:blur-[6px] before:-z-10 bg-white/40 rounded-2xl before:content items-baseline justify-center xl:my-2 ring-1 ring-white/30 ring-inset shadow-sm shadow-black/15'>
         {dockMacOS.map((item, index) => (
           <Fragment key={item.name}>
             {item.click && (
               <button
                 onClick={item.click}
-                className='flex flex-col items-center justify-center h-[60px] group cursor-pointer relative'
+                className="flex flex-col items-center justify-center h-[60px] group cursor-pointer relative"
               >
-                <span className='hidden -top-8 absolute group-hover:block text-gray-800 text-sm font-semibold transition-transform transform-gpu text-nowrap'>
+                <span className="hidden -top-8 absolute group-hover:block text-gray-800 text-sm font-semibold transition-transform transform-gpu text-nowrap">
                   {item.title}
                 </span>
 
@@ -171,7 +177,7 @@ const ResponsiveUI = ({
                   alt={item.name}
                   height={50}
                   width={50}
-                  className='transition-transform transform-gpu group-hover:scale-150'
+                  className="transition-transform transform-gpu group-hover:scale-150"
                   style={{
                     transition: 'transform 0.3s',
                     transformOrigin: 'bottom'
@@ -185,9 +191,9 @@ const ResponsiveUI = ({
                 href={`${item.path}`}
                 target={'_blank'}
                 download
-                className='flex flex-col items-center justify-center h-[60px] group cursor-pointer relative'
+                className="flex flex-col items-center justify-center h-[60px] group cursor-pointer relative"
               >
-                <span className='hidden -top-8 absolute group-hover:block text-gray-800 text-sm font-semibold transition-transform transform-gpu text-nowrap'>
+                <span className="hidden -top-8 absolute group-hover:block text-gray-800 text-sm font-semibold transition-transform transform-gpu text-nowrap">
                   {item.title}
                 </span>
                 <Image
@@ -195,14 +201,14 @@ const ResponsiveUI = ({
                   src={item.img}
                   height={50}
                   width={50}
-                  className='transition-transform transform-gpu group-hover:scale-150'
+                  className="transition-transform transform-gpu group-hover:scale-150"
                   style={{
                     transition: 'transform 0.3s',
                     transformOrigin: 'bottom'
                   }}
                 />
                 {dockMacOS[index]?.path === pathname && (
-                  <span className='h-1 w-1 bg-[#808080] rounded-full' />
+                  <span className="h-1 w-1 bg-[#808080] rounded-full" />
                 )}
               </Link>
             )}
@@ -211,9 +217,9 @@ const ResponsiveUI = ({
               (session.status === 'authenticated' ? (
                 <Link
                   href={`${item.path}`}
-                  className='flex flex-col items-center justify-center h-[60px] group cursor-pointer relative'
+                  className="flex flex-col items-center justify-center h-[60px] group cursor-pointer relative"
                 >
-                  <span className='hidden -top-8 absolute group-hover:block text-gray-800 text-sm font-semibold transition-transform transform-gpu text-nowrap'>
+                  <span className="hidden -top-8 absolute group-hover:block text-gray-800 text-sm font-semibold transition-transform transform-gpu text-nowrap">
                     {item.title}
                   </span>
                   <Image
@@ -221,14 +227,14 @@ const ResponsiveUI = ({
                     src={item.img}
                     height={50}
                     width={50}
-                    className='transition-transform transform-gpu group-hover:scale-150'
+                    className="transition-transform transform-gpu group-hover:scale-150"
                     style={{
                       transition: 'transform 0.3s',
                       transformOrigin: 'bottom'
                     }}
                   />
                   {dockMacOS[index]?.path === pathname && (
-                    <span className='h-1 w-1 bg-[#808080] rounded-full' />
+                    <span className="h-1 w-1 bg-[#808080] rounded-full" />
                   )}
                 </Link>
               ) : null)}
@@ -236,9 +242,9 @@ const ResponsiveUI = ({
             {!item.click && !['resume', 'mails'].includes(item.name) && (
               <Link
                 href={`${item.path}`}
-                className='flex flex-col items-center justify-center h-[60px] group cursor-pointer relative'
+                className="flex flex-col items-center justify-center h-[60px] group cursor-pointer relative"
               >
-                <span className='hidden -top-8 absolute group-hover:block text-gray-800 text-sm font-semibold transition-transform transform-gpu text-nowrap'>
+                <span className="hidden -top-8 absolute group-hover:block text-gray-800 text-sm font-semibold transition-transform transform-gpu text-nowrap">
                   {item.title}
                 </span>
                 <Image
@@ -246,14 +252,14 @@ const ResponsiveUI = ({
                   src={item.img}
                   height={50}
                   width={50}
-                  className='transition-transform transform-gpu group-hover:scale-150'
+                  className="transition-transform transform-gpu group-hover:scale-150"
                   style={{
                     transition: 'transform 0.3s',
                     transformOrigin: 'bottom'
                   }}
                 />
                 {dockMacOS[index]?.path === pathname && (
-                  <span className='h-1 w-1 bg-[#808080] rounded-full' />
+                  <span className="h-1 w-1 bg-[#808080] rounded-full" />
                 )}
               </Link>
             )}
