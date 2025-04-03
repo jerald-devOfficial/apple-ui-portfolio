@@ -141,3 +141,15 @@ export const copyAddressToClipboard = (hash: string) => {
       })
   }
 }
+
+export const formatDiaryDate = (createdAt: Date) => {
+  const parsedDate = new Date(createdAt);
+
+  if (isToday(parsedDate)) {
+    return `Today at ${format(parsedDate, 'h:mm a')}`;
+  } else if (isThisYear(parsedDate)) {
+    return format(parsedDate, 'MMM d, h:mm a');
+  } else {
+    return format(parsedDate, 'MMM d, yyyy, h:mm a');
+  }
+};
