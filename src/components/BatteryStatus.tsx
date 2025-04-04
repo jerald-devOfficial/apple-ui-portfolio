@@ -38,6 +38,7 @@ interface BatteryManager extends EventTarget {
 const BatteryStatus = () => {
   const [batteryPercentage, setBatteryPercentage] = useState(0)
   const [isIOS, setIsIOS] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(false)
 
   useEffect(() => {
     // Check if the Battery Status API is supported
@@ -57,6 +58,22 @@ const BatteryStatus = () => {
       // Check if the user agent indicates iOS
       setIsIOS(true)
     }
+
+    // Detect system preference for dark mode
+    if (typeof window !== 'undefined') {
+      const darkModeMediaQuery = window.matchMedia(
+        '(prefers-color-scheme: dark)'
+      )
+      setIsDarkMode(darkModeMediaQuery.matches)
+
+      const handleChange = (e: MediaQueryListEvent) => {
+        setIsDarkMode(e.matches)
+      }
+
+      darkModeMediaQuery.addEventListener('change', handleChange)
+      return () =>
+        darkModeMediaQuery.removeEventListener('change', handleChange)
+    }
   }, [])
 
   const updateBatteryPercentage = (battery: BatteryManager) => {
@@ -64,31 +81,44 @@ const BatteryStatus = () => {
     setBatteryPercentage(percentage)
   }
 
+  // Dynamic styling based on theme
+  const outlineColorClass = isDarkMode
+    ? 'outline-white/50'
+    : 'outline-black/50 dark:outline-white/50'
+
+  const fillClass = isDarkMode ? 'bg-white' : 'bg-black dark:bg-white'
+
+  const tipClass = isDarkMode ? 'bg-white/50' : 'bg-black/50 dark:bg-white/50'
+
   return (
-    <div className='flex items-center gap-x-1.5'>
+    <div className="flex items-center gap-x-1.5">
       {isIOS ? (
         <>
-          <span className='outline-2 outline outline-white/50 xl:outline-black/50 outline-offset-2 rounded-xs h-2 w-5 relative'>
-            {/* Percentage white bar */}
+          <span
+            className={`outline-2 ${outlineColorClass} outline-offset-2 rounded-xs h-2 w-5 relative`}
+          >
+            {/* Percentage bar */}
             <span
-              className='w-full h-full bg-white xl:bg-black absolute rounded-xs flex items-center justify-center'
+              className={`w-full h-full ${fillClass} absolute rounded-xs flex items-center justify-center`}
               style={{ width: `100%` }}
             >
-              <XMarkIcon className='text-red-600 h-3 w-3' />
+              <XMarkIcon className="text-red-600 h-3 w-3" />
             </span>
           </span>
-          <span className='rounded-r-full h-1 w-0.5 bg-white/50 xl:bg-black/50' />
+          <span className={`rounded-r-full h-1 w-0.5 ${tipClass}`} />
         </>
       ) : (
         <>
-          <span className='outline-2 outline outline-white/50 xl:outline-black/50 outline-offset-2 rounded-xs h-2 w-5 relative'>
-            {/* Percentage white bar */}
+          <span
+            className={`outline-2 ${outlineColorClass} outline-offset-2 rounded-xs h-2 w-5 relative`}
+          >
+            {/* Percentage bar */}
             <span
-              className='w-full h-full bg-white xl:bg-black absolute rounded-xs'
+              className={`w-full h-full ${fillClass} absolute rounded-xs`}
               style={{ width: `${batteryPercentage}%` }}
             />
           </span>
-          <span className='rounded-r-full h-1 w-0.5 bg-white/50 xl:bg-black/50' />
+          <span className={`rounded-r-full h-1 w-0.5 ${tipClass}`} />
         </>
       )}
     </div>
