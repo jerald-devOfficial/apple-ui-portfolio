@@ -1,18 +1,30 @@
+// reference: https://github.com/kunalagra/codegamy/blob/main/utils/dbConnect.js
+
+import { initModels } from '@/lib/models'
 import mongoose from 'mongoose'
 
-const connect = async () => {
-  try {
-    // Show connection URI (with credentials masked)
-    const uri = process.env.MONGODB!
-    const maskedUri = uri.replace(/:([^@]+)@/, ':****@')
-    console.log(`Connecting to MongoDB: ${maskedUri}`)
+const uri = process.env.MONGODB_URI!
 
-    await mongoose.connect(process.env.MONGODB!)
-    console.log('MongoDB connected successfully')
+// Create a function to connect to the database
+const dbConnect = async () => {
+  if (mongoose.connection.readyState >= 1) {
+    // If already connected, return the existing connection
+    initModels() // Ensure models are registered even if connection exists
+    return mongoose.connection
+  }
+
+  try {
+    // Connect to the MongoDB database using Mongoose
+    await mongoose.connect(uri)
+    console.log('Connected to MongoDB with Mongoose')
+
+    // Initialize models
+    const models = initModels()
+    console.log('Models initialized:', models)
   } catch (error) {
-    console.error('MongoDB connection error:', error)
-    throw new Error('Connection to MongoDB failed!')
+    console.error('Error connecting to MongoDB with Mongoose:', error)
+    throw error
   }
 }
 
-export default connect
+export default dbConnect

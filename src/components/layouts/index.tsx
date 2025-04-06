@@ -2,6 +2,7 @@
 
 import DeviceStatus from '@/components/DeviceStatus'
 import DisplayTime from '@/components/DisplayTime'
+import ThemeToggle from '@/components/ThemeToggle'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -151,13 +152,16 @@ const ResponsiveUI = ({
   return (
     <>
       {/* Mobile Header */}
-      <header className="flex justify-between items-center px-5 xs:px-12 py-4 sm:px-4 sm:py-1.5 w-full xl:hidden">
+      <header className="flex justify-between items-center px-5 xs:px-12 py-4 sm:px-4 sm:py-1.5 w-full xl:hidden text-sm font-bold text-black dark:text-white">
         <DisplayTime />
-        <DeviceStatus />
+        <div className="flex items-center gap-x-4">
+          <ThemeToggle />
+          <DeviceStatus />
+        </div>
       </header>
 
       {/* Desktop Header - macOS style */}
-      <header className="xl:flex justify-between items-center px-4 py-1.5 w-full hidden bg-black/10 backdrop-blur-[50px] text-white">
+      <header className="xl:flex justify-between items-center px-4 py-1.5 w-full hidden dark:bg-black/10 backdrop-blur-[50px] bg-white/50">
         <div className="flex items-center">
           {/* Apple Logo */}
           <Link href={'/'} className="px-3">
@@ -170,7 +174,7 @@ const ResponsiveUI = ({
           </Link>
 
           {/* Current Page Title */}
-          <button className="px-3 py-0.5 text-sm font-medium rounded hover:bg-gray-500/30 cursor-pointer">
+          <button className="px-3 py-0.5 text-sm font-semibold rounded hover:bg-gray-500/30 cursor-pointer">
             {getCurrentPageTitle()}
           </button>
 
@@ -180,7 +184,7 @@ const ResponsiveUI = ({
               <button
                 key={link.name}
                 onClick={handleMenuClick(link.name)}
-                className={`px-3 cursor-pointer py-0.5 text-sm font-medium rounded ${
+                className={`px-3 cursor-pointer py-0.5 text-sm font-semibold rounded ${
                   activeMenu === link.name
                     ? 'bg-gray-500/50'
                     : 'hover:bg-gray-500/30'
@@ -194,6 +198,7 @@ const ResponsiveUI = ({
 
         {/* Right side status items */}
         <div className="flex items-center gap-x-4">
+          <ThemeToggle />
           {session.status === 'authenticated' && session.data?.user?.image && (
             <div className="h-6 w-6 rounded-full overflow-hidden">
               <Image
@@ -213,7 +218,7 @@ const ResponsiveUI = ({
       {children}
 
       {/* Mobile Footer/Dock */}
-      <footer className='flex w-full xs:w-[unset] xs:gap-x-[30px] sm:gap-x-4 py-5 px-5 sm:px-7 sm:py-4 before:absolute before:content-[""] before:bg-[#BFBFBF70]/44 before:backdrop-blur-[50px] before:-z-10 bg-white/20 hover:bg-white/30 rounded-none xs:rounded-[40px] sm:rounded-[30px] before:content items-center justify-around xs:justify-center my-0 xs:my-3 sm:my-4 xl:hidden'>
+      <footer className='flex w-full xs:w-[unset] xs:gap-x-[30px] sm:gap-x-4 py-5 px-5 sm:px-7 sm:py-4 before:absolute before:content-[""] before:bg-[#BFBFBF70]/44 before:backdrop-blur-[50px] before:-z-10 bg-white/20 dark:bg-black/20 hover:bg-white/30 dark:hover:bg-black/30 rounded-none xs:rounded-[40px] sm:rounded-[30px] before:content items-center justify-around xs:justify-center my-0 xs:my-3 sm:my-4 xl:hidden'>
         {dock.map((item) =>
           item.click ? (
             <button
@@ -246,7 +251,7 @@ const ResponsiveUI = ({
       </footer>
 
       {/* Desktop Footer/Dock - With groups and separators */}
-      <footer className='hidden xl:flex xl:gap-x-0.5 xl:px-1.5 xl:py-1.5 before:absolute before:content-[""] before:bg-[#F6F6F6]/36 before:backdrop-blur-[135px] before:blur-[6px] before:-z-10 bg-white/40 dark:bg-black/10 rounded-2xl before:content items-baseline justify-center xl:my-2 ring-1 ring-white/30 dark:ring-white/10 ring-inset shadow-sm shadow-black/15'>
+      <footer className='hidden xl:flex xl:gap-x-0.5 xl:px-1.5 xl:py-1.5 before:absolute before:content-[""] before:bg-[#F6F6F6]/36 dark:before:bg-[#1A1A1A]/36 before:backdrop-blur-[135px] before:blur-[6px] before:-z-10 bg-white/40 dark:bg-black/10 rounded-2xl before:content items-baseline justify-center xl:my-2 ring-1 ring-white/30 dark:ring-white/10 ring-inset shadow-sm shadow-black/15'>
         {/* Group 1 */}
         {dockGroup1.map((item) => (
           <DockItem key={item.name} item={item} pathname={pathname} />
@@ -305,7 +310,7 @@ const DockItem = ({
         onClick={item.click}
         className="flex flex-col items-center justify-center h-[60px] group cursor-pointer relative"
       >
-        <span className="hidden -top-9 absolute left-1/2 transform -translate-x-1/2 px-2 py-1 bg-white/80 dark:bg-zinc-800/90 text-gray-800 dark:text-white text-xs font-medium rounded-md shadow-lg backdrop-blur-sm border border-white/20 dark:border-zinc-700/50 whitespace-nowrap group-hover:block opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
+        <span className="hidden -top-9 absolute left-1/2 transform -translate-x-1/2 px-2 py-1 bg-white/80 dark:bg-zinc-800/90 text-gray-800 dark:text-white text-xs font-medium rounded-md shadow-lg backdrop-blur-sm border border-white/20 dark:border-zinc-700/50 whitespace-nowrap group-hover:block opacity-0 group-hover:opacity-100 z-10">
           {item.title}
         </span>
 
@@ -332,7 +337,7 @@ const DockItem = ({
         download
         className="flex flex-col items-center justify-center h-[60px] group cursor-pointer relative"
       >
-        <span className="hidden -top-9 absolute left-1/2 transform -translate-x-1/2 px-2 py-1 bg-white/80 dark:bg-zinc-800/90 text-gray-800 dark:text-white text-xs font-medium rounded-md shadow-lg backdrop-blur-sm border border-white/20 dark:border-zinc-700/50 whitespace-nowrap group-hover:block opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
+        <span className="hidden -top-9 absolute left-1/2 transform -translate-x-1/2 px-2 py-1 bg-white/80 dark:bg-zinc-800/90 text-gray-800 dark:text-white text-xs font-medium rounded-md shadow-lg backdrop-blur-sm border border-white/20 dark:border-zinc-700/50 whitespace-nowrap group-hover:block opacity-0 group-hover:opacity-100 z-10">
           {item.title}
         </span>
         <Image
@@ -364,7 +369,7 @@ const DockItem = ({
         href={item.path}
         className="flex flex-col items-center justify-center h-[60px] group cursor-pointer relative"
       >
-        <span className="hidden -top-9 absolute left-1/2 transform -translate-x-1/2 px-2 py-1 bg-white/80 dark:bg-zinc-800/90 text-gray-800 dark:text-white text-xs font-medium rounded-md shadow-lg backdrop-blur-sm border border-white/20 dark:border-zinc-700/50 whitespace-nowrap group-hover:block opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
+        <span className="hidden -top-9 absolute left-1/2 transform -translate-x-1/2 px-2 py-1 bg-white/80 dark:bg-zinc-800/90 text-gray-800 dark:text-white text-xs font-medium rounded-md shadow-lg backdrop-blur-sm border border-white/20 dark:border-zinc-700/50 whitespace-nowrap group-hover:block opacity-0 group-hover:opacity-100 z-10">
           {item.title}
         </span>
         <Image
@@ -388,7 +393,7 @@ const DockItem = ({
   // Fallback for items without path or click handler
   return (
     <div className="flex flex-col items-center justify-center h-[60px] group cursor-pointer relative">
-      <span className="hidden -top-9 absolute left-1/2 transform -translate-x-1/2 px-2 py-1 bg-white/80 dark:bg-zinc-800/90 text-gray-800 dark:text-white text-xs font-medium rounded-md shadow-lg backdrop-blur-sm border border-white/20 dark:border-zinc-700/50 whitespace-nowrap group-hover:block opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
+      <span className="hidden -top-9 absolute left-1/2 transform -translate-x-1/2 px-2 py-1 bg-white/80 dark:bg-zinc-800/90 text-gray-800 dark:text-white text-xs font-medium rounded-md shadow-lg backdrop-blur-sm border border-white/20 dark:border-zinc-700/50 whitespace-nowrap group-hover:block opacity-0 group-hover:opacity-100 z-10">
         {item.title}
       </span>
       <Image

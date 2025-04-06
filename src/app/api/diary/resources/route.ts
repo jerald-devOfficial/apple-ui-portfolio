@@ -1,5 +1,4 @@
 import Diary from '@/models/Diary'
-import connect from '@/utils/db'
 import { PipelineStage } from 'mongoose'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
@@ -24,7 +23,7 @@ export const GET = async (req: NextRequest) => {
 
     const skip = (page - 1) * limit
 
-    await connect()
+    await dbConnect()
 
     // Build the aggregation pipeline
     const pipeline: PipelineStage[] = [

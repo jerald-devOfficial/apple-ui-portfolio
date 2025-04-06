@@ -1,5 +1,5 @@
 import Diary from '@/models/Diary'
-import connect from '@/utils/db'
+import dbConnect from '@/utils/db'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -14,7 +14,7 @@ export const GET = async (req: NextRequest) => {
 
     const userId = session.email || session.sub
 
-    await connect()
+    await dbConnect()
 
     // Total diary entries
     const totalEntries = await Diary.countDocuments({ userId })

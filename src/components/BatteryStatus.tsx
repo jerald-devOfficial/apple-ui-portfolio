@@ -1,6 +1,7 @@
 'use client'
 
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 
 interface BatteryManagerEventMap {
@@ -38,9 +39,13 @@ interface BatteryManager extends EventTarget {
 const BatteryStatus = () => {
   const [batteryPercentage, setBatteryPercentage] = useState(0)
   const [isIOS, setIsIOS] = useState(false)
-  const [isDarkMode, setIsDarkMode] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  // Using useTheme hook for consistency with other components
+  useTheme()
 
   useEffect(() => {
+    setMounted(true)
+
     // Check if the Battery Status API is supported
     if ('getBattery' in navigator) {
       ;(navigator as NavigatorWithBattery)
@@ -58,22 +63,6 @@ const BatteryStatus = () => {
       // Check if the user agent indicates iOS
       setIsIOS(true)
     }
-
-    // Detect system preference for dark mode
-    if (typeof window !== 'undefined') {
-      const darkModeMediaQuery = window.matchMedia(
-        '(prefers-color-scheme: dark)'
-      )
-      setIsDarkMode(darkModeMediaQuery.matches)
-
-      const handleChange = (e: MediaQueryListEvent) => {
-        setIsDarkMode(e.matches)
-      }
-
-      darkModeMediaQuery.addEventListener('change', handleChange)
-      return () =>
-        darkModeMediaQuery.removeEventListener('change', handleChange)
-    }
   }, [])
 
   const updateBatteryPercentage = (battery: BatteryManager) => {
@@ -81,14 +70,13 @@ const BatteryStatus = () => {
     setBatteryPercentage(percentage)
   }
 
+  // Don't render until mounted to avoid hydration mismatch
+  if (!mounted) return null
+
   // Dynamic styling based on theme
-  const outlineColorClass = isDarkMode
-    ? 'outline-white/50'
-    : 'outline-black/50 dark:outline-white/50'
-
-  const fillClass = isDarkMode ? 'bg-white' : 'bg-black dark:bg-white'
-
-  const tipClass = isDarkMode ? 'bg-white/50' : 'bg-black/50 dark:bg-white/50'
+  const outlineColorClass = 'outline-black/50 dark:outline-white/50'
+  const fillClass = 'bg-black dark:bg-white'
+  const tipClass = 'bg-black/50 dark:bg-white/50'
 
   return (
     <div className="flex items-center gap-x-1.5">

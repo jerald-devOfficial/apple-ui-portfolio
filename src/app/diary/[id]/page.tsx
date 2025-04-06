@@ -208,10 +208,11 @@ const DiaryView = () => {
     session?.user?.email &&
     diary.userId.toLowerCase() === session.user.email.toLowerCase()
 
+  // Simplified site owner check using environment variable as fallback
+  const ownerEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL!
   const isSiteOwner =
     status === 'authenticated' &&
-    (session?.user?.email?.toLowerCase() === 'spaueofficicial@gmail.com' ||
-      session?.user?.email?.toLowerCase() === 'spaueofficial@gmail.com')
+    session?.user?.email?.toLowerCase() === ownerEmail.toLowerCase()
 
   const canEditOrDelete = isOwner || isSiteOwner
 
