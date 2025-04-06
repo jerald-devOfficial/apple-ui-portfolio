@@ -1,4 +1,5 @@
 import Diary from '@/models/Diary'
+import dbConnect from '@/utils/db'
 import { PipelineStage } from 'mongoose'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
