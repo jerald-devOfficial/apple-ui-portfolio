@@ -78,39 +78,62 @@ const DiaryEdit = () => {
     setError('')
     setSuccess(false)
 
+    console.log('Submitting diary update for ID:', id)
+
     try {
+      const updateData = {
+        title,
+        content,
+        publicity: publicity === 'public',
+        tags: tags
+          .split(',')
+          .map((tag) => tag.trim())
+          .filter((tag) => tag)
+      }
+
+      console.log('Sending update with data:', {
+        title,
+        contentLength: content.length,
+        publicity: updateData.publicity,
+        tags: updateData.tags
+      })
+
       const res = await fetch(`/api/diary/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          title,
-          content,
-          publicity: publicity === 'public',
-          tags: tags
-            .split(',')
-            .map((tag) => tag.trim())
-            .filter((tag) => tag)
-        })
+        body: JSON.stringify(updateData)
+      })
+
+      const data = await res.json()
+      console.log('Server response:', {
+        status: res.status,
+        message: data.message || data.msg
       })
 
       if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.msg || 'Failed to update diary entry')
+        // Enhanced error handling with detailed message
+        const errorMsg =
+          data.msg || data.message || 'Failed to update diary entry'
+        console.error('Update failed:', errorMsg)
+        throw new Error(errorMsg)
       }
 
       setSuccess(true)
+      console.log('Diary updated successfully, redirecting in 1 second...')
 
       // Redirect after successful update
       setTimeout(() => {
         push(`/diary/${id}`)
       }, 1000)
     } catch (err) {
+      console.error('Error updating diary:', err)
+
       if (err instanceof Error) {
         setError(err.message)
       } else {
-        setError('Failed to update diary entry')
+        setError('Failed to update diary entry - please try again later')
       }
     } finally {
       setIsSaving(false)

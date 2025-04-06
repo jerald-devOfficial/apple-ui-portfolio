@@ -1,16 +1,20 @@
 'use client'
 
+import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 
 const WifiStatus = () => {
   const [wifiStrength, setWifiStrength] = useState(0)
-  const [isDarkMode, setIsDarkMode] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  // Using useTheme hook for consistency with other components
+  useTheme()
 
   useEffect(() => {
+    setMounted(true)
+
     // Fetch real-time WiFi signal strength
     const fetchWifiStrength = () => {
-      // Your logic to fetch WiFi strength goes here
-      // For demonstration, I'm using a random number between 0 and 100
+      // For demonstration, using a random number between 0 and 100
       const strength = Math.floor(Math.random() * 101)
       setWifiStrength(strength)
     }
@@ -21,33 +25,15 @@ const WifiStatus = () => {
     // Fetch WiFi strength every 5 seconds
     const intervalId = setInterval(fetchWifiStrength, 5000)
 
-    // Detect system color scheme
-    if (typeof window !== 'undefined') {
-      const darkModeMediaQuery = window.matchMedia(
-        '(prefers-color-scheme: dark)'
-      )
-      setIsDarkMode(darkModeMediaQuery.matches)
-
-      const handleChange = (e: MediaQueryListEvent) => {
-        setIsDarkMode(e.matches)
-      }
-
-      darkModeMediaQuery.addEventListener('change', handleChange)
-
-      return () => {
-        clearInterval(intervalId)
-        darkModeMediaQuery.removeEventListener('change', handleChange)
-      }
-    }
-
     // Clear interval on component unmount
     return () => clearInterval(intervalId)
   }, [])
 
+  // Don't render anything until after hydration to avoid mismatch
+  if (!mounted) return null
+
   // Dynamic text color based on theme
-  const textColorClass = isDarkMode
-    ? 'text-white'
-    : 'text-black dark:text-white'
+  const textColorClass = 'text-black dark:text-white'
 
   return wifiStrength <= 33 ? (
     <svg

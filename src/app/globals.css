@@ -1,5 +1,60 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:is(.dark *));
+
+/* Dark mode transition styles */
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+
+  /* macOS UI variables */
+  --menu-bg-light: rgba(235, 235, 235, 0.9);
+  --menu-bg-dark: rgba(0, 0, 0, 0.6);
+  --menu-text-light: rgb(0, 0, 0);
+  --menu-text-dark: rgb(255, 255, 255);
+}
+
+.dark {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+}
+
+/* macOS Menu Bar styles */
+.macos-menu-bar {
+  background-color: var(--menu-bg-light);
+  color: var(--menu-text-light);
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.dark .macos-menu-bar {
+  background-color: var(--menu-bg-dark);
+  color: var(--menu-text-dark);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+html {
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+html.dark body {
+  color: rgb(var(--foreground-rgb));
+  background-color: rgb(var(--background-end-rgb));
+}
+
+/* Apply transition to all elements that change in dark mode */
+* {
+  transition-property: color, background-color, border-color, outline-color,
+    text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
+    backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.15s;
+}
+
 @theme {
   --breakpoint-*: initial;
   --breakpoint-xs: 390px;

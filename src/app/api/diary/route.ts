@@ -1,13 +1,13 @@
+import { auth } from '@/auth'
 import Diary from '@/models/Diary'
-import connect from '@/utils/db'
+import dbConnect from '@/utils/db'
 import mongoose from 'mongoose'
-import { getServerSession } from 'next-auth'
 import { NextResponse } from 'next/server'
 
 // Create a new diary entry
 export const POST = async (req: Request) => {
   try {
-    const session = await getServerSession()
+    const session = await auth()
 
     if (!session || !session.user) {
       return NextResponse.json({ msg: 'Unauthorized' }, { status: 401 })
@@ -31,7 +31,7 @@ export const POST = async (req: Request) => {
       )
     }
 
-    await connect()
+    await dbConnect()
 
     // Store email as lowercase to ensure consistent comparison
     const userEmail = session.user.email || 'anonymous'
@@ -85,14 +85,14 @@ export const POST = async (req: Request) => {
   }
 }
 
-// Get diary entries - SUPER SIMPLE like contact API
+// Get diary entries
 export async function GET(req: Request) {
   try {
     // Parse query parameters
     const url = new URL(req.url)
     const createTest = url.searchParams.get('createTest')
 
-    await connect()
+    await dbConnect()
 
     // Create a test diary if requested (this is for debugging only)
     if (createTest === 'true') {

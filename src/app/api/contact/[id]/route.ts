@@ -1,5 +1,5 @@
 import { Contact } from '@/models/Contact'
-import connect from '@/utils/db'
+import dbConnect from '@/utils/db'
 import { NextResponse } from 'next/server'
 
 export const PATCH = async (
@@ -7,7 +7,7 @@ export const PATCH = async (
   { params }: { params: Promise<{ id: string }> }
 ) => {
   try {
-    await connect()
+    await dbConnect()
     const { id } = await params
     const body = await request.json()
 
@@ -40,7 +40,7 @@ export const DELETE = async (
   { params }: { params: Promise<{ id: string }> }
 ) => {
   try {
-    await connect()
+    await dbConnect()
     const { id } = await params
 
     // Delete the mail with the specified ID

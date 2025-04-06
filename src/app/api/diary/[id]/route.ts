@@ -1,7 +1,7 @@
+import { auth } from '@/auth'
 import Diary from '@/models/Diary'
-import connect from '@/utils/db'
+import dbConnect from '@/utils/db'
 import mongoose from 'mongoose'
-import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Get a single diary entry
@@ -18,52 +18,19 @@ export const GET = async (
       return NextResponse.json({ msg: 'Invalid diary ID' }, { status: 400 })
     }
 
-    await connect()
+    await dbConnect()
     console.log(`Database connected, retrieving diary: ${id}`)
 
-    // Get authentication status
-    const session = await getToken({ req })
+    // Get authentication status using new auth() method
+    const session = await auth()
     const isAuthenticated = !!session
 
-    // Try to get the user email from the session, with all possible formats
+    // Extract user email from session with consistent approach
     let userEmail: string | undefined = undefined
 
-    // Debug information about the session
-    console.log('Session debug:', {
-      exists: !!session,
-      keys: session ? Object.keys(session) : [],
-      hasEmail: session && 'email' in session,
-      hasUser: session && 'user' in session,
-      userObject:
-        session && session.user ? JSON.stringify(session.user) : 'null',
-      emailDirectly:
-        session && 'email' in session ? (session.email as string) : undefined,
-      emailFromUser:
-        session &&
-        session.user &&
-        typeof session.user === 'object' &&
-        'email' in session.user
-          ? (session.user.email as string)
-          : undefined
-    })
-
-    if (session) {
-      // Direct email property
-      if ('email' in session) {
-        userEmail = session.email as string
-        console.log('Found email directly in session:', userEmail)
-      }
-      // Next-auth structure with user object
-      else if (
-        'user' in session &&
-        session.user &&
-        typeof session.user === 'object'
-      ) {
-        if ('email' in session.user) {
-          userEmail = session.user.email as string
-          console.log('Found email in session.user:', userEmail)
-        }
-      }
+    if (session?.user?.email) {
+      userEmail = session.user.email.toLowerCase()
+      console.log('User authenticated:', userEmail)
     }
 
     // Find the diary with comprehensive error handling
@@ -107,7 +74,7 @@ export const GET = async (
         userId: diaryData.userId || '<missing>'
       })
 
-      const diaryUserId = diaryData.userId || ''
+      const diaryUserId = diaryData.userId ? diaryData.userId.toLowerCase() : ''
 
       // Check permissions:
       // 1. Public diaries can be viewed by anyone
@@ -138,18 +105,17 @@ export const GET = async (
       console.log('Checking ownership:', {
         diaryUserId: diaryUserId,
         userEmail,
-        lowerCaseMatch:
-          diaryUserId.toLowerCase() === (userEmail?.toLowerCase() || '')
+        lowerCaseMatch: diaryUserId === userEmail
       })
 
-      // Site owner should have access to all diaries
-      const isSiteOwner =
-        userEmail?.toLowerCase() === 'spaueofficicial@gmail.com' ||
-        userEmail?.toLowerCase() === 'spaueofficial@gmail.com'
+      // Use the environment variable consistently
+      const ownerEmail =
+        process.env.NEXT_PUBLIC_ADMIN_EMAIL?.toLowerCase() ||
+        'spaueofficial@gmail.com'
+      const isSiteOwner = userEmail === ownerEmail
 
       // Check if user is either the diary owner or the site owner
-      const isOwner =
-        diaryUserId.toLowerCase() === (userEmail?.toLowerCase() || '')
+      const isOwner = diaryUserId === userEmail
       const hasAccess = isOwner || isSiteOwner
 
       if (!hasAccess) {
@@ -204,7 +170,7 @@ export const PUT = async (
   { params }: { params: Promise<{ id: string }> }
 ) => {
   try {
-    const session = await getToken({ req })
+    const session = await auth()
 
     if (!session) {
       return NextResponse.json({ msg: 'Unauthorized' }, { status: 401 })
@@ -228,22 +194,28 @@ export const PUT = async (
       lastEditedSection
     } = await req.json()
 
-    await connect()
+    await dbConnect()
 
-    // Get user email with same approach as GET handler
+    // Simplified way to extract email from any session format
     let userEmail: string | undefined = undefined
 
-    if ('email' in session) {
-      userEmail = session.email as string
-    } else if (
-      'user' in session &&
-      session.user &&
-      typeof session.user === 'object' &&
-      'email' in session.user
-    ) {
-      userEmail = session.user.email as string
-    } else if (session.sub) {
-      userEmail = session.sub as string
+    if (session) {
+      if ('email' in session) {
+        userEmail = session.email as string
+      } else if (
+        session.user &&
+        typeof session.user === 'object' &&
+        'email' in session.user
+      ) {
+        userEmail = session.user.email as string
+      } else if (session.user?.id) {
+        userEmail = session.user.id as string
+      }
+
+      // Make sure we have email in lowercase
+      if (userEmail) {
+        userEmail = userEmail.toLowerCase()
+      }
     }
 
     if (!userEmail) {
@@ -254,14 +226,11 @@ export const PUT = async (
       )
     }
 
-    // Normalize email to lowercase for comparison
-    const normalizedEmail = userEmail.toLowerCase()
-    console.log(`Attempting to update diary ${id} for user ${normalizedEmail}`)
+    console.log(`Attempting to update diary ${id} for user ${userEmail}`)
 
-    // Site owner should have access to all diaries
-    const isSiteOwner =
-      normalizedEmail === 'spaueofficicial@gmail.com' ||
-      normalizedEmail === 'spaueofficial@gmail.com'
+    // Site owner should have access to all diaries - using environment variable
+    const ownerEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL!
+    const isSiteOwner = userEmail === ownerEmail
 
     // Find diary with case-insensitive userId comparison
     const diary = await Diary.findOne({
@@ -273,12 +242,12 @@ export const PUT = async (
     }
 
     // Verify ownership with case-insensitive comparison
-    const isOwner = diary.userId.toLowerCase() === normalizedEmail
+    const isOwner = diary.userId.toLowerCase() === userEmail
     const hasAccess = isOwner || isSiteOwner
 
     if (!hasAccess) {
       console.log(
-        `User ${normalizedEmail} is not the owner of diary ${id} (owned by ${diary.userId}) and is not the site owner`
+        `User ${userEmail} is not the owner of diary ${id} (owned by ${diary.userId}) and is not the site owner`
       )
       return NextResponse.json({ msg: 'Unauthorized' }, { status: 401 })
     }
@@ -296,7 +265,7 @@ export const PUT = async (
 
     await diary.save()
     console.log(
-      `Diary ${id} updated successfully by ${normalizedEmail} (${
+      `Diary ${id} updated successfully by ${userEmail} (${
         isOwner ? 'owner' : 'site admin'
       })`
     )
@@ -318,7 +287,7 @@ export const DELETE = async (
   { params }: { params: Promise<{ id: string }> }
 ) => {
   try {
-    const session = await getToken({ req })
+    const session = await auth()
 
     if (!session) {
       return NextResponse.json({ msg: 'Unauthorized' }, { status: 401 })
@@ -330,22 +299,28 @@ export const DELETE = async (
       return NextResponse.json({ msg: 'Invalid diary ID' }, { status: 400 })
     }
 
-    await connect()
+    await dbConnect()
 
-    // Get user email with same approach as other handlers
+    // Simplified way to extract email from any session format
     let userEmail: string | undefined = undefined
 
-    if ('email' in session) {
-      userEmail = session.email as string
-    } else if (
-      'user' in session &&
-      session.user &&
-      typeof session.user === 'object' &&
-      'email' in session.user
-    ) {
-      userEmail = session.user.email as string
-    } else if (session.sub) {
-      userEmail = session.sub as string
+    if (session) {
+      if ('email' in session) {
+        userEmail = session.email as string
+      } else if (
+        session.user &&
+        typeof session.user === 'object' &&
+        'email' in session.user
+      ) {
+        userEmail = session.user.email as string
+      } else if (session.user?.id) {
+        userEmail = session.user.id as string
+      }
+
+      // Make sure we have email in lowercase
+      if (userEmail) {
+        userEmail = userEmail.toLowerCase()
+      }
     }
 
     if (!userEmail) {
@@ -356,14 +331,11 @@ export const DELETE = async (
       )
     }
 
-    // Normalize email to lowercase for comparison
-    const normalizedEmail = userEmail.toLowerCase()
-    console.log(`Attempting to delete diary ${id} for user ${normalizedEmail}`)
+    console.log(`Attempting to delete diary ${id} for user ${userEmail}`)
 
-    // Site owner should have access to all diaries
-    const isSiteOwner =
-      normalizedEmail === 'spaueofficicial@gmail.com' ||
-      normalizedEmail === 'spaueofficial@gmail.com'
+    // Site owner should have access to all diaries - using environment variable
+    const ownerEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL!
+    const isSiteOwner = userEmail === ownerEmail
 
     // First find the diary to verify ownership
     const diary = await Diary.findById(id)
@@ -372,12 +344,12 @@ export const DELETE = async (
     }
 
     // Verify ownership with case-insensitive comparison
-    const isOwner = diary.userId.toLowerCase() === normalizedEmail
+    const isOwner = diary.userId.toLowerCase() === userEmail
     const hasAccess = isOwner || isSiteOwner
 
     if (!hasAccess) {
       console.log(
-        `User ${normalizedEmail} is not the owner of diary ${id} (owned by ${diary.userId}) and is not the site owner`
+        `User ${userEmail} is not the owner of diary ${id} (owned by ${diary.userId}) and is not the site owner`
       )
       return NextResponse.json({ msg: 'Unauthorized' }, { status: 401 })
     }
@@ -385,7 +357,7 @@ export const DELETE = async (
     // Now delete the diary
     await Diary.deleteOne({ _id: id })
     console.log(
-      `Diary ${id} deleted successfully by ${normalizedEmail} (${
+      `Diary ${id} deleted successfully by ${userEmail} (${
         isOwner ? 'owner' : 'site admin'
       })`
     )
