@@ -3,23 +3,6 @@ import dbConnect from '@/utils/db'
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 
-// Extend session types
-declare module 'next-auth' {
-  interface Session {
-    user: {
-      name?: string | null
-      email?: string | null
-      image?: string | null
-      id?: string
-      isAdmin?: boolean
-    }
-  }
-  interface JWT {
-    id?: string
-    isAdmin?: boolean
-  }
-}
-
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     GoogleProvider({
@@ -44,19 +27,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         try {
           await dbConnect()
 
+          // Note the addition of toLowerCase()
           const existingUser = await Admin.findOne({
             email: user?.email?.toLowerCase()
           }).lean()
 
+          // If user already exists in the database, sign in is successful
           if (existingUser) {
             console.log('signIn successful for existing user')
+
             return true
-          } else {
+          }
+          // Otherwise, create a new user and then sign in is successful
+          else {
             const newUser = new Admin({
               name: user.name,
-              email: user?.email?.toLowerCase(),
-              authType: 'GOOGLE',
-              googleId: account.id
+              email: user?.email?.toLowerCase(), // convert to lower case
+              authType: 'GOOGLE', // set authType to 'GOOGLE'
+              googleId: account.id // set googleId
             })
 
             await newUser.save()
@@ -72,12 +60,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       console.log(
         `signIn called for account: ${account?.provider}, email from profile: ${profile?.email}`
       )
-      return false // Deny non-Google sign-ins
+      return true
     }
   },
   debug: process.env.NODE_ENV === 'development',
   pages: {
-    signIn: '/',
     error: '/'
   }
 })
