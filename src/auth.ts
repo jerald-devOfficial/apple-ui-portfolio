@@ -12,12 +12,12 @@ declare module 'next-auth' {
       email?: string | null
       image?: string | null
       id?: string
-      role?: 'admin' | 'user'
+      isAdmin?: boolean
     }
   }
   interface JWT {
     id?: string
-    role?: string
+    isAdmin?: boolean
   }
 }
 
@@ -32,7 +32,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, token }) {
       if (token && session.user) {
         session.user.id = token.id as string
-        session.user.role = token.role as 'admin' | 'user'
+        session.user.isAdmin = Boolean(token.isAdmin)
       }
       return session
     },
@@ -43,8 +43,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const isAdmin =
           profile.email?.toLowerCase() ===
           process.env.NEXT_PUBLIC_ADMIN_EMAIL?.toLowerCase()
-
-        token.role = isAdmin ? 'admin' : 'user'
+        token.isAdmin = isAdmin
 
         // Add user ID to token if we have it from DB
         if (isAdmin) {
