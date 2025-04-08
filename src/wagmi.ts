@@ -7,7 +7,13 @@ export function getConfig() {
     chains: [mainnet, sepolia],
     connectors: [
       walletConnect({
-        projectId: process.env.NEXT_PUBLIC_WC_PROJECT_ID!
+        projectId: process.env.NEXT_PUBLIC_WC_PROJECT_ID!,
+        metadata: {
+          name: 'Jerald Baroro Portfolio',
+          description: 'Jerald Baroro Web3 Integration',
+          url: process.env.NEXT_PUBLIC_APP_URL || 'https://jeraldbaroro.xyz',
+          icons: ['https://jeraldbaroro.xyz/apple-touch-icon.png']
+        }
       })
     ],
     storage: createStorage({
