@@ -7,18 +7,29 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   providers: [
     GoogleProvider({
       clientId: process.env.AUTH_GOOGLE_ID!,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET!
+      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
+      authorization: {
+        params: {
+          prompt: 'select_account'
+        }
+      }
     })
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
+      // Add debug logging
+      console.log('Sign-in attempt:', {
+        email: profile?.email,
+        provider: account?.provider,
+        timestamp: new Date().toISOString()
+      })
+
       if (account?.provider === 'google') {
-        // Hardcode the email check as it was working before
         const isAllowedToSignIn =
           profile?.email?.toLowerCase() === 'spaueofficial@gmail.com'
 
         if (!isAllowedToSignIn) {
-          console.log('signIn denied for non-admin email')
+          console.log('Sign-in denied: not admin email', profile?.email)
           return false
         }
 
@@ -29,7 +40,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           }).lean()
 
           if (existingUser) {
-            console.log('signIn successful for existing admin')
+            console.log('Sign-in successful: existing admin')
             return true
           } else {
             const newUser = new Admin({
@@ -39,17 +50,20 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               googleId: account.id
             })
             await newUser.save()
-            console.log('signIn successful, new admin created')
+            console.log('Sign-in successful: new admin created')
             return true
           }
         } catch (error) {
-          console.error('signIn failed with error:', error)
+          console.error('Sign-in error:', error)
           throw error
         }
       }
+
+      console.log('Sign-in denied: not Google provider')
       return false
     }
   },
+  debug: true, // Enable debug mode
   pages: {
     signIn: '/',
     error: '/'
