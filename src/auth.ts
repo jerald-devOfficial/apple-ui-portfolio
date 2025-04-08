@@ -59,13 +59,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         }
       }
 
-      console.log('Sign-in denied: not Google provider')
-      return false
+      return true
     }
   },
   debug: true, // Enable debug mode
   pages: {
-    signIn: '/',
     error: '/'
   }
 })
