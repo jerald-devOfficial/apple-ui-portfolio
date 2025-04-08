@@ -3,68 +3,55 @@ import dbConnect from '@/utils/db'
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const { auth, handlers, signIn, signOut } = NextAuth({
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!
+      clientId: process.env.AUTH_GOOGLE_ID!,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET!
     })
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
       if (account?.provider === 'google') {
+        // Hardcode the email check as it was working before
         const isAllowedToSignIn =
-          profile?.email?.toLowerCase() ===
-          process.env.NEXT_PUBLIC_ADMIN_EMAIL?.toLowerCase()
+          profile?.email?.toLowerCase() === 'spaueofficial@gmail.com'
 
         if (!isAllowedToSignIn) {
-          console.log(
-            `signIn denied for non-${process.env.NEXT_PUBLIC_ADMIN_EMAIL} email address`
-          )
+          console.log('signIn denied for non-admin email')
           return false
         }
 
         try {
           await dbConnect()
-
-          // Note the addition of toLowerCase()
           const existingUser = await Admin.findOne({
             email: user?.email?.toLowerCase()
           }).lean()
 
-          // If user already exists in the database, sign in is successful
           if (existingUser) {
-            console.log('signIn successful for existing user')
-
+            console.log('signIn successful for existing admin')
             return true
-          }
-          // Otherwise, create a new user and then sign in is successful
-          else {
+          } else {
             const newUser = new Admin({
               name: user.name,
-              email: user?.email?.toLowerCase(), // convert to lower case
-              authType: 'GOOGLE', // set authType to 'GOOGLE'
-              googleId: account.id // set googleId
+              email: user?.email?.toLowerCase(),
+              authType: 'GOOGLE',
+              googleId: account.id
             })
-
             await newUser.save()
-            console.log('signIn successful, new user created')
+            console.log('signIn successful, new admin created')
             return true
           }
         } catch (error) {
-          console.error(`signIn failed with error: ${error}`)
+          console.error('signIn failed with error:', error)
           throw error
         }
       }
-
-      console.log(
-        `signIn called for account: ${account?.provider}, email from profile: ${profile?.email}`
-      )
-      return true
+      return false
     }
   },
-  debug: process.env.NODE_ENV === 'development',
   pages: {
+    signIn: '/',
     error: '/'
   }
 })
