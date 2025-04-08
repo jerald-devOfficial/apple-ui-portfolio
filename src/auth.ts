@@ -64,7 +64,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   },
   debug: true, // Enable debug mode
   pages: {
-    signIn: '/',
     error: '/'
   }
 })
