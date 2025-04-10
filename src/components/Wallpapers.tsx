@@ -82,9 +82,10 @@ const Wallpapers = () => {
         <Image
           src={mobileWallpaper}
           className="object-cover object-center sm:hidden block"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
+          sizes="(max-width: 768px) 100vw"
           fill
           priority
+          quality={100}
           alt="iOS Wallpaper"
           key={mobileWallpaper}
         />
@@ -95,9 +96,10 @@ const Wallpapers = () => {
         <Image
           src={tabletWallpaper}
           className="object-cover object-center hidden sm:block xl:hidden"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw"
+          sizes="(min-width: 768px) and (max-width: 1280px) 100vw"
           fill
           priority
+          quality={100}
           alt="iPadOS Wallpaper"
           key={tabletWallpaper}
         />
@@ -110,7 +112,8 @@ const Wallpapers = () => {
           className="object-cover object-center hidden xl:block"
           fill
           priority
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw"
+          quality={100}
+          sizes="(min-width: 1280px) 100vw"
           alt="macOS Wallpaper"
           key={desktopWallpaper}
         />
