@@ -62,22 +62,40 @@ const DiaryEdit = () => {
     setIsSaving(true)
 
     try {
-      const updateData = {
-        title,
-        content,
-        publicity: publicity === 'public',
-        tags: tags
+      // Create update object only with changed fields
+      const updateData: {
+        title?: string
+        content?: string
+        publicity?: boolean
+        tags?: string[]
+      } = {}
+
+      if (title !== diary.title) updateData.title = title
+      if (content !== diary.content) updateData.content = content
+      if ((publicity === 'public') !== diary.publicity)
+        updateData.publicity = publicity === 'public'
+
+      const currentTags = diary.tags?.join(', ') || ''
+      if (tags !== currentTags) {
+        updateData.tags = tags
           .split(',')
           .map((tag) => tag.trim())
           .filter((tag) => tag)
       }
 
+      // Only send request if there are changes
+      if (Object.keys(updateData).length === 0) {
+        toast.info('No changes to save')
+        setIsSaving(false)
+        return
+      }
+
       const res = await fetch(`/api/diary/${id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(updateData)
+        body: JSON.stringify({ update: updateData })
       })
 
       const data = await res.json()

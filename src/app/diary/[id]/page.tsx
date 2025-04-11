@@ -87,11 +87,7 @@ const DiaryView = () => {
 
   // Use SWR for data fetching
   const fetcher = (url: string) => fetch(url).then((res) => res.json())
-  const {
-    data: diary,
-    error,
-    isLoading
-  } = useSWR(status === 'authenticated' ? `/api/diary/${id}` : null, fetcher)
+  const { data: diary, error, isLoading } = useSWR(`/api/diary/${id}`, fetcher)
 
   // Determine if the current user is the diary owner or the site owner
   const isOwner =
