@@ -242,7 +242,8 @@ export const PUT = async (
     }
 
     // Verify ownership with case-insensitive comparison
-    const isOwner = diary.userId.toLowerCase() === userEmail
+    const diaryUserId = diary.userId?.toLowerCase() || ''
+    const isOwner = diaryUserId === userEmail
     const hasAccess = isOwner || isSiteOwner
 
     if (!hasAccess) {
@@ -344,7 +345,8 @@ export const DELETE = async (
     }
 
     // Verify ownership with case-insensitive comparison
-    const isOwner = diary.userId.toLowerCase() === userEmail
+    const diaryUserId = diary.userId?.toLowerCase() || ''
+    const isOwner = diaryUserId === userEmail
     const hasAccess = isOwner || isSiteOwner
 
     if (!hasAccess) {
