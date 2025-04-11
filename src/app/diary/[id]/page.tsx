@@ -10,7 +10,8 @@ import dynamic from 'next/dynamic'
 import { Montserrat } from 'next/font/google'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import useSWR from 'swr'
 
 // Dynamically import TinyMCE Editor for viewing mode
 const Editor = dynamic(
@@ -19,17 +20,6 @@ const Editor = dynamic(
 )
 
 const montserrat = Montserrat({ subsets: ['latin'], display: 'swap' })
-
-interface DiaryEntry {
-  _id: string
-  userId: string
-  title: string
-  content: string
-  createdAt: Date
-  updatedAt: Date
-  publicity: boolean
-  tags?: string[]
-}
 
 // Loading component
 const LoadingView = () => (
@@ -93,113 +83,15 @@ const DiaryView = () => {
   const { id } = useParams()
   const { push } = useRouter()
   const { data: session, status } = useSession()
-  const [diary, setDiary] = useState<DiaryEntry | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
   const [isDeleting, setIsDeleting] = useState(false)
 
-  useEffect(() => {
-    const fetchDiary = async () => {
-      try {
-        setLoading(true)
-        console.log(`Fetching diary with ID: ${id}, auth status: ${status}`)
-
-        if (!id) {
-          setError('Invalid diary ID')
-          setLoading(false)
-          return
-        }
-
-        // Add cache-busting parameter
-        const res = await fetch(`/api/diary/${id}?t=${Date.now()}`, {
-          cache: 'no-store',
-          headers: {
-            'Cache-Control': 'no-cache'
-          }
-        })
-
-        console.log(`Diary fetch response status: ${res.status}`)
-
-        // Handle different status codes
-        if (res.status === 404) {
-          setError('Diary entry not found')
-          setLoading(false)
-          return
-        }
-
-        if (res.status === 401) {
-          // Try to parse the debug info
-          let errorData = {}
-          try {
-            errorData = await res.json()
-            console.log('Auth error debug info:', errorData)
-          } catch (e) {
-            console.error('Failed to parse error response', e)
-          }
-
-          setError(
-            `You do not have permission to view this diary. ${
-              status === 'authenticated'
-                ? 'This private diary belongs to someone else.'
-                : 'Please sign in to view private diaries.'
-            }`
-          )
-          setLoading(false)
-          return
-        }
-
-        if (res.status === 400) {
-          setError('Invalid diary format')
-          setLoading(false)
-          return
-        }
-
-        if (res.status === 500) {
-          console.error('Server error when fetching diary')
-          setError('Server error - please try again later')
-          setLoading(false)
-          return
-        }
-
-        if (!res.ok) {
-          let errorMessage = 'Failed to fetch diary entry'
-
-          try {
-            const errorData = await res.json()
-            console.error('Failed to fetch diary:', res.status, errorData)
-            if (errorData.msg) {
-              errorMessage = errorData.msg
-            }
-          } catch (e) {
-            console.error('Failed to parse error response', e)
-          }
-
-          setError(errorMessage)
-          setLoading(false)
-          return
-        }
-
-        // Response is OK, parse the data
-        try {
-          const data = await res.json()
-          console.log('Diary loaded successfully:', id)
-          setDiary(data)
-        } catch (parseError) {
-          console.error('Error parsing diary data:', parseError)
-          setError('Error reading diary data')
-        }
-      } catch (err) {
-        console.error('Network error loading diary entry:', err)
-        setError('Network error - please check your connection')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    if (id) {
-      fetchDiary()
-    }
-  }, [id, status])
+  // Use SWR for data fetching
+  const fetcher = (url: string) => fetch(url).then((res) => res.json())
+  const {
+    data: diary,
+    error,
+    isLoading
+  } = useSWR(status === 'authenticated' ? `/api/diary/${id}` : null, fetcher)
 
   // Determine if the current user is the diary owner or the site owner
   const isOwner =
@@ -237,18 +129,17 @@ const DiaryView = () => {
 
       push('/diaries')
     } catch (err) {
-      setError('Error deleting diary entry')
       console.error(err)
       setIsDeleting(false)
     }
   }
 
-  if (loading) {
+  if (isLoading) {
     return <LoadingView />
   }
 
   if (error || !diary) {
-    return <ErrorView error={error || 'Diary entry not found'} />
+    return <ErrorView error={error?.message || 'Diary entry not found'} />
   }
 
   return (
@@ -268,7 +159,7 @@ const DiaryView = () => {
           <div className="flex items-center gap-x-3">
             {canEditOrDelete && (
               <>
-                <Link href={`/diary/edit/${diary._id}`}>
+                <Link href={`/diary/${diary._id}/edit`}>
                   <button className="text-blue-500 hover:text-blue-600 transition-colors flex items-center gap-x-1">
                     <PencilIcon className="w-4 h-4" />
                     <span>Edit</span>
@@ -309,14 +200,16 @@ const DiaryView = () => {
             {diary.tags && diary.tags.length > 0 && (
               <>
                 <span>•</span>
-                {diary.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="text-gray-500 dark:text-gray-400"
-                  >
-                    {tag}
-                  </span>
-                ))}
+                <div className="flex flex-wrap gap-2">
+                  {diary.tags?.map((tag: string, index: number) => (
+                    <span
+                      key={index}
+                      className="px-2 py-1 text-sm bg-stone-300 dark:bg-zinc-800 rounded-full"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </>
             )}
           </div>
