@@ -165,7 +165,7 @@ export const GET = async (
 }
 
 // Update a diary entry
-export const PUT = async (
+export const PATCH = async (
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) => {
@@ -182,17 +182,7 @@ export const PUT = async (
       return NextResponse.json({ msg: 'Invalid diary ID' }, { status: 400 })
     }
 
-    const {
-      title,
-      content,
-      publicity,
-      tags,
-      category,
-      resources,
-      status,
-      isFavorite,
-      lastEditedSection
-    } = await req.json()
+    const { update } = await req.json()
 
     await dbConnect()
 
@@ -253,18 +243,16 @@ export const PUT = async (
       return NextResponse.json({ msg: 'Unauthorized' }, { status: 401 })
     }
 
-    // Update fields
-    diary.title = title || diary.title
-    diary.content = content || diary.content
-    diary.publicity = publicity !== undefined ? publicity : diary.publicity
-    diary.tags = tags || diary.tags
-    diary.category = category || diary.category
-    diary.resources = resources || diary.resources
-    diary.status = status || diary.status
-    diary.isFavorite = isFavorite !== undefined ? isFavorite : diary.isFavorite
-    diary.lastEditedSection = lastEditedSection || diary.lastEditedSection
+    // Update the document with the new values
+    const result = await Diary.findByIdAndUpdate(
+      id,
+      { $set: update },
+      {
+        new: true,
+        runValidators: true
+      }
+    )
 
-    await diary.save()
     console.log(
       `Diary ${id} updated successfully by ${userEmail} (${
         isOwner ? 'owner' : 'site admin'
@@ -272,7 +260,7 @@ export const PUT = async (
     )
 
     return NextResponse.json({
-      diary,
+      diary: result,
       message: 'Diary updated successfully',
       success: true
     })
