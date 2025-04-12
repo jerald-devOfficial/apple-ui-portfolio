@@ -1,25 +1,18 @@
 'use client'
 
+import TinyMCEEditor from '@/components/TinyMCEEditor'
 import { ArrowLeftIcon, ArrowUpCircleIcon } from '@heroicons/react/24/solid'
 import { useSession } from 'next-auth/react'
-import dynamic from 'next/dynamic'
 import { Montserrat } from 'next/font/google'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
-
-// Dynamically import TinyMCE Editor
-const Editor = dynamic(
-  () => import('@tinymce/tinymce-react').then(({ Editor }) => Editor),
-  { ssr: false, loading: () => <p>Loading editor...</p> }
-)
+import { useEffect, useState } from 'react'
 
 const montserrat = Montserrat({ subsets: ['latin'], display: 'swap' })
 
 const Diary = () => {
   const { status } = useSession()
   const { push } = useRouter()
-  const editorRef = useRef(null)
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [publicity, setPublicity] = useState('private')
@@ -27,106 +20,12 @@ const Diary = () => {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
-  const [editorConfig, setEditorConfig] = useState({
-    height: 300,
-    menubar: false,
-    skin: 'oxide',
-    content_css: 'default',
-    plugins: [
-      'advlist',
-      'autolink',
-      'lists',
-      'link',
-      'image',
-      'charmap',
-      'preview',
-      'anchor',
-      'searchreplace',
-      'visualblocks',
-      'code',
-      'fullscreen',
-      'insertdatetime',
-      'media',
-      'table',
-      'code',
-      'help',
-      'wordcount',
-      'codesample',
-      'quickbars'
-    ],
-    toolbar:
-      'undo redo | blocks | ' +
-      'bold italic forecolor | alignleft aligncenter ' +
-      'alignright alignjustify | bullist numlist outdent indent | ' +
-      'removeformat | codesample | help',
-    content_style: `
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        font-size: 16px;
-        line-height: 1.6;
-        padding: 0;
-        margin: 0;
-      }
-      p {
-        margin: 0 0 1em 0;
-      }
-      code {
-        font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-        background-color: rgba(0, 0, 0, 0.05);
-        padding: .1em .2em;
-        border-radius: 3px;
-      }
-      .mce-content-body:focus {
-        outline: none;
-      }
-    `,
-    placeholder: 'Write your thoughts here...'
-  })
 
   useEffect(() => {
     if (status !== 'authenticated') {
       push('/diaries')
     }
   }, [status, push])
-
-  // Update editor config based on color scheme
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const isDarkMode =
-        window.matchMedia &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches
-
-      setEditorConfig((prev) => ({
-        ...prev,
-        skin: isDarkMode ? 'oxide-dark' : 'oxide',
-        content_css: isDarkMode ? 'dark' : 'default',
-        content_style: `
-          body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            font-size: 16px;
-            line-height: 1.6;
-            padding: 0;
-            margin: 0;
-            ${isDarkMode ? 'background-color: #1e1e1e; color: #f3f3f3;' : ''}
-          }
-          p {
-            margin: 0 0 1em 0;
-          }
-          code {
-            font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            background-color: ${
-              isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'
-            };
-            padding: .1em .2em;
-            border-radius: 3px;
-          }
-          .mce-content-body:focus {
-            outline: none;
-          }
-        `
-      }))
-    }
-  }, [])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -268,14 +167,10 @@ const Diary = () => {
                       Content
                     </label>
                     <div className="rounded-lg border border-gray-300 dark:border-zinc-700 overflow-hidden">
-                      <Editor
-                        onInit={(_, editor) => {
-                          editorRef.current = editor
-                        }}
+                      <TinyMCEEditor
                         value={content}
                         onEditorChange={(newContent) => setContent(newContent)}
-                        apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
-                        init={editorConfig}
+                        height={300}
                       />
                     </div>
                   </div>

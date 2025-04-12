@@ -1,23 +1,22 @@
 'use client'
 
+import { fetcher } from '@/lib/fetcher'
+import { IDiary } from '@/models/Diary'
 import {
   ArrowLeftIcon,
+  HeartIcon as HeartIconOutline,
   PencilIcon,
   TrashIcon
 } from '@heroicons/react/24/outline'
+import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid'
+import { Editor } from '@tinymce/tinymce-react'
 import { useSession } from 'next-auth/react'
-import dynamic from 'next/dynamic'
 import { Montserrat } from 'next/font/google'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import useSWR from 'swr'
-
-// Dynamically import TinyMCE Editor for viewing mode
-const Editor = dynamic(
-  () => import('@tinymce/tinymce-react').then(({ Editor }) => Editor),
-  { ssr: false, loading: () => <p>Loading...</p> }
-)
 
 const montserrat = Montserrat({ subsets: ['latin'], display: 'swap' })
 
@@ -84,10 +83,19 @@ const DiaryView = () => {
   const { push } = useRouter()
   const { data: session, status } = useSession()
   const [isDeleting, setIsDeleting] = useState(false)
+  const [isLiked, setIsLiked] = useState(false)
+  const [editorConfig, setEditorConfig] = useState({
+    skin: 'oxide',
+    content_css: 'default'
+  })
 
   // Use SWR for data fetching
-  const fetcher = (url: string) => fetch(url).then((res) => res.json())
-  const { data: diary, error, isLoading } = useSWR(`/api/diary/${id}`, fetcher)
+  const {
+    data: diary,
+    error,
+    isLoading,
+    mutate
+  } = useSWR<IDiary>(`/api/diary/${id}`, fetcher)
 
   // Determine if the current user is the diary owner or the site owner
   const isOwner =
@@ -130,6 +138,51 @@ const DiaryView = () => {
     }
   }
 
+  const handleLike = useCallback(async () => {
+    if (!diary?._id) return
+
+    try {
+      const response = await fetch(`/api/diary/${diary._id}/like`, {
+        method: 'POST'
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to like diary')
+      }
+
+      setIsLiked(true)
+      toast.success('Diary liked!')
+      mutate()
+    } catch (err) {
+      toast.error('Failed to like diary')
+      console.error(err)
+    }
+  }, [diary?._id, mutate])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const isDarkMode = window.matchMedia(
+        '(prefers-color-scheme: dark)'
+      ).matches
+      setEditorConfig({
+        skin: isDarkMode ? 'oxide-dark' : 'oxide',
+        content_css: isDarkMode ? 'dark' : 'default'
+      })
+
+      // Listen for theme changes
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+      const handleChange = (e: MediaQueryListEvent) => {
+        setEditorConfig({
+          skin: e.matches ? 'oxide-dark' : 'oxide',
+          content_css: e.matches ? 'dark' : 'default'
+        })
+      }
+
+      mediaQuery.addEventListener('change', handleChange)
+      return () => mediaQuery.removeEventListener('change', handleChange)
+    }
+  }, [])
+
   if (isLoading) {
     return <LoadingView />
   }
@@ -152,7 +205,7 @@ const DiaryView = () => {
             </button>
           </Link>
 
-          <div className="flex items-center gap-x-3">
+          <div className="flex items-center gap-x-4">
             {canEditOrDelete && (
               <>
                 <Link href={`/diary/${diary._id}/edit`}>
@@ -172,6 +225,17 @@ const DiaryView = () => {
                 </button>
               </>
             )}
+            <button
+              onClick={handleLike}
+              className="text-red-500 hover:text-red-600 transition-colors"
+              aria-label={isLiked ? 'Unlike diary' : 'Like diary'}
+            >
+              {isLiked ? (
+                <HeartIconSolid className="w-6 h-6" />
+              ) : (
+                <HeartIconOutline className="w-6 h-6" />
+              )}
+            </button>
           </div>
         </div>
 
@@ -184,11 +248,12 @@ const DiaryView = () => {
           <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
             <span>
               Today at{' '}
-              {new Date(diary.createdAt).toLocaleTimeString('en-US', {
-                hour: 'numeric',
-                minute: 'numeric',
-                hour12: true
-              })}
+              {diary.createdAt &&
+                new Date(diary.createdAt).toLocaleTimeString('en-US', {
+                  hour: 'numeric',
+                  minute: 'numeric',
+                  hour12: true
+                })}
             </span>
             <span>•</span>
             <span>{diary.publicity ? 'Public' : 'Private'}</span>
@@ -225,8 +290,8 @@ const DiaryView = () => {
               statusbar: false,
               branding: false,
               inline: true,
-              skin: 'oxide-dark',
-              content_css: 'dark',
+              skin: editorConfig.skin,
+              content_css: editorConfig.content_css,
               content_style: `
                 body {
                   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -235,39 +300,36 @@ const DiaryView = () => {
                   padding: 0;
                   margin: 0;
                   background-color: transparent;
-                  color: #e5e5e5;
+                  color: var(--tw-prose-body);
                 }
                 p {
                   margin: 0 0 1em 0;
                 }
                 h1, h2, h3, h4, h5, h6 {
-                  color: #ffffff;
+                  color: var(--tw-prose-headings);
                 }
-                /* Basic inline code style */
                 code {
                   font-family: 'Consolas', monospace;
-                  background-color: rgba(255, 255, 255, 0.1);
+                  background-color: var(--tw-prose-pre-bg);
                   padding: .1em .2em;
                   border-radius: 3px;
                 }
-                /* Force dark background for code blocks */
                 pre {
-                  background-color: #1e1e1e !important;
-                  border: 1px solid #2a2a2a !important;
+                  background-color: var(--tw-prose-pre-bg) !important;
+                  border: 1px solid var(--tw-prose-pre-border) !important;
                   border-radius: 6px !important;
                   padding: 1em !important;
                 }
                 pre code {
                   background-color: transparent !important;
                 }
-                /* Prism specific overrides */
                 .language-markup,
                 .language-javascript,
                 .language-typescript,
                 .language-css,
                 .language-jsx,
                 .language-tsx {
-                  background-color: #1e1e1e !important;
+                  background-color: var(--tw-prose-pre-bg) !important;
                 }
               `
             }}

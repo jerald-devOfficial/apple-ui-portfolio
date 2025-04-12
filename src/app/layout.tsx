@@ -62,12 +62,12 @@ export default async function RootLayout({
       <body
         className={`${inter.className} flex h-screen flex-col items-center justify-between relative transition-colors`}
       >
-        <Wallpapers />
-        <AuthProvider>
-          <Providers initialState={initialState}>
+        <Providers initialState={initialState}>
+          <Wallpapers />
+          <AuthProvider>
             <ResponsiveUI>{children}</ResponsiveUI>
-          </Providers>
-        </AuthProvider>
+          </AuthProvider>
+        </Providers>
       </body>
     </html>
   )

@@ -402,3 +402,65 @@ pre span:not([class]) + span.token.punctuation {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
+
+/* TinyMCE Editor Dark Mode Styles */
+.dark .tox-tinymce {
+  border-color: rgb(63, 63, 70) !important;
+}
+
+.dark .tox .tox-toolbar,
+.dark .tox .tox-toolbar__overflow,
+.dark .tox .tox-toolbar__primary {
+  background: rgb(39, 39, 42) !important;
+  border-color: rgb(63, 63, 70) !important;
+}
+
+.dark .tox .tox-tbtn {
+  color: rgb(244, 244, 245) !important;
+}
+
+.dark .tox .tox-tbtn:hover {
+  background: rgb(63, 63, 70) !important;
+}
+
+.dark .tox .tox-statusbar {
+  background: rgb(39, 39, 42) !important;
+  border-color: rgb(63, 63, 70) !important;
+  color: rgb(161, 161, 170) !important;
+}
+
+.dark .tox .tox-edit-area__iframe {
+  background: rgb(24, 24, 27) !important;
+}
+
+.dark .tox .tox-tbtn--enabled,
+.dark .tox .tox-tbtn--enabled:hover {
+  background: rgb(63, 63, 70) !important;
+  color: rgb(244, 244, 245) !important;
+}
+
+.dark .tox .tox-tbtn svg {
+  fill: rgb(244, 244, 245) !important;
+}
+
+.dark .tox .tox-tbtn--disabled svg,
+.dark .tox .tox-tbtn--disabled:hover svg {
+  fill: rgb(161, 161, 170) !important;
+}
+
+.dark .tox-menu {
+  background-color: rgb(39, 39, 42) !important;
+  border-color: rgb(63, 63, 70) !important;
+}
+
+.dark .tox .tox-collection__item {
+  color: rgb(244, 244, 245) !important;
+}
+
+.dark .tox .tox-collection__item--active {
+  background-color: rgb(63, 63, 70) !important;
+}
+
+.dark .tox .tox-collection__item:hover {
+  background-color: rgb(63, 63, 70) !important;
+}
