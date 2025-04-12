@@ -1,52 +1,27 @@
 'use client'
 
+import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 const Wallpapers = () => {
+  const { theme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [mobileWallpaper, setMobileWallpaper] = useState('')
   const [tabletWallpaper, setTabletWallpaper] = useState('')
   const [desktopWallpaper, setDesktopWallpaper] = useState('')
-  const [isDarkMode, setIsDarkMode] = useState(false)
 
   // Wait for component to mount to avoid hydration mismatch
   useEffect(() => {
     setMounted(true)
+  }, [])
 
-    // Initial theme check
-    const storedTheme = localStorage.getItem('theme')
-    setIsDarkMode(storedTheme === 'dark')
-    updateWallpapers(storedTheme === 'dark')
+  // Update wallpapers based on theme
+  useEffect(() => {
+    if (!mounted) return
 
-    // Setup listener for theme changes
-    const checkTheme = () => {
-      const theme = localStorage.getItem('theme')
-      setIsDarkMode(theme === 'dark')
-      updateWallpapers(theme === 'dark')
-    }
-
-    // Listen for storage events (cross-tab)
-    window.addEventListener('storage', checkTheme)
-
-    // Set up a one-time check for theme changes
-    // This polls localStorage every second to check for theme changes
-    const interval = setInterval(() => {
-      const theme = localStorage.getItem('theme')
-      if ((theme === 'dark') !== isDarkMode) {
-        setIsDarkMode(theme === 'dark')
-        updateWallpapers(theme === 'dark')
-      }
-    }, 1000)
-
-    return () => {
-      window.removeEventListener('storage', checkTheme)
-      clearInterval(interval)
-    }
-  }, [isDarkMode])
-
-  // Function to update wallpapers based on theme
-  const updateWallpapers = (isDark: boolean) => {
+    const currentTheme = theme === 'system' ? resolvedTheme : theme
+    const isDark = currentTheme === 'dark'
     const timestamp = Date.now()
 
     setMobileWallpaper(
@@ -66,7 +41,7 @@ const Wallpapers = () => {
         ? `/images/bg/macOS-dark.png?v=${timestamp}`
         : `/images/bg/macOS-light.png?v=${timestamp}`
     )
-  }
+  }, [theme, resolvedTheme, mounted])
 
   // Render a placeholder until component is mounted
   if (!mounted) {

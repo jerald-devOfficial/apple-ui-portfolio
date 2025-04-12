@@ -174,22 +174,15 @@ const Diaries = () => {
               </p>
             </div>
           ) : filteredDiaries?.length ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
-              {filteredDiaries.map((diary, index) => (
-                <div
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredDiaries.map((diary) => (
+                <DiaryCard
                   key={diary._id}
-                  className={index === 0 ? 'md:col-span-2 lg:col-span-2' : ''}
-                >
-                  <DiaryCard
-                    key={diary._id}
-                    diary={diary}
-                    isOwner={
-                      isAuthenticated &&
-                      sessionData?.user?.email === diary.userId
-                    }
-                    featured={index === 0}
-                  />
-                </div>
+                  diary={diary}
+                  isOwner={
+                    isAuthenticated && sessionData?.user?.email === diary.userId
+                  }
+                />
               ))}
             </div>
           ) : data?.diaries?.length ? (
