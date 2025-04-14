@@ -1,5 +1,60 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:is(.dark *));
+
+/* Dark mode transition styles */
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+
+  /* macOS UI variables */
+  --menu-bg-light: rgba(235, 235, 235, 0.9);
+  --menu-bg-dark: rgba(0, 0, 0, 0.6);
+  --menu-text-light: rgb(0, 0, 0);
+  --menu-text-dark: rgb(255, 255, 255);
+}
+
+.dark {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+}
+
+/* macOS Menu Bar styles */
+.macos-menu-bar {
+  background-color: var(--menu-bg-light);
+  color: var(--menu-text-light);
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.dark .macos-menu-bar {
+  background-color: var(--menu-bg-dark);
+  color: var(--menu-text-dark);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+html {
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+html.dark body {
+  color: rgb(var(--foreground-rgb));
+  background-color: rgb(var(--background-end-rgb));
+}
+
+/* Apply transition to all elements that change in dark mode */
+* {
+  transition-property: color, background-color, border-color, outline-color,
+    text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
+    backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.15s;
+}
+
 @theme {
   --breakpoint-*: initial;
   --breakpoint-xs: 390px;
@@ -83,14 +138,329 @@
 }
 
 @layer utilities {
-      
-      @keyframes wave-animation {
-        0% {
-          background-position-x: 0;
-        }
-        100% {
-          background-position-x: 100%;
-        }
-      }
+  @keyframes wave-animation {
+    0% {
+      background-position-x: 0;
+    }
+    100% {
+      background-position-x: 100%;
+    }
   }
-  
+}
+
+/* Code Syntax Highlighting Styles */
+pre {
+  background-color: #1e1e1e !important;
+  border-radius: 6px !important;
+  padding: 1em !important;
+  border: 1px solid #2a2a2a !important;
+  margin: 1em 0 !important;
+}
+
+pre code {
+  background-color: transparent !important;
+  color: #d4d4d4 !important;
+  font-family: 'Consolas', monospace !important;
+  text-shadow: none !important;
+  -webkit-font-smoothing: none !important;
+  -moz-osx-font-smoothing: none !important;
+}
+
+/* Make all token text sharp with no white glow - target everything */
+pre *,
+pre code *,
+.token,
+pre span,
+pre code span,
+pre span.token,
+pre .token * {
+  text-shadow: none !important;
+  -webkit-font-smoothing: none !important;
+  -moz-osx-font-smoothing: none !important;
+  background: transparent !important;
+  font-family: 'Consolas', monospace !important;
+}
+
+/* Target PrismJS specific selectors */
+code[class^='language-'],
+pre[class^='language-'],
+pre[class^='language-'] > code,
+code[class^='language-'] span,
+pre[class^='language-'] span {
+  text-shadow: none !important;
+  -webkit-font-smoothing: none !important;
+  -moz-osx-font-smoothing: none !important;
+  font-family: 'Consolas', monospace !important;
+  background: transparent !important;
+}
+
+/* Target TinyMCE rendered content specifically */
+.mce-content-body pre {
+  background-color: #1e1e1e !important;
+  border-radius: 6px !important;
+  padding: 1em !important;
+  border: 1px solid #2a2a2a !important;
+  margin: 1em 0 !important;
+}
+
+.mce-content-body pre code {
+  background-color: transparent !important;
+}
+
+/* Override TinyMCE's PrismJS styles */
+.mce-content-body pre[class^='language-'],
+.mce-content-body code[class^='language-'] {
+  text-shadow: none !important;
+  font-family: 'Consolas', monospace !important;
+  background-color: #1e1e1e !important;
+}
+
+/* Force background color for any pre element that might be inside TinyMCE content */
+div[contenteditable='true'] pre,
+div[contenteditable='false'] pre,
+.tox-edit-area pre,
+.tox-editor-container pre {
+  background-color: #1e1e1e !important;
+}
+
+/* Special handling for code blocks in view mode */
+.mce-content-body .mce-item-preview pre,
+.mce-content-body pre.prism,
+.mce-content-body pre[data-mce-placeholder],
+.mce-content-body div.mce-preview-object pre {
+  background-color: #1e1e1e !important;
+  border: 1px solid #2a2a2a !important;
+  border-radius: 6px !important;
+}
+
+/* Override codesample plugin styles */
+.mce-content-body .prism,
+.prism {
+  background-color: #1e1e1e !important;
+}
+
+/* TinyMCE codesample plugin uses Prism - ensure these are styled correctly */
+pre.prism,
+pre.line-numbers {
+  background-color: #1e1e1e !important;
+  margin: 1em 0 !important;
+  padding: 1em !important;
+  border: 1px solid #2a2a2a !important;
+  border-radius: 6px !important;
+}
+
+/* Override inline styles that might be applied by TinyMCE */
+pre[style] {
+  background-color: #1e1e1e !important;
+}
+
+/* Override any existing styling for specific characters */
+pre .operator,
+pre .punctuation,
+pre span.token.operator,
+pre span.token.punctuation,
+pre .ellipsis,
+pre span.token.comment span,
+.token.operator,
+.token.punctuation {
+  text-shadow: none !important;
+  background-color: transparent !important;
+  color: #d4d4d4 !important;
+  font-family: 'Consolas', monospace !important;
+}
+
+/* Code syntax highlighting - match TinyMCE editor's theme */
+.token.comment,
+.token.prolog,
+.token.cdata {
+  color: #6a9955 !important; /* green */
+}
+.token.delimiter,
+.token.boolean,
+.token.keyword,
+.token.selector,
+.token.important,
+.token.atrule {
+  color: #569cd6 !important; /* blue */
+}
+.token.operator,
+.token.punctuation,
+.token.attr-name {
+  color: #d4d4d4 !important; /* light gray */
+}
+.token.tag,
+.token.tag .punctuation,
+.token.doctype,
+.token.builtin {
+  color: #569cd6 !important; /* blue */
+}
+.token.entity,
+.token.number,
+.token.symbol {
+  color: #b5cea8 !important; /* light green */
+}
+.token.property,
+.token.constant,
+.token.variable {
+  color: #9cdcfe !important; /* light blue */
+}
+.token.string,
+.token.char {
+  color: #ce9178 !important; /* orange */
+}
+.token.attr-value,
+.token.attr-value .punctuation {
+  color: #ce9178 !important; /* orange */
+}
+.token.url {
+  color: #dcdcaa !important; /* yellow */
+  text-decoration: underline;
+}
+.token.function {
+  color: #dcdcaa !important; /* yellow */
+}
+
+/* Ensure ALL text in code blocks is visible - Fallback */
+pre,
+pre code,
+pre span,
+pre div,
+pre label {
+  color: #d0c088 !important; /* Muted gold color for any text not specifically styled */
+}
+.token,
+span.token {
+  color: #d4d4d4 !important; /* Base color for any token not specifically styled */
+}
+
+/* Special handling for variable names and identifiers */
+pre span:empty + span:not([class]),
+pre span:not([class*='token']),
+pre code > span:not([class]),
+pre span.token + span:not([class]) {
+  color: #d4d4d4 !important; /* Light gray for variable names */
+}
+
+/* Edge case handling for specific patterns */
+pre span.token.operator + span:not([class]),
+pre span.token.punctuation + span:not([class]),
+pre span:not([class]) + span.token.operator,
+pre span:not([class]) + span.token.punctuation {
+  color: #d4d4d4 !important; /* Light gray for any text adjacent to operators/punctuation */
+}
+
+/* Hide TinyMCE UI elements in view mode */
+.tox-tinymce {
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+.tox-editor-container {
+  background: transparent !important;
+}
+.tox-edit-area {
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.tox-edit-area__iframe {
+  background: transparent !important;
+}
+.tox-statusbar {
+  display: none !important;
+}
+.mce-content-body {
+  outline: none !important;
+}
+.mce-content-body:hover {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.mce-content-body:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.mce-content-body [data-mce-selected] {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Featured Diary Card */
+.featured-card {
+  border-width: 2px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.dark .featured-card {
+  border-color: rgba(59, 130, 246, 0.2);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2),
+    0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+.featured-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* TinyMCE Editor Dark Mode Styles */
+.dark .tox-tinymce {
+  border-color: rgb(63, 63, 70) !important;
+}
+
+.dark .tox .tox-toolbar,
+.dark .tox .tox-toolbar__overflow,
+.dark .tox .tox-toolbar__primary {
+  background: rgb(39, 39, 42) !important;
+  border-color: rgb(63, 63, 70) !important;
+}
+
+.dark .tox .tox-tbtn {
+  color: rgb(244, 244, 245) !important;
+}
+
+.dark .tox .tox-tbtn:hover {
+  background: rgb(63, 63, 70) !important;
+}
+
+.dark .tox .tox-statusbar {
+  background: rgb(39, 39, 42) !important;
+  border-color: rgb(63, 63, 70) !important;
+  color: rgb(161, 161, 170) !important;
+}
+
+.dark .tox .tox-edit-area__iframe {
+  background: rgb(24, 24, 27) !important;
+}
+
+.dark .tox .tox-tbtn--enabled,
+.dark .tox .tox-tbtn--enabled:hover {
+  background: rgb(63, 63, 70) !important;
+  color: rgb(244, 244, 245) !important;
+}
+
+.dark .tox .tox-tbtn svg {
+  fill: rgb(244, 244, 245) !important;
+}
+
+.dark .tox .tox-tbtn--disabled svg,
+.dark .tox .tox-tbtn--disabled:hover svg {
+  fill: rgb(161, 161, 170) !important;
+}
+
+.dark .tox-menu {
+  background-color: rgb(39, 39, 42) !important;
+  border-color: rgb(63, 63, 70) !important;
+}
+
+.dark .tox .tox-collection__item {
+  color: rgb(244, 244, 245) !important;
+}
+
+.dark .tox .tox-collection__item--active {
+  background-color: rgb(63, 63, 70) !important;
+}
+
+.dark .tox .tox-collection__item:hover {
+  background-color: rgb(63, 63, 70) !important;
+}

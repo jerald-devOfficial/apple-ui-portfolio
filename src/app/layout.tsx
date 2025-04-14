@@ -55,17 +55,19 @@ export default async function RootLayout({
     headersList.get('cookie')
   )
   return (
-    <html lang='en'>
-      <meta name='theme-color' content='currentColor' />
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="theme-color" content="currentColor" />
+      </head>
       <body
-        className={`${inter.className} flex h-screen flex-col items-center justify-between relative`}
+        className={`${inter.className} flex h-screen flex-col items-center justify-between relative transition-colors`}
       >
-        <Wallpapers />
-        <AuthProvider>
-          <Providers initialState={initialState}>
+        <Providers initialState={initialState}>
+          <Wallpapers />
+          <AuthProvider>
             <ResponsiveUI>{children}</ResponsiveUI>
-          </Providers>
-        </AuthProvider>
+          </AuthProvider>
+        </Providers>
       </body>
     </html>
   )

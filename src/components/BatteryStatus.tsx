@@ -1,6 +1,7 @@
 'use client'
 
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 
 interface BatteryManagerEventMap {
@@ -38,8 +39,13 @@ interface BatteryManager extends EventTarget {
 const BatteryStatus = () => {
   const [batteryPercentage, setBatteryPercentage] = useState(0)
   const [isIOS, setIsIOS] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  // Using useTheme hook for consistency with other components
+  useTheme()
 
   useEffect(() => {
+    setMounted(true)
+
     // Check if the Battery Status API is supported
     if ('getBattery' in navigator) {
       ;(navigator as NavigatorWithBattery)
@@ -64,31 +70,43 @@ const BatteryStatus = () => {
     setBatteryPercentage(percentage)
   }
 
+  // Don't render until mounted to avoid hydration mismatch
+  if (!mounted) return null
+
+  // Dynamic styling based on theme
+  const outlineColorClass = 'outline-black/50 dark:outline-white/50'
+  const fillClass = 'bg-black dark:bg-white'
+  const tipClass = 'bg-black/50 dark:bg-white/50'
+
   return (
-    <div className='flex items-center gap-x-1.5'>
+    <div className="flex items-center gap-x-1.5">
       {isIOS ? (
         <>
-          <span className='outline-2 outline outline-white/50 xl:outline-black/50 outline-offset-2 rounded-xs h-2 w-5 relative'>
-            {/* Percentage white bar */}
+          <span
+            className={`outline-2 ${outlineColorClass} outline-offset-2 rounded-xs h-2 w-5 relative`}
+          >
+            {/* Percentage bar */}
             <span
-              className='w-full h-full bg-white xl:bg-black absolute rounded-xs flex items-center justify-center'
+              className={`w-full h-full ${fillClass} absolute rounded-xs flex items-center justify-center`}
               style={{ width: `100%` }}
             >
-              <XMarkIcon className='text-red-600 h-3 w-3' />
+              <XMarkIcon className="text-red-600 h-3 w-3" />
             </span>
           </span>
-          <span className='rounded-r-full h-1 w-0.5 bg-white/50 xl:bg-black/50' />
+          <span className={`rounded-r-full h-1 w-0.5 ${tipClass}`} />
         </>
       ) : (
         <>
-          <span className='outline-2 outline outline-white/50 xl:outline-black/50 outline-offset-2 rounded-xs h-2 w-5 relative'>
-            {/* Percentage white bar */}
+          <span
+            className={`outline-2 ${outlineColorClass} outline-offset-2 rounded-xs h-2 w-5 relative`}
+          >
+            {/* Percentage bar */}
             <span
-              className='w-full h-full bg-white xl:bg-black absolute rounded-xs'
+              className={`w-full h-full ${fillClass} absolute rounded-xs`}
               style={{ width: `${batteryPercentage}%` }}
             />
           </span>
-          <span className='rounded-r-full h-1 w-0.5 bg-white/50 xl:bg-black/50' />
+          <span className={`rounded-r-full h-1 w-0.5 ${tipClass}`} />
         </>
       )}
     </div>

@@ -1,6 +1,6 @@
 import { Contact } from '@/models/Contact'
 import { getRandomHexColor } from '@/utils'
-import connect from '@/utils/db'
+import dbConnect from '@/utils/db'
 import mongoose from 'mongoose'
 import { NextResponse } from 'next/server'
 
@@ -10,7 +10,7 @@ export async function POST(req: Request) {
   const avatarColor = getRandomHexColor() + '/' + getRandomHexColor()
 
   try {
-    await connect()
+    await dbConnect()
 
     await Contact.create({ fullName, email, message, avatarColor, subject })
 
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
 
 export async function GET() {
   try {
-    await connect()
+    await dbConnect()
 
     const contact = await Contact.find()
 
