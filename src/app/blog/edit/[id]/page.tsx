@@ -2,22 +2,40 @@
 
 import ErrorBanner from '@/components/ErrorBanner'
 import TinyMCEEditor from '@/components/TinyMCEEditor'
+import { IBlogDocument } from '@/models/Blog'
 import { ArrowLeftIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline'
+import { Session } from 'next-auth'
 import { useSession } from 'next-auth/react'
 import { Montserrat } from 'next/font/google'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import useSWR from 'swr'
 
 const montserrat = Montserrat({ subsets: ['latin'], display: 'swap' })
 
-const BlogCreate = () => {
+// Extend Session type to include user ID for Next Auth
+interface CustomSession extends Session {
+  user: {
+    id?: string
+    name?: string | null
+    email?: string | null
+    image?: string | null
+  }
+}
+
+const BlogEdit = () => {
   const router = useRouter()
-  const { status } = useSession()
+  const { id } = useParams()
+  const { data: session, status } = useSession() as {
+    data: CustomSession | null
+    status: string
+  }
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [mounted, setMounted] = useState(false)
 
   // Form fields
   const [title, setTitle] = useState('')
@@ -29,13 +47,58 @@ const BlogCreate = () => {
   const [tagInput, setTagInput] = useState('')
   const [featured, setFeatured] = useState(false)
   const [status_, setStatus_] = useState('published')
+  const [slug, setSlug] = useState('')
 
-  // Redirect if not authenticated
+  // Set mounted state after component mounts on client
   useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Fetch blog post
+  const { data: blog, error: fetchError } = useSWR<IBlogDocument>(
+    mounted && id ? `/api/blog/${id}` : null,
+    async (url: string) => {
+      const res = await fetch(url)
+      if (!res.ok) {
+        throw new Error('Failed to fetch blog post')
+      }
+      return res.json()
+    },
+    {
+      revalidateOnFocus: false
+    }
+  )
+
+  // Set form values from fetched blog
+  useEffect(() => {
+    if (blog) {
+      setTitle(blog.title || '')
+      setSummary(blog.summary || '')
+      setContent(blog.content || '')
+      setCoverImage(blog.coverImage || '')
+      setTags(blog.tags || [])
+      setCategory(blog.category || '')
+      setFeatured(blog.featured || false)
+      setStatus_(blog.status || 'published')
+      setSlug(blog.slug || '')
+    }
+  }, [blog])
+
+  // Redirect if not authenticated or not the author
+  useEffect(() => {
+    if (!mounted) return
+
     if (status === 'unauthenticated') {
       router.push('/blog')
+      return
     }
-  }, [status, router])
+
+    // Check if user is the author
+    if (blog && session && session.user?.id !== blog.userId) {
+      router.push(`/blog/${blog.slug}`)
+      toast.error('You are not authorized to edit this blog post')
+    }
+  }, [blog, session, status, router, mounted])
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -51,8 +114,8 @@ const BlogCreate = () => {
     }
 
     try {
-      const response = await fetch('/api/blog', {
-        method: 'POST',
+      const response = await fetch(`/api/blog/${id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -71,16 +134,16 @@ const BlogCreate = () => {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to create blog post')
+        throw new Error(data.message || 'Failed to update blog post')
       }
 
-      toast.success('Blog post created successfully!')
+      toast.success('Blog post updated successfully!')
       router.push(`/blog/${data.blog.slug}`)
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error
           ? err.message
-          : 'An error occurred while creating the blog post'
+          : 'An error occurred while updating the blog post'
       setError(errorMessage)
     } finally {
       setIsSubmitting(false)
@@ -108,14 +171,57 @@ const BlogCreate = () => {
     }
   }
 
-  if (status === 'loading') {
+  // Initial loading state
+  if (!mounted) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-pulse flex flex-col items-center">
-          <div className="h-8 w-8 bg-blue-200 dark:bg-blue-700 rounded-full mb-4"></div>
-          <div className="h-4 w-24 bg-gray-200 dark:bg-zinc-700 rounded"></div>
+      <main
+        className={`flex overflow-hidden h-full w-full xl:max-w-[1024px] sm:pt-6 xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 ${montserrat.className} my-2 sm:my-0`}
+      >
+        <div className="flex grow h-full rounded-xl bg-stone-200/95 dark:bg-zinc-900 flex-col shadow-xl overflow-hidden">
+          <div className="flex justify-between items-center bg-white/90 dark:bg-zinc-800/90 backdrop-blur-md px-4 py-3 sm:py-4 border-b border-gray-200 dark:border-zinc-700">
+            <div className="flex items-center gap-4">
+              <Link
+                href="/blog"
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              >
+                <ArrowLeftIcon className="w-5 h-5" />
+              </Link>
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                Edit Blog Post
+              </h1>
+            </div>
+          </div>
+          <div className="flex-grow overflow-y-auto p-4 sm:p-6 bg-white/80 dark:bg-zinc-900/80">
+            <div className="grid place-items-center h-64">
+              <div className="animate-pulse flex flex-col items-center">
+                <div className="h-8 w-8 bg-blue-200 dark:bg-blue-700 rounded-full mb-4"></div>
+                <div className="h-4 w-24 bg-gray-200 dark:bg-zinc-700 rounded"></div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
+    )
+  }
+
+  if (fetchError) {
+    return (
+      <main
+        className={`flex overflow-hidden h-full w-full xl:max-w-[1024px] sm:pt-6 xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 ${montserrat.className} my-2 sm:my-0`}
+      >
+        <div className="flex grow h-full rounded-xl bg-stone-200/95 dark:bg-zinc-900 flex-col shadow-xl overflow-hidden p-6">
+          <ErrorBanner message="Failed to load blog post. It may have been deleted or doesn't exist." />
+          <div className="mt-4">
+            <Link
+              href="/blog"
+              className="text-blue-500 hover:underline flex items-center gap-1"
+            >
+              <ArrowLeftIcon className="w-4 h-4" />
+              Back to blog
+            </Link>
+          </div>
+        </div>
+      </main>
     )
   }
 
@@ -128,13 +234,13 @@ const BlogCreate = () => {
         <div className="flex justify-between items-center bg-white/90 dark:bg-zinc-800/90 backdrop-blur-md px-4 py-3 sm:py-4 border-b border-gray-200 dark:border-zinc-700">
           <div className="flex items-center gap-4">
             <Link
-              href="/blog"
+              href={`/blog/${slug}`}
               className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             >
               <ArrowLeftIcon className="w-5 h-5" />
             </Link>
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-              Create Blog Post
+              Edit Blog Post
             </h1>
           </div>
           <button
@@ -144,7 +250,7 @@ const BlogCreate = () => {
             className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center gap-x-2 hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <PaperAirplaneIcon className="w-5 h-5" />
-            <span>{isSubmitting ? 'Publishing...' : 'Publish'}</span>
+            <span>{isSubmitting ? 'Saving...' : 'Save'}</span>
           </button>
         </div>
 
@@ -339,7 +445,7 @@ const BlogCreate = () => {
               </label>
               <TinyMCEEditor
                 value={content}
-                onEditorChange={(newContent: string) => setContent(newContent)}
+                onEditorChange={(newContent) => setContent(newContent)}
                 className="min-h-[400px]"
               />
             </div>
@@ -350,4 +456,4 @@ const BlogCreate = () => {
   )
 }
 
-export default BlogCreate
+export default BlogEdit
