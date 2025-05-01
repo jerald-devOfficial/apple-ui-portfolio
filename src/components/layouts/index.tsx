@@ -106,12 +106,16 @@ const ResponsiveUI = ({
       img: '/images/icons/macOS-mail.png',
       path: '/contact'
     },
-    {
-      name: 'mails',
-      title: 'Mails',
-      img: '/images/icons/macOS-gmail.png',
-      path: '/mails'
-    }
+    ...(session.status === 'authenticated'
+      ? [
+          {
+            name: 'mails',
+            title: 'Mails',
+            img: '/images/icons/macOS-gmail.png',
+            path: '/mails'
+          }
+        ]
+      : [])
   ]
 
   // Group 4: Utilities & Settings
@@ -350,10 +354,6 @@ const DockItem = ({
         )}
       </Link>
     )
-  }
-
-  if (item.name === 'mails' && !item.click) {
-    return null // Handle this special case
   }
 
   // Only render Link if path exists
