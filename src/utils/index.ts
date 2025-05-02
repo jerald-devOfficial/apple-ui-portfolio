@@ -60,31 +60,10 @@ export const formatDate = (createdAt: Date) => {
   }
 }
 
-export const fetchExchangeRateFromAPI = async (
-  from: string,
-  to: string
-): Promise<number> => {
-  try {
-    const response = await fetch(
-      `https://api.coingecko.com/api/v3/simple/price?ids=${from}&vs_currencies=${to}`
-    )
-
-    if (!response.ok) {
-      throw new Error(`Network response was not ok: ${response.statusText}`)
-    }
-
-    const data = await response.json()
-    const exchangeRate = data[from.toLowerCase()]?.[to.toLowerCase()]
-
-    if (exchangeRate === undefined) {
-      throw new Error(`Exchange rate not found for ${from} to ${to}`)
-    }
-
-    return exchangeRate
-  } catch (error) {
-    console.error('Error fetching exchange rate:', error)
-    return 0
-  }
+export async function fetchExchangeRateFromAPI() {
+  const res = await fetch('/api/eth-usd')
+  const data = await res.json()
+  return data.usd
 }
 
 export const classNames = (...classes: string[]) => {
@@ -143,13 +122,13 @@ export const copyAddressToClipboard = (hash: string) => {
 }
 
 export const formatDiaryDate = (createdAt: Date) => {
-  const parsedDate = new Date(createdAt);
+  const parsedDate = new Date(createdAt)
 
   if (isToday(parsedDate)) {
-    return `Today at ${format(parsedDate, 'h:mm a')}`;
+    return `Today at ${format(parsedDate, 'h:mm a')}`
   } else if (isThisYear(parsedDate)) {
-    return format(parsedDate, 'MMM d, h:mm a');
+    return format(parsedDate, 'MMM d, h:mm a')
   } else {
-    return format(parsedDate, 'MMM d, yyyy, h:mm a');
+    return format(parsedDate, 'MMM d, yyyy, h:mm a')
   }
-};
+}

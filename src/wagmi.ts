@@ -21,7 +21,9 @@ export function getConfig() {
     }),
     ssr: true,
     transports: {
-      [mainnet.id]: http(),
+      [mainnet.id]: http(
+        `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
+      ),
       [sepolia.id]: http()
     }
   })

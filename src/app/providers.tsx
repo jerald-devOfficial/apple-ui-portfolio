@@ -1,6 +1,7 @@
 'use client'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { SessionProvider } from 'next-auth/react'
 import { ThemeProvider } from 'next-themes'
 import { type ReactNode, useEffect, useState } from 'react'
 import { type State, WagmiProvider } from 'wagmi'
@@ -23,12 +24,11 @@ export function Providers({
     setMounted(true)
   }, [])
 
-  if (!mounted) return <>{children}</>
   return (
     <WagmiProvider config={config} initialState={initialState}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <SessionProvider>{mounted ? children : null}</SessionProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </WagmiProvider>
