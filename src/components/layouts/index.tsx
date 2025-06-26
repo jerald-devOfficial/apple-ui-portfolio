@@ -75,6 +75,12 @@ const ResponsiveUI = ({
       path: '/portfolio'
     },
     {
+      name: 'blog',
+      title: 'Blog',
+      img: '/images/icons/macOS-safari.png',
+      path: '/blog'
+    },
+    {
       name: 'diaries',
       title: 'Diaries',
       img: '/images/icons/macOS-diary.png',

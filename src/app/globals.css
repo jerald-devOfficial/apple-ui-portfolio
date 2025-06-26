@@ -464,3 +464,105 @@ pre span:not([class]) + span.token.punctuation {
 .dark .tox .tox-collection__item:hover {
   background-color: rgb(63, 63, 70) !important;
 }
+
+/* Prose heading styles for blog content */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  color: rgb(15, 23, 42);
+  font-weight: 700;
+  line-height: 1.25;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.prose h1 {
+  font-size: 2.25rem;
+  margin-top: 0;
+}
+
+.prose h2 {
+  font-size: 1.875rem;
+  border-bottom: 1px solid rgb(226, 232, 240);
+  padding-bottom: 0.5rem;
+}
+
+.prose h3 {
+  font-size: 1.5rem;
+}
+
+.prose h4 {
+  font-size: 1.25rem;
+}
+
+.prose h5 {
+  font-size: 1.125rem;
+}
+
+.prose h6 {
+  font-size: 1rem;
+}
+
+/* Dark mode prose heading styles */
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4,
+.dark .prose h5,
+.dark .prose h6 {
+  color: rgb(248, 250, 252);
+}
+
+.dark .prose h2 {
+  border-bottom-color: rgb(51, 65, 85);
+}
+
+/* Additional prose styles for better content formatting */
+.prose p {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  line-height: 1.75;
+  color: rgb(55, 65, 81);
+}
+
+.dark .prose p {
+  color: rgb(209, 213, 219);
+}
+
+.prose ul,
+.prose ol {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding-left: 1.625rem;
+}
+
+.prose li {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose strong {
+  font-weight: 600;
+  color: rgb(15, 23, 42);
+}
+
+.dark .prose strong {
+  color: rgb(248, 250, 252);
+}
+
+.prose blockquote {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-left: 1rem;
+  border-left: 4px solid rgb(226, 232, 240);
+  font-style: italic;
+  color: rgb(75, 85, 99);
+}
+
+.dark .prose blockquote {
+  border-left-color: rgb(55, 65, 81);
+  color: rgb(156, 163, 175);
+}

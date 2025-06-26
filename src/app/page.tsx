@@ -25,6 +25,11 @@ export default function Home() {
       path: '/news'
     },
     {
+      name: 'Blog',
+      img: '/images/icons/safari.png',
+      path: '/blog'
+    },
+    {
       name: 'Resume',
       img: '/images/icons/resume.png',
       path: '/pdfs/updated-resume.pdf'
@@ -42,8 +47,8 @@ export default function Home() {
   ]
 
   return (
-    <main className='py-9 sm:py-12 grow w-full flex flex-col items-center'>
-      <section className='grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-y-5 sm:gap-y-12 px-5 sm:px-12 md:px-0 xl:hidden max-w-[955px] place-content-center w-full'>
+    <main className="py-9 sm:py-12 grow w-full flex flex-col items-center">
+      <section className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-y-5 sm:gap-y-12 px-5 sm:px-12 md:px-0 xl:hidden max-w-[955px] place-content-center w-full">
         {icons.map((item) => (
           <Fragment key={item.name}>
             {item.click && item.name !== 'Resume' && (

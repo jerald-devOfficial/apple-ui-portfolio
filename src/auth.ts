@@ -1,4 +1,5 @@
 import { Admin } from '@/models/Admin'
+import { User } from '@/models/User'
 import dbConnect from '@/utils/db'
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
@@ -25,34 +26,40 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       })
 
       if (account?.provider === 'google') {
-        const isAllowedToSignIn =
-          profile?.email?.toLowerCase() === 'spaueofficial@gmail.com'
-
-        if (!isAllowedToSignIn) {
-          console.log('Sign-in denied: not admin email', profile?.email)
-          return false
-        }
-
         try {
           await dbConnect()
-          const existingUser = await Admin.findOne({
+
+          // Check if user is admin first
+          const admin = await Admin.findOne({
             email: user?.email?.toLowerCase()
           }).lean()
 
-          if (existingUser) {
-            console.log('Sign-in successful: existing admin')
-            return true
-          } else {
-            const newUser = new Admin({
-              name: user.name,
-              email: user?.email?.toLowerCase(),
-              authType: 'GOOGLE',
-              googleId: account.id
-            })
-            await newUser.save()
-            console.log('Sign-in successful: new admin created')
+          if (admin) {
+            console.log('Sign-in successful: admin user')
             return true
           }
+
+          // If not admin, check if regular user exists
+          const regularUser = await User.findOne({
+            email: user?.email?.toLowerCase()
+          }).lean()
+
+          if (regularUser) {
+            console.log('Sign-in successful: existing regular user')
+            return true
+          }
+
+          // Create new regular user
+          const newUser = new User({
+            name: user.name,
+            email: user?.email?.toLowerCase(),
+            authType: 'GOOGLE',
+            googleId: account.id,
+            avatar: user.image
+          })
+          await newUser.save()
+          console.log('Sign-in successful: new regular user created')
+          return true
         } catch (error) {
           console.error('Sign-in error:', error)
           throw error
@@ -60,6 +67,32 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       }
 
       return true
+    },
+    async session({ session }) {
+      if (session?.user?.email) {
+        await dbConnect()
+
+        // Check if user is admin
+        const admin = await Admin.findOne({
+          email: session.user.email.toLowerCase()
+        }).lean()
+
+        if (admin) {
+          session.user.role = 'admin'
+          session.user.id = admin._id.toString()
+        } else {
+          // Check if regular user
+          const user = await User.findOne({
+            email: session.user.email.toLowerCase()
+          }).lean()
+
+          if (user) {
+            session.user.role = 'user'
+            session.user.id = user._id.toString()
+          }
+        }
+      }
+      return session
     }
   },
   debug: true, // Enable debug mode
