@@ -150,8 +150,8 @@ const PhotosWidget = () => {
           {/* Photos Grid - Mobile */}
           <div className="flex-1">
             {isLoading ? (
-              <div className="flex flex-col items-center justify-center h-full text-center">
-                <div className="w-6 h-6 mb-1 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center animate-pulse">
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                <div className="w-8 h-8 mb-2 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center animate-pulse">
                   <Image
                     src="/images/icons/photos.png"
                     alt="Loading"
@@ -292,8 +292,8 @@ const PhotosWidget = () => {
           )}
 
           {isLoading ? (
-            <div className="text-center text-gray-500 dark:text-gray-400 py-6 sm:py-8 xl:py-12">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 xl:w-20 xl:h-20 mx-auto mb-3 sm:mb-4 xl:mb-6 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center animate-pulse">
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-gray-500 dark:text-gray-400">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 xl:w-20 xl:h-20 mb-3 sm:mb-4 xl:mb-6 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center animate-pulse">
                 <Image
                   src="/images/icons/photos.png"
                   alt="Loading"
