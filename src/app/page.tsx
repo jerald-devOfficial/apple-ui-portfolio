@@ -51,37 +51,37 @@ const Home = () => {
   return (
     <main className="grow w-full flex flex-col items-center overflow-hidden">
       {/* Mobile Layout (xs to sm) - iOS Widget Style */}
-      <section className="sm:hidden px-4 w-full py-4 space-y-3 pb-8 min-h-0">
+      <section className="sm:hidden px-4 w-full py-3 space-y-2 pb-6 min-h-0">
         {/* Top Row - About Me Widget (2x2 tiles) */}
-        <div className="h-[160px] max-w-[300px] xs:max-w-[350px] mx-auto">
+        <div className="h-[140px] max-w-[300px] xs:max-w-[350px] mx-auto">
           <AboutMeWidget />
         </div>
 
         {/* Second Row - Photos Widget (2x2 tiles) */}
-        <div className="h-[160px] max-w-[300px] xs:max-w-[350px] mx-auto">
+        <div className="h-[140px] max-w-[300px] xs:max-w-[350px] mx-auto">
           <PhotosWidget />
         </div>
 
-        {/* App Icons Grid - Below Widgets with more spacing */}
-        <div className="pt-4 pb-6">
-          <div className="grid grid-cols-4 gap-4 place-content-center w-full max-w-[300px] xs:max-w-[350px] mx-auto">
+        {/* App Icons Grid - Below Widgets with optimized spacing */}
+        <div className="pt-3 pb-4">
+          <div className="grid grid-cols-4 gap-3 place-content-center w-full max-w-[300px] xs:max-w-[350px] mx-auto">
             {icons.slice(0, 6).map((item) => (
               <Fragment key={item.name}>
                 {item.click && item.name !== 'Resume' && (
                   <button
-                    className="grid place-items-center gap-y-2 w-full"
+                    className="grid place-items-center gap-y-1.5 w-full"
                     onClick={item.click}
                   >
-                    <div className="relative size-[50px] xs:size-[60px] cursor-pointer">
+                    <div className="relative size-[45px] xs:size-[50px] cursor-pointer">
                       <Image
                         alt={item.name}
                         src={item.img}
                         fill
                         priority
-                        sizes="50px xs:60px"
+                        sizes="45px xs:50px"
                       />
                     </div>
-                    <span className="text-[10px] font-normal text-white text-center leading-tight">
+                    <span className="text-[9px] font-normal text-white text-center leading-tight">
                       {item.name}
                     </span>
                   </button>
@@ -92,18 +92,18 @@ const Home = () => {
                   item.name !== 'Mails' && (
                     <Link
                       href={`${item.path}`}
-                      className="grid place-items-center gap-y-2 w-full"
+                      className="grid place-items-center gap-y-1.5 w-full"
                     >
-                      <div className="relative size-[50px] xs:size-[60px] cursor-pointer">
+                      <div className="relative size-[45px] xs:size-[50px] cursor-pointer">
                         <Image
                           alt={item.name}
                           src={item.img}
                           fill
                           priority
-                          sizes="50px xs:60px"
+                          sizes="45px xs:50px"
                         />
                       </div>
-                      <span className="text-[10px] font-normal text-white text-center leading-tight">
+                      <span className="text-[9px] font-normal text-white text-center leading-tight">
                         {item.name}
                       </span>
                     </Link>
@@ -111,21 +111,21 @@ const Home = () => {
 
                 {!item.click && item.name === 'Resume' && (
                   <Link
-                    className="grid place-items-center gap-y-2 w-full"
+                    className="grid place-items-center gap-y-1.5 w-full"
                     href={`${item.path}`}
                     target={'_blank'}
                     download
                   >
-                    <div className="relative size-[50px] xs:size-[60px] cursor-pointer">
+                    <div className="relative size-[45px] xs:size-[50px] cursor-pointer">
                       <Image
                         alt={item.name}
                         src={item.img}
                         fill
                         priority
-                        sizes="50px xs:60px"
+                        sizes="45px xs:50px"
                       />
                     </div>
-                    <span className="text-[10px] font-normal text-white text-center leading-tight">
+                    <span className="text-[9px] font-normal text-white text-center leading-tight">
                       {item.name}
                     </span>
                   </Link>
@@ -135,18 +135,18 @@ const Home = () => {
                   (session.status === 'authenticated' ? (
                     <Link
                       href={`${item.path}`}
-                      className="grid place-items-center gap-y-2 w-full"
+                      className="grid place-items-center gap-y-1.5 w-full"
                     >
-                      <div className="relative size-[50px] xs:size-[60px] cursor-pointer">
+                      <div className="relative size-[45px] xs:size-[50px] cursor-pointer">
                         <Image
                           alt={item.name}
                           src={item.img}
                           fill
                           priority
-                          sizes="50px xs:60px"
+                          sizes="45px xs:50px"
                         />
                       </div>
-                      <span className="text-[10px] font-normal text-white text-center leading-tight">
+                      <span className="text-[9px] font-normal text-white text-center leading-tight">
                         {item.name}
                       </span>
                     </Link>
@@ -159,18 +159,18 @@ const Home = () => {
               <Link
                 key={item.name}
                 href={`${item.path}`}
-                className="grid place-items-center gap-y-2 w-full"
+                className="grid place-items-center gap-y-1.5 w-full"
               >
-                <div className="relative size-[50px] xs:size-[60px] cursor-pointer">
+                <div className="relative size-[45px] xs:size-[50px] cursor-pointer">
                   <Image
                     alt={item.name}
                     src={item.img}
                     fill
                     priority
-                    sizes="50px xs:60px"
+                    sizes="45px xs:50px"
                   />
                 </div>
-                <span className="text-[10px] font-normal text-white text-center leading-tight">
+                <span className="text-[9px] font-normal text-white text-center leading-tight">
                   {item.name}
                 </span>
               </Link>

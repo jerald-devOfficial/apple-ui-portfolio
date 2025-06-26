@@ -98,26 +98,26 @@ const AboutMeWidget = () => {
       <Link href="/portfolio" className="sm:hidden h-full block">
         <div className="h-full flex flex-col cursor-pointer hover:scale-[1.02] transition-transform">
           {/* Header - Profile */}
-          <div className="flex items-center gap-2 mb-1.5">
-            <div className="relative w-9 h-9 rounded-full overflow-hidden ring-2 ring-white/50">
+          <div className="flex items-center gap-2 mb-1">
+            <div className="relative w-8 h-8 rounded-full overflow-hidden ring-1 ring-white/50">
               <Image
                 src="/images/logo/logo.png"
                 alt="Jerald Baroro"
                 fill
-                sizes="36px"
+                sizes="32px"
                 className="object-cover"
               />
             </div>
             <div className="flex-1 min-w-0">
-              <h2 className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+              <h2 className="text-xs font-semibold text-gray-900 dark:text-white truncate">
                 Jerald Baroro
               </h2>
-              <p className="text-xs text-gray-600 dark:text-gray-400">
+              <p className="text-[10px] text-gray-600 dark:text-gray-400">
                 Full Stack Developer
               </p>
               <div className="flex items-center gap-1 mt-0.5">
-                <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                <span className="text-[9px] text-green-600 dark:text-green-400 font-medium">
+                <div className="w-1 h-1 bg-green-500 rounded-full"></div>
+                <span className="text-[8px] text-green-600 dark:text-green-400 font-medium">
                   Available for Hire
                 </span>
               </div>
@@ -125,32 +125,32 @@ const AboutMeWidget = () => {
           </div>
 
           {/* Key Stats */}
-          <div className="grid grid-cols-2 gap-1.5 mb-1.5">
-            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-1.5 text-center">
-              <div className="text-base font-bold text-blue-600 dark:text-blue-400">
+          <div className="grid grid-cols-2 gap-1 mb-1">
+            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-1 text-center">
+              <div className="text-sm font-bold text-blue-600 dark:text-blue-400">
                 5+
               </div>
-              <div className="text-[9px] text-blue-700 dark:text-blue-300">
+              <div className="text-[8px] text-blue-700 dark:text-blue-300">
                 Years Exp
               </div>
             </div>
-            <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-1.5 text-center">
-              <div className="text-base font-bold text-purple-600 dark:text-purple-400">
+            <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-1 text-center">
+              <div className="text-sm font-bold text-purple-600 dark:text-purple-400">
                 7
               </div>
-              <div className="text-[9px] text-purple-700 dark:text-purple-300">
+              <div className="text-[8px] text-purple-700 dark:text-purple-300">
                 Companies
               </div>
             </div>
           </div>
 
           {/* Tech Stack */}
-          <div className="mt-2">
+          <div className="mt-1.5">
             <div className="flex flex-wrap gap-0.5">
               {['React', 'Next.js', 'Node.js', 'TypeScript'].map((tech) => (
                 <span
                   key={tech}
-                  className="px-1.5 py-0.5 text-[8px] font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full"
+                  className="px-1 py-0.5 text-[7px] font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full"
                 >
                   {tech}
                 </span>

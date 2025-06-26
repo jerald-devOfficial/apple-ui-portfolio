@@ -88,22 +88,22 @@ const PhotosWidget = () => {
         {/* Mobile Compact Layout */}
         <div className="sm:hidden h-full flex flex-col">
           {/* Header - Compact */}
-          <div className="flex items-center justify-between mb-1.5">
-            <div className="flex items-center gap-1.5">
+          <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center gap-1">
               <Image
                 src="/images/icons/photos.png"
                 alt="Photos"
-                width={14}
-                height={14}
+                width={12}
+                height={12}
               />
-              <h2 className="text-xs font-semibold text-gray-900 dark:text-white">
+              <h2 className="text-[11px] font-semibold text-gray-900 dark:text-white">
                 Gallery
               </h2>
             </div>
             {isAdmin && (
               <button
                 onClick={() => setShowUploadForm(!showUploadForm)}
-                className="text-blue-500 hover:text-blue-600 transition-colors text-[9px] font-medium px-1.5 py-0.5 bg-blue-50 dark:bg-blue-900/30 rounded-full"
+                className="text-blue-500 hover:text-blue-600 transition-colors text-[8px] font-medium px-1 py-0.5 bg-blue-50 dark:bg-blue-900/30 rounded-full"
               >
                 {showUploadForm ? '✕' : '+'}
               </button>
@@ -112,11 +112,11 @@ const PhotosWidget = () => {
 
           {/* Upload Form - Mobile Compact */}
           {showUploadForm && isAdmin && (
-            <div className="mb-1.5 space-y-1">
+            <div className="mb-1 space-y-0.5">
               <input
                 type="file"
                 accept="image/*"
-                className="w-full text-[8px] text-gray-500 file:mr-1.5 file:py-0.5 file:px-1.5 file:rounded-full file:border-0 file:text-[8px] file:font-semibold file:bg-blue-50 file:text-blue-700"
+                className="w-full text-[7px] text-gray-500 file:mr-1 file:py-0.5 file:px-1 file:rounded-full file:border-0 file:text-[7px] file:font-semibold file:bg-blue-50 file:text-blue-700"
                 onChange={(e) => {
                   if (e.target.files?.[0]) {
                     const formData = new FormData()
