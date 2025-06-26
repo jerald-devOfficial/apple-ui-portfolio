@@ -69,14 +69,14 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto">
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             <Suspense fallback={<div>Loading blog content...</div>}>
               <BlogContent blog={normalizedBlog} />
             </Suspense>
 
             {/* Comments Section */}
             {normalizedBlog.status === 'published' && (
-              <div className="mt-12">
+              <div className="mt-8 sm:mt-12">
                 <Suspense fallback={<div>Loading comments...</div>}>
                   <BlogComments blogId={normalizedBlog._id} />
                 </Suspense>

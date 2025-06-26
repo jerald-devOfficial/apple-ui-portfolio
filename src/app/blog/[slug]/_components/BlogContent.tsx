@@ -16,7 +16,7 @@ const BlogContent = ({ blog }: BlogContentProps) => {
   // If no content blocks, fall back to legacy content
   if (sortedBlocks.length === 0 && blog.content) {
     return (
-      <div className="prose prose-lg dark:prose-invert max-w-none">
+      <div className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert max-w-none prose-headings:leading-tight prose-p:leading-relaxed">
         <div
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(blog.content)
@@ -27,7 +27,7 @@ const BlogContent = ({ blog }: BlogContentProps) => {
   }
 
   return (
-    <div className="prose prose-lg dark:prose-invert max-w-none">
+    <div className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert max-w-none prose-headings:leading-tight prose-p:leading-relaxed">
       {sortedBlocks.map((block) => (
         <ContentBlockRenderer key={block.id} block={block} />
       ))}
@@ -44,7 +44,7 @@ const ContentBlockRenderer = ({ block }: ContentBlockRendererProps) => {
     case 'text':
       return (
         <div
-          className="mb-6"
+          className="mb-4 sm:mb-6"
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(block.content)
           }}
@@ -53,14 +53,14 @@ const ContentBlockRenderer = ({ block }: ContentBlockRendererProps) => {
 
     case 'code':
       return (
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <div className="bg-gray-900 dark:bg-zinc-800 rounded-lg overflow-hidden">
             {block.metadata?.language && (
-              <div className="bg-gray-800 dark:bg-zinc-700 px-4 py-2 text-sm text-gray-300 border-b border-gray-700 dark:border-zinc-600">
+              <div className="bg-gray-800 dark:bg-zinc-700 px-3 sm:px-4 py-2 text-xs sm:text-sm text-gray-300 border-b border-gray-700 dark:border-zinc-600">
                 {block.metadata.language}
               </div>
             )}
-            <pre className="p-4 overflow-x-auto">
+            <pre className="p-3 sm:p-4 overflow-x-auto text-xs sm:text-sm">
               <code
                 className={`language-${block.metadata?.language || 'text'}`}
               >
@@ -69,7 +69,7 @@ const ContentBlockRenderer = ({ block }: ContentBlockRendererProps) => {
             </pre>
           </div>
           {block.metadata?.caption && (
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 italic">
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-2 italic">
               {block.metadata.caption}
             </p>
           )}
@@ -78,7 +78,7 @@ const ContentBlockRenderer = ({ block }: ContentBlockRendererProps) => {
 
     case 'image':
       return (
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <div className="relative">
             <Image
               src={block.metadata?.url || block.content}
@@ -86,10 +86,11 @@ const ContentBlockRenderer = ({ block }: ContentBlockRendererProps) => {
               width={800}
               height={600}
               className="w-full h-auto rounded-lg shadow-md"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 800px"
             />
           </div>
           {block.metadata?.caption && (
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 text-center italic">
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-2 text-center italic">
               {block.metadata.caption}
             </p>
           )}
@@ -98,7 +99,7 @@ const ContentBlockRenderer = ({ block }: ContentBlockRendererProps) => {
 
     case 'video':
       return (
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <div className="relative aspect-video">
             <video
               src={block.metadata?.url || block.content}
@@ -110,7 +111,7 @@ const ContentBlockRenderer = ({ block }: ContentBlockRendererProps) => {
             </video>
           </div>
           {block.metadata?.caption && (
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 text-center italic">
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-2 text-center italic">
               {block.metadata.caption}
             </p>
           )}
