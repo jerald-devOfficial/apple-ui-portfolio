@@ -80,11 +80,11 @@ const EditDiary = () => {
       })
 
       const res = await fetch(`/api/diary/${id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify({ update: body })
       })
 
       const data = await res.json()
