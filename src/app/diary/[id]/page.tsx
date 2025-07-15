@@ -2,6 +2,7 @@
 
 import { fetcher } from '@/lib/fetcher'
 import { IDiary } from '@/models/Diary'
+import { formatDiaryDate } from '@/utils'
 import {
   ArrowLeftIcon,
   HeartIcon as HeartIconOutline,
@@ -247,13 +248,7 @@ const DiaryView = () => {
 
           <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
             <span>
-              Today at{' '}
-              {diary.createdAt &&
-                new Date(diary.createdAt).toLocaleTimeString('en-US', {
-                  hour: 'numeric',
-                  minute: 'numeric',
-                  hour12: true
-                })}
+              {diary.createdAt && formatDiaryDate(new Date(diary.createdAt))}
             </span>
             <span>•</span>
             <span>{diary.publicity ? 'Public' : 'Private'}</span>
