@@ -25,7 +25,7 @@ const FeaturedNews = ({ featured }: FeaturedNewsProps) => {
       target='_blank'
       rel='noopener noreferrer'
       href={featured?.link || '#'}
-      className='flex flex-col bg-white rounded-xl shadow-lg group cursor-pointer hover:bg-gray-200'
+      className='flex flex-col bg-white dark:bg-zinc-700 rounded-xl shadow-lg group cursor-pointer hover:bg-gray-200 dark:hover:bg-zinc-600'
     >
       <header className='relative rounded-t-[inherit] bg-slate-600'>
         <Image
@@ -48,14 +48,14 @@ const FeaturedNews = ({ featured }: FeaturedNewsProps) => {
         />
       </header>
       <main className='flex flex-col gap-y-1 p-2'>
-        <h5 className='text-base text-gray-800 truncate font-medium'>
+        <h5 className='text-base text-gray-800 dark:text-gray-300 truncate font-medium'>
           {featured?.creator || 'Unknown Creator'}
         </h5>
-        <h4 className='font-bold text-black text-2xl tracking-tighter'>
+        <h4 className='font-bold text-black dark:text-white text-2xl tracking-tighter'>
           {featured?.title || 'No Title'}
         </h4>
       </main>
-      <footer className='border-t border-solid border-slate-200 group-hover:border-gray-100 px-2 py-1'>
+      <footer className='border-t border-solid border-slate-200 dark:border-zinc-600 group-hover:border-gray-100 dark:group-hover:border-zinc-500 px-2 py-1'>
         <span className='text-sm text-gray-400 font-medium'>
           {formatDate(featured?.pubDate || new Date())}
         </span>

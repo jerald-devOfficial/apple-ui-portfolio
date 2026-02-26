@@ -46,9 +46,9 @@ const Portfolio = () => {
     <main
       className={`flex overflow-hidden h-full w-full xl:max-w-[1024px] sm:pt-6 xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 ${montserrat.className} my-2 sm:my-0`}
     >
-      <div className='flex grow h-full rounded-xl bg-stone-200/95 flex-col shadow-xl overflow-hidden'>
-        <div className='flex border-b-[0.3px] border-gray-400/60 sm:border-gray-300/90 border-solid'>
-          <div className='px-4 xs:pt-5 hidden xs:pb-3 xs:flex gap-x-4 items-center hover:bg-[#F5F5F5] md:w-1/3 shadow-xs'>
+      <div className='flex grow h-full rounded-xl bg-stone-200/95 dark:bg-zinc-900 flex-col shadow-xl overflow-hidden'>
+        <div className='flex border-b-[0.3px] border-gray-400/60 sm:border-gray-300/90 dark:border-zinc-700 border-solid'>
+          <div className='px-4 xs:pt-5 hidden xs:pb-3 xs:flex gap-x-4 items-center hover:bg-[#F5F5F5] dark:hover:bg-zinc-800 md:w-1/3 shadow-xs'>
             <div className='block'>
               <div className='relative h-[60px] w-[60px]'>
                 <Image
@@ -61,14 +61,14 @@ const Portfolio = () => {
               </div>
             </div>
             <div className='flex flex-col'>
-              <h1 className='font-medium text-base text-black'>Portfolio</h1>
-              <p className='font-normal text-xs text-gray-700 tracking-tight'>
+              <h1 className='font-medium text-base text-black dark:text-white'>Portfolio</h1>
+              <p className='font-normal text-xs text-gray-700 dark:text-gray-300 tracking-tight'>
                 Get to know about Jerald here.
               </p>
             </div>
           </div>
           <div
-            className={`flex-1 px-4 pt-2.5 pb-3 hidden md:flex gap-x-4 h-[92px] flex-col justify-between items-center bg-white/95 overflow-hidden ${
+            className={`flex-1 px-4 pt-2.5 pb-3 hidden md:flex gap-x-4 h-[92px] flex-col justify-between items-center bg-white/95 dark:bg-zinc-800/95 overflow-hidden ${
               activeCategory !== null ? 'shadow-sm' : ''
             }`}
           >
@@ -106,7 +106,7 @@ const Portfolio = () => {
                     <span className='h-5 w-5 flex-1' />
                   )}
                 </div>
-                <h2 className='font-semibold text-lg text-black'>
+                <h2 className='font-semibold text-lg text-black dark:text-white'>
                   {icons[activeCategory].title}
                 </h2>
                 <div className='flex w-12 justify-end'>
@@ -121,8 +121,8 @@ const Portfolio = () => {
         </div>
         {/* start  */}
         <div className='flex-col flex md:flex-row sm:justify-between h-full overflow-hidden'>
-          <div className='flex items-center justify-between sm:order-2 md:order-[initial] md:w-1/3 md:justify-center md:border-r-[0.3px] md:border-r-gray-300 md:items-baseline'>
-            <div className='flex flex-row md:flex-col py-1 md:py-0 items-baseline gap-x-6 justify-evenly w-full md:mt-6 md:mx-4 md:bg-white md:rounded-xl md:pl-4'>
+          <div className='flex items-center justify-between sm:order-2 md:order-[initial] md:w-1/3 md:justify-center md:border-r-[0.3px] md:border-r-gray-300 dark:md:border-r-zinc-700 md:items-baseline'>
+            <div className='flex flex-row md:flex-col py-1 md:py-0 items-baseline gap-x-6 justify-evenly w-full md:mt-6 md:mx-4 md:bg-white dark:md:bg-zinc-800 md:rounded-xl md:pl-4'>
               {icons.map((icon, index) => (
                 <button
                   className={`grid place-content-center place-items-center gap-y-1.5 xs:w-[62px] cursor-pointer md:flex md:items-center md:justify-between group md:w-full md:flex-row-reverse md:px-6 md:py-3.5 md:pr-3 md:pl-0 ${
@@ -137,18 +137,18 @@ const Portfolio = () => {
                       : setActiveCategory(index)
                   }
                 >
-                  <span className='rounded-full bg-white group-hover:bg-stone-50 grid place-items-center p-4 xs:w-[62px] xs:h-[62px] w-10 h-10 md:h-4 md:w-4 place-content-center'>
+                  <span className='rounded-full bg-white dark:bg-zinc-700 group-hover:bg-stone-50 dark:group-hover:bg-zinc-600 grid place-items-center p-4 xs:w-[62px] xs:h-[62px] w-10 h-10 md:h-4 md:w-4 place-content-center'>
                     <icon.icon
                       className={`${
                         activeCategory === index
-                          ? 'text-blue-600'
-                          : 'text-black'
+                          ? 'text-blue-600 dark:text-blue-400'
+                          : 'text-black dark:text-white'
                       } h-5 w-5 stroke-2 group-hover:text-blue-400`}
                     />
                   </span>
                   <span
                     className={`${
-                      activeCategory === index ? 'text-blue-800' : 'text-black'
+                      activeCategory === index ? 'text-blue-800 dark:text-blue-400' : 'text-black dark:text-white'
                     } text-wrap text-center text-xs group-hover:text-blue-600 md:text-base`}
                   >
                     {icon.title}
@@ -157,9 +157,9 @@ const Portfolio = () => {
               ))}
             </div>
           </div>
-          <hr className='border-[0.3px] border-gray-300 border-solid sm:order-1 md:hidden' />
+          <hr className='border-[0.3px] border-gray-300 dark:border-zinc-700 border-solid sm:order-1 md:hidden' />
           {activeCategory !== null ? (
-            <div className='flex flex-col py-5 sm:py-10 px-4 sm:px-12 gap-y-5 sm:gap-y-10 relative overflow-y-auto h-full w-full md:flex-1 bg-white/95'>
+            <div className='flex flex-col py-5 sm:py-10 px-4 sm:px-12 gap-y-5 sm:gap-y-10 relative overflow-y-auto h-full w-full md:flex-1 bg-white/95 dark:bg-zinc-800/95'>
               {activeCategory === 0 &&
                 skills.map((item) => (
                   <div
@@ -203,18 +203,18 @@ const Portfolio = () => {
                       )}
                     </div>
                     <div className='flex flex-col gap-y-2'>
-                      <h3 className='text-base font-semibold text-black'>
+                      <h3 className='text-base font-semibold text-black dark:text-white'>
                         {item.title}
                       </h3>
                       <div className='flex flex-col gap-y-1'>
-                        <p className='text-sm font-normal text-black'>
+                        <p className='text-sm font-normal text-black dark:text-gray-300'>
                           {item.desc}
                         </p>
                         {item.url && (
                           <div className='block relative'>
                             <a
                               href={`https://${item.url}`}
-                              className='text-sm font-normal no-underline hover:underline text-violet-600 inline-flex items-center gap-x-2'
+                              className='text-sm font-normal no-underline hover:underline text-violet-600 dark:text-violet-400 inline-flex items-center gap-x-2'
                             >
                               <LinkIcon height={16} />
                               {item.url}
@@ -266,7 +266,7 @@ const Portfolio = () => {
                       )}
                     </div>
                     <div className='flex flex-col gap-y-2'>
-                      <h3 className='text-base font-semibold text-black'>
+                      <h3 className='text-base font-semibold text-black dark:text-white'>
                         {item.title}
                       </h3>
                       <div className='relative sm:hidden block md:block lg:hidden'>
@@ -306,14 +306,14 @@ const Portfolio = () => {
                         )}
                       </div>
                       <div className='flex flex-col gap-y-1'>
-                        <p className='text-sm font-normal text-black'>
+                        <p className='text-sm font-normal text-black dark:text-gray-300'>
                           {item.desc}
                         </p>
                         {item.url && (
                           <div className='block relative'>
                             <a
                               href={`https://${item.url}`}
-                              className='text-sm font-normal no-underline hover:underline text-violet-600 inline-flex items-center gap-x-2'
+                              className='text-sm font-normal no-underline hover:underline text-violet-600 dark:text-violet-400 inline-flex items-center gap-x-2'
                             >
                               <LinkIcon height={16} />
                               {item.url}
@@ -325,7 +325,7 @@ const Portfolio = () => {
                           <div className='block relative'>
                             <a
                               href={item.github}
-                              className='text-sm font-normal no-underline hover:underline text-violet-600 inline-flex items-end gap-x-2'
+                              className='text-sm font-normal no-underline hover:underline text-violet-600 dark:text-violet-400 inline-flex items-end gap-x-2'
                             >
                               <Image
                                 src='/images/icons/github.png'
@@ -366,10 +366,10 @@ const Portfolio = () => {
                     </div>
                     <div className='flex flex-col gap-y-2'>
                       <div className='flex flex-col'>
-                        <h2 className='text-base font-semibold text-black'>
+                        <h2 className='text-base font-semibold text-black dark:text-white'>
                           {item.company}
                         </h2>
-                        <h5 className='text-xs font-normal text-gray-600'>
+                        <h5 className='text-xs font-normal text-gray-600 dark:text-gray-400'>
                           {item.startDate} -{' '}
                           {item.isPresent ? 'Present' : item.endDate}
                         </h5>
@@ -379,14 +379,14 @@ const Portfolio = () => {
                           key={project.name}
                           className='flex flex-col gap-y-2'
                         >
-                          <h3 className='text-sm font-medium text-black'>
+                          <h3 className='text-sm font-medium text-black dark:text-white'>
                             {project.title}
                           </h3>
                           <ul className='flex flex-col gap-y-1 list-disc'>
                             {project.desc.map((desc: string, i: number) => (
                               <li
                                 key={i}
-                                className='text-sm font-normal text-gray-800'
+                                className='text-sm font-normal text-gray-800 dark:text-gray-300'
                               >
                                 {desc}
                               </li>
@@ -424,7 +424,7 @@ const Portfolio = () => {
                       </a>
                     </div>
                     <div className='flex flex-col gap-y-2'>
-                      <h3 className='text-base font-semibold text-black'>
+                      <h3 className='text-base font-semibold text-black dark:text-white'>
                         {certificate.title}
                       </h3>
                       <div className='relative block sm:hidden md:block lg:hidden'>
@@ -449,7 +449,7 @@ const Portfolio = () => {
                       <div className='block relative'>
                         <a
                           href={`https://ude.my/${certificate.credentialID}`}
-                          className='text-sm font-normal no-underline hover:underline text-violet-600 inline-flex items-center gap-x-2'
+                          className='text-sm font-normal no-underline hover:underline text-violet-600 dark:text-violet-400 inline-flex items-center gap-x-2'
                         >
                           <LinkIcon height={16} />
                           {certificate.credentialID}
@@ -460,11 +460,11 @@ const Portfolio = () => {
                 ))}
             </div>
           ) : (
-            <div className='flex items-center flex-col justify-center gap-y-2 flex-1 bg-white/95'>
-              <h2 className='text-base font-medium text-slate-800'>
+            <div className='flex items-center flex-col justify-center gap-y-2 flex-1 bg-white/95 dark:bg-zinc-800/95'>
+              <h2 className='text-base font-medium text-slate-800 dark:text-gray-200'>
                 Nothing to see here.
               </h2>
-              <p className='text-xs font-normal text-slate-700'>
+              <p className='text-xs font-normal text-slate-700 dark:text-gray-400'>
                 Please select one of the sidebar categories.
               </p>
             </div>
