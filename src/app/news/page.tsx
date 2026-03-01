@@ -89,9 +89,9 @@ const News = () => {
     <main
       className={`flex overflow-hidden h-full w-full xl:max-w-[1024px] sm:pt-6 xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 py-2 sm:py-0`}
     >
-      <div className='w-[768px] flex flex-col bg-white/95 flex-1 h-[inherit] panel shadow-xl overflow-hidden relative rounded-xl'>
+      <div className='w-[768px] flex flex-col bg-white/95 dark:bg-zinc-900 flex-1 h-[inherit] panel shadow-xl overflow-hidden relative rounded-xl'>
         <div
-          className={`border-b border-[#3C3C43]/36 border-solid px-4 flex gap-x-4 h-[92px] items-end`}
+          className={`border-b border-[#3C3C43]/36 dark:border-zinc-700 border-solid px-4 flex gap-x-4 h-[92px] items-end`}
         >
           <div className='flex flex-col items-start justify-start w-full '>
             <div className='flex gap-x-1 items-center'>
@@ -102,18 +102,18 @@ const News = () => {
                 height={24}
                 width={24}
               />
-              <h2 className='font-black tracking-tight text-2xl text-black'>
+              <h2 className='font-black tracking-tight text-2xl text-black dark:text-white'>
                 News
               </h2>
             </div>
-            <h2 className='font-black tracking-tight text-2xl text-zinc-500'>
+            <h2 className='font-black tracking-tight text-2xl text-zinc-500 dark:text-zinc-400'>
               {format(new Date(), 'MMM d')}
             </h2>
           </div>
         </div>
         {isLoading && (
           <div className='flex items-center flex-col justify-center gap-y-2 grow'>
-            <h4 className='text-base font-medium text-slate-600'>
+            <h4 className='text-base font-medium text-slate-600 dark:text-gray-400'>
               Fetching news...
             </h4>
           </div>
@@ -127,7 +127,7 @@ const News = () => {
         )}
 
         {data && (
-          <div className='flex flex-col w-full h-full px-4 py-6 bg-white gap-y-10 overflow-y-auto justify-between'>
+          <div className='flex flex-col w-full h-full px-4 py-6 bg-white dark:bg-zinc-800 gap-y-10 overflow-y-auto justify-between'>
             <h2 className='font-black text-3xl text-rose-500'>Top Stories</h2>
             <FeaturedNews featured={data[0]} />
             <div className='grid grid-cols-2 gap-4'>
