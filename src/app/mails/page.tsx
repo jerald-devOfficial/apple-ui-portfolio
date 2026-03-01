@@ -123,8 +123,8 @@ const Mails = () => {
       className={`flex overflow-hidden h-full w-full xl:max-w-[1024px] sm:pt-6 xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 ${montserrat.className} my-2 sm:my-0`}
     >
       <div className='flex grow h-full rounded-xl shadow-xl overflow-hidden'>
-        <div className='sm:w-[200px] bg-[#F5F5F5] opacity-[97%] lg:w-[300px] w-full relative sidebar overflow-hidden shadow-inner flex flex-col rounded-l-[inherit] sm:rounded-r-none rounded-r-[inherit]'>
-          <div className='border-b border-[#3C3C43]/36 border-solid px-4 pt-5 pb-3 hidden sm:flex gap-x-4 items-center hover:bg-[#F5F5F5]'>
+        <div className='sm:w-[200px] bg-[#F5F5F5] dark:bg-zinc-800 opacity-[97%] lg:w-[300px] w-full relative sidebar overflow-hidden shadow-inner flex flex-col rounded-l-[inherit] sm:rounded-r-none rounded-r-[inherit]'>
+          <div className='border-b border-[#3C3C43]/36 dark:border-zinc-700 border-solid px-4 pt-5 pb-3 hidden sm:flex gap-x-4 items-center hover:bg-[#F5F5F5] dark:hover:bg-zinc-700'>
             <Image
               src='/images/icons/gmail.png'
               height={60}
@@ -132,18 +132,18 @@ const Mails = () => {
               alt='GMail icon'
             />
             <div className='flex flex-col'>
-              <h1 className='font-normal text-base text-black'>Inbox</h1>
-              <h3 className='font-normal text-xs text-[#3C3C43]/60 tracking-tight'>
+              <h1 className='font-normal text-base text-black dark:text-white'>Inbox</h1>
+              <h3 className='font-normal text-xs text-[#3C3C43]/60 dark:text-gray-400 tracking-tight'>
                 Read emails from visitors
               </h3>
             </div>
           </div>
 
           {selectedMail ? (
-            <div className='flex flex-col sm:hidden justify-between items-start border-b border-[#3C3C43]/37 border-solid px-4 py-4 gap-y-4 gap-x-4 hover:bg-[#F5F5F5]'>
+            <div className='flex flex-col sm:hidden justify-between items-start border-b border-[#3C3C43]/37 dark:border-zinc-700 border-solid px-4 py-4 gap-y-4 gap-x-4 hover:bg-[#F5F5F5] dark:hover:bg-zinc-700'>
               <div className='flex justify-between items-center w-full'>
                 <button
-                  className='text-blue-600 flex items-center gap-x-1'
+                  className='text-blue-600 dark:text-blue-400 flex items-center gap-x-1'
                   onClick={() => setSelectedMail(null)}
                 >
                   <ChevronLeftIcon className='h-4 w-4' />{' '}
@@ -153,7 +153,7 @@ const Mails = () => {
                   {selectedMail.read && (
                     <button
                       onClick={() => handleMarkAsUnread(selectedMail?._id)}
-                      className='block font-medium xs:text-base text-sm text-blue-600'
+                      className='block font-medium xs:text-base text-sm text-blue-600 dark:text-blue-400'
                     >
                       Mark as Unread
                     </button>
@@ -163,12 +163,12 @@ const Mails = () => {
                   </button>
                 </div>
               </div>
-              <h2 className='xs:text-lg text-base font-bold text-left'>
+              <h2 className='xs:text-lg text-base font-bold text-left dark:text-white'>
                 {selectedMail.subject}
               </h2>
             </div>
           ) : (
-            <div className='border-b border-[#3C3C43]/36 border-solid px-4 pt-5 pb-3 flex sm:hidden gap-x-4 items-center hover:bg-[#F5F5F5]'>
+            <div className='border-b border-[#3C3C43]/36 dark:border-zinc-700 border-solid px-4 pt-5 pb-3 flex sm:hidden gap-x-4 items-center hover:bg-[#F5F5F5] dark:hover:bg-zinc-700'>
               <Image
                 src='/images/icons/gmail.png'
                 height={60}
@@ -176,8 +176,8 @@ const Mails = () => {
                 alt='GMail icon'
               />
               <div className='flex flex-col'>
-                <h1 className='font-normal text-base text-black'>Inbox</h1>
-                <h3 className='font-normal text-xs text-[#3C3C43]/60 tracking-tight'>
+                <h1 className='font-normal text-base text-black dark:text-white'>Inbox</h1>
+                <h3 className='font-normal text-xs text-[#3C3C43]/60 dark:text-gray-400 tracking-tight'>
                   Read emails from visitors
                 </h3>
               </div>
@@ -185,12 +185,12 @@ const Mails = () => {
           )}
 
           {isLoading && (
-            <div className='bg-white px-4 py-2'>
-              <h3 className='text-sm font-medium'>Fetching data...</h3>
+            <div className='bg-white dark:bg-zinc-800 px-4 py-2'>
+              <h3 className='text-sm font-medium dark:text-white'>Fetching data...</h3>
             </div>
           )}
           {error && (
-            <div className='bg-white px-4 py-2'>
+            <div className='bg-white dark:bg-zinc-800 px-4 py-2'>
               <h3 className='text-sm font-medium text-red-600'>
                 Error: {error}
               </h3>
@@ -199,7 +199,7 @@ const Mails = () => {
           {data && data?.length > 0 && (
             <>
               {/* hidden sm */}
-              <div className='bg-white py-2 gap-y-2 relative w-full hidden sm:flex flex-col'>
+              <div className='bg-white dark:bg-zinc-800 py-2 gap-y-2 relative w-full hidden sm:flex flex-col'>
                 {data.map((mail, index) => (
                   <Fragment key={mail._id}>
                     <button
@@ -273,16 +273,16 @@ const Mails = () => {
                         </div>
                       </div>
                       <div className='flex flex-col'>
-                        <h3 className='font-bold text-base text-black'>
+                        <h3 className='font-bold text-base text-black dark:text-white'>
                           {selectedMail.fullName}
                         </h3>
-                        <span className='font-normal text-sm text-gray-600'>
+                        <span className='font-normal text-sm text-gray-600 dark:text-gray-300'>
                           {`<${selectedMail.email}>`}
                         </span>
                       </div>
                     </div>
                     <div className='flex gap-x-1'>
-                      <span className='text-sm font-normal text-gray-600 tracking-tighter'>
+                      <span className='text-sm font-normal text-gray-600 dark:text-gray-300 tracking-tighter'>
                         {hoursAgo(selectedMail.createdAt) > 24 ? (
                           formatDate(selectedMail.createdAt)
                         ) : (
@@ -297,13 +297,13 @@ const Mails = () => {
                     </div>
                   </div>
                   <div className='pt-10 px-2'>
-                    <p className='text-gray-800 text-xl font-medium'>
+                    <p className='text-gray-800 dark:text-gray-200 text-xl font-medium'>
                       {selectedMail.message}
                     </p>
                   </div>
                 </div>
               ) : (
-                <div className='bg-white py-2 gap-y-2 relative w-full flex flex-col sm:hidden h-full overflow-y-auto'>
+                <div className='bg-white dark:bg-zinc-800 py-2 gap-y-2 relative w-full flex flex-col sm:hidden h-full overflow-y-auto'>
                   {data.map((mail, index) => (
                     <Fragment key={mail._id}>
                       <button
@@ -358,13 +358,13 @@ const Mails = () => {
             </>
           )}
         </div>
-        <div className='flex flex-col bg-white/95 flex-1 h-[inherit] panel overflow-hidden relative rounded-r-[inherit]'>
+        <div className='flex flex-col bg-white/95 dark:bg-zinc-800/95 flex-1 h-[inherit] panel overflow-hidden relative rounded-r-[inherit]'>
           <div
-            className={`border-b border-[#3C3C43]/36 border-solid px-4 pt-2.5 pb-3 flex gap-x-4 h-[92px] flex-col justify-end`}
+            className={`border-b border-[#3C3C43]/36 dark:border-zinc-700 border-solid px-4 pt-2.5 pb-3 flex gap-x-4 h-[92px] flex-col justify-end`}
           >
             {selectedMail && (
               <div className='flex justify-between items-center'>
-                <h2 className='md:text-xl sm:text-base xl:text-2xl font-bold flex-1'>
+                <h2 className='md:text-xl sm:text-base xl:text-2xl font-bold flex-1 dark:text-white'>
                   {selectedMail.subject}
                 </h2>
 
@@ -372,7 +372,7 @@ const Mails = () => {
                   {selectedMail.read && (
                     <button
                       onClick={() => handleMarkAsUnread(selectedMail?._id)}
-                      className='block font-medium sm:text-sm md:text-base text-blue-600'
+                      className='block font-medium sm:text-sm md:text-base text-blue-600 dark:text-blue-400'
                     >
                       Mark as Unread
                     </button>
@@ -404,23 +404,23 @@ const Mails = () => {
                   </div>
                   <div className='flex flex-col'>
                     <div className='flex gap-x-4'>
-                      <h3 className='font-bold sm:text-sm md:text-base  text-black'>
+                      <h3 className='font-bold sm:text-sm md:text-base  text-black dark:text-white'>
                         {selectedMail.fullName}
                       </h3>
-                      <span className='font-normal sm:text-xs md:text-sm text-gray-600 sm:hidden md:block'>
+                      <span className='font-normal sm:text-xs md:text-sm text-gray-600 dark:text-gray-300 sm:hidden md:block'>
                         {`<${selectedMail.email}>`}
                       </span>
                     </div>
-                    <span className='text-gray-600 text-sm font-normal hidden md:block'>
+                    <span className='text-gray-600 dark:text-gray-300 text-sm font-normal hidden md:block'>
                       to Jerald
                     </span>
-                    <span className='font-normal sm:block md:hidden sm:text-xs md:text-sm text-gray-600'>
+                    <span className='font-normal sm:block md:hidden sm:text-xs md:text-sm text-gray-600 dark:text-gray-300'>
                       {`<${selectedMail.email}>`}
                     </span>
                   </div>
                 </div>
                 <div className='flex gap-x-1'>
-                  <span className='md:text-sm sm:text-xs font-normal text-gray-600 tracking-tighter'>
+                  <span className='md:text-sm sm:text-xs font-normal text-gray-600 dark:text-gray-300 tracking-tighter'>
                     {hoursAgo(selectedMail.createdAt) > 24 ? (
                       formatDate(selectedMail.createdAt)
                     ) : (
@@ -435,17 +435,17 @@ const Mails = () => {
                 </div>
               </div>
               <div className='pt-10 lg:px-16 sm:px-2'>
-                <p className='text-gray-800 text-xl font-medium'>
+                <p className='text-gray-800 dark:text-gray-200 text-xl font-medium'>
                   {selectedMail.message}
                 </p>
               </div>
             </div>
           ) : (
             <div className='flex items-center flex-col justify-center gap-y-2 grow'>
-              <h4 className='text-base font-medium text-slate-600'>
+              <h4 className='text-base font-medium text-slate-600 dark:text-slate-400'>
                 Nothing to see here.
               </h4>
-              <p className='text-xs font-normal text-slate-500'>
+              <p className='text-xs font-normal text-slate-500 dark:text-slate-400'>
                 Please select one of the emails.
               </p>
             </div>

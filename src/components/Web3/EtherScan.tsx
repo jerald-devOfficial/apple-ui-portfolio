@@ -143,7 +143,7 @@ const EtherScan = () => {
                   href="https://etherscan.io/txs"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-violet-500 font-medium"
+                  className="text-violet-500 dark:text-violet-400 font-medium"
                 >
                   etherscan.io/txs
                 </a>
@@ -185,7 +185,7 @@ const EtherScan = () => {
               </div>
             </div>
             <button
-              className="rounded-md flex items-center justify-center px-2 py-1 text-sm text-white bg-blue-600 font-medium"
+              className="rounded-md flex items-center justify-center px-2 py-1 text-sm text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 font-medium"
               onClick={handleClear}
             >
               Clear
