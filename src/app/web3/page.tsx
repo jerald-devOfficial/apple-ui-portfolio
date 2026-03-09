@@ -70,11 +70,11 @@ const Web3Page = () => {
                 />
               </div>
             ) : (
-              <h3 className="block sm:hidden">Web3 Mini Projects</h3>
+              <h3 className="block sm:hidden dark:text-white">Web3 Mini Projects</h3>
             )}
             {mobileCategory !== null ? (
               <button
-                className="text-blue-600 flex sm:hidden items-center gap-x-1 "
+                className="text-blue-600 dark:text-blue-400 flex sm:hidden items-center gap-x-1 "
                 onClick={() => setMobileCategory(null)}
               >
                 <ChevronLeftIcon className="h-4 w-4" />{' '}
@@ -83,13 +83,13 @@ const Web3Page = () => {
             ) : null}
           </div>
 
-          <div className="mt-6 mx-4 pl-4 rounded-xl border border-solid border-gray-300 hidden sm:block">
+          <div className="mt-6 mx-4 pl-4 rounded-xl border border-solid border-gray-300 dark:border-zinc-700 hidden sm:block">
             {sides.map((item, index) => (
               <button
                 key={item.title}
                 className={`flex justify-between py-3.5 pr-3 md:items-center sm:items-start w-full group ${
                   index < sides.length - 1
-                    ? 'border-b border-gray-300 border-solid'
+                    ? 'border-b border-gray-300 dark:border-zinc-700 border-solid'
                     : ''
                 }`}
                 onClick={() => setActiveCategory(index)}
@@ -111,13 +111,13 @@ const Web3Page = () => {
               <MobileComponent />
             </div>
           ) : (
-            <div className="mt-6 mx-4 pl-4 rounded-xl border border-solid border-gray-300 block sm:hidden">
+            <div className="mt-6 mx-4 pl-4 rounded-xl border border-solid border-gray-300 dark:border-zinc-700 block sm:hidden">
               {sides.map((item, index) => (
                 <button
                   key={item.title}
                   className={`flex justify-between py-3.5 pr-3 md:items-center sm:items-start w-full group ${
                     index < sides.length - 1
-                      ? 'border-b border-gray-300 border-solid'
+                      ? 'border-b border-gray-300 dark:border-zinc-700 border-solid'
                       : ''
                   }`}
                   onClick={() => setMobileCategory(index)}

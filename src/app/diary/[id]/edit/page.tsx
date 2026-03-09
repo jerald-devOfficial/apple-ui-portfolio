@@ -142,7 +142,7 @@ const EditDiary = () => {
           </p>
           <Link
             href="/diaries"
-            className="text-blue-500 hover:text-blue-600 mt-4 inline-block"
+            className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 mt-4 inline-block"
           >
             Go back to diaries
           </Link>
