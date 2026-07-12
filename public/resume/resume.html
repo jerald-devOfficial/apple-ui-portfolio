@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jerald Baroro — Senior Full Stack Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #111111;
+        --muted: #3a3a3a;
+        --soft: #5c5c5c;
+        --line: #1b5e3b;
+        --bg-soft: #f4f4f4;
+        --rule: #d8d8d8;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      @page {
+        size: A4;
+        margin: 0;
+      }
+
+      html,
+      body {
+        background: #e8e8e8;
+        color: var(--ink);
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 9pt;
+        line-height: 1.36;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .sheet {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 12px auto;
+        background: #fff;
+        padding: 10mm;
+        box-sizing: border-box;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 6px;
+      }
+
+      header h1 {
+        font-family: 'Raleway', Arial, sans-serif;
+        font-size: 18.5pt;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        line-height: 1.05;
+      }
+
+      header .title {
+        font-family: 'Raleway', Arial, sans-serif;
+        font-size: 9.75pt;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-top: 3px;
+        color: var(--muted);
+      }
+
+      .contact {
+        margin-top: 4px;
+        font-size: 8.1pt;
+        color: var(--soft);
+        line-height: 1.42;
+      }
+
+      .contact a {
+        color: var(--soft);
+        text-decoration: none;
+      }
+
+      .contact span + span::before {
+        content: ' · ';
+        margin: 0 1px;
+      }
+
+      .rule {
+        height: 2px;
+        background: var(--line);
+        margin: 8px 0 10px;
+        border: 0;
+      }
+
+      h2 {
+        font-family: 'Raleway', Arial, sans-serif;
+        font-size: 9.1pt;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink);
+        border-bottom: 1px solid var(--rule);
+        padding-bottom: 2px;
+        margin-bottom: 6px;
+      }
+
+      section {
+        margin-bottom: 11px;
+      }
+
+      .summary p {
+        font-size: 8.6pt;
+        color: var(--muted);
+        line-height: 1.38;
+      }
+
+      .skills-grid {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr 1fr;
+        gap: 7px 9px;
+        background: var(--bg-soft);
+        padding: 7px 9px;
+        border-radius: 2px;
+      }
+
+      .skills-grid h3 {
+        font-family: 'Raleway', Arial, sans-serif;
+        font-size: 8.05pt;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+        color: var(--ink);
+      }
+
+      .skills-grid p {
+        font-size: 7.9pt;
+        color: var(--muted);
+        line-height: 1.36;
+      }
+
+      .job {
+        margin-bottom: 8px;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      .job-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 1px;
+      }
+
+      .job-head h3 {
+        font-family: 'Raleway', Arial, sans-serif;
+        font-size: 9.05pt;
+        font-weight: 700;
+        color: var(--ink);
+        padding-right: 6px;
+      }
+
+      .job-meta {
+        font-size: 7.9pt;
+        color: var(--soft);
+        margin-bottom: 2px;
+      }
+
+      .dates {
+        font-size: 7.9pt;
+        color: var(--soft);
+        white-space: nowrap;
+        font-weight: 700;
+      }
+
+      .job ul {
+        margin-left: 12px;
+      }
+
+      .job li {
+        font-size: 8.2pt;
+        color: var(--muted);
+        margin-bottom: 1.5px;
+        line-height: 1.34;
+      }
+
+      .edu-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 10px;
+        font-size: 8.35pt;
+        color: var(--muted);
+      }
+
+      .edu-row strong {
+        font-family: 'Raleway', Arial, sans-serif;
+        color: var(--ink);
+        font-weight: 700;
+      }
+
+      @media print {
+        html,
+        body {
+          background: #fff;
+          width: 210mm;
+          height: 297mm;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+        }
+
+        .sheet {
+          width: 210mm;
+          height: 297mm;
+          min-height: 297mm;
+          margin: 0;
+          padding: 10mm;
+          box-sizing: border-box;
+          box-shadow: none;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        a {
+          color: inherit;
+          text-decoration: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="sheet">
+      <header>
+        <h1>Jerald Baroro</h1>
+        <p class="title">Senior Full Stack Engineer</p>
+        <p class="contact">
+          <span>09667652125</span>
+          <span
+            ><a href="mailto:spaueOfficial@gmail.com"
+              >spaueOfficial@gmail.com</a
+            ></span
+          >
+          <span>Mandaue City, Philippines</span>
+        </p>
+        <p class="contact">
+          <span
+            ><a href="https://jeraldbaroro.xyz" target="_blank" rel="noopener"
+              >jeraldbaroro.xyz</a
+            ></span
+          >
+          <span
+            ><a
+              href="https://github.com/jerald-devOfficial"
+              target="_blank"
+              rel="noopener"
+              >github.com/jerald-devOfficial</a
+            ></span
+          >
+        </p>
+      </header>
+
+      <hr class="rule" />
+
+      <section class="summary">
+        <h2>Professional Summary</h2>
+        <p>
+          Senior Full Stack Engineer with 6+ years delivering TypeScript web
+          platforms (React, Next.js, NestJS) for enterprise product teams.
+          Most recently led frontend delivery for high-traffic broadband customer
+          platforms in an NX monorepo — including Playwright E2E and CI/CD —
+          after shipping fintech and cloud-backed (AWS) full-stack products.
+        </p>
+      </section>
+
+      <section>
+        <h2>Skills</h2>
+        <div class="skills-grid">
+          <div>
+            <h3>Languages &amp; Frontend</h3>
+            <p>
+              TypeScript, JavaScript, React, Next.js, React Native, Redux
+              Toolkit, Zustand, Material UI, Tailwind CSS, SCSS
+            </p>
+          </div>
+          <div>
+            <h3>Backend &amp; Data</h3>
+            <p>
+              Node.js, NestJS, Express, REST APIs, Prisma, Mongoose,
+              PostgreSQL, MongoDB, Firebase
+            </p>
+          </div>
+          <div>
+            <h3>Cloud, CI/CD &amp; Quality</h3>
+            <p>
+              AWS (ECS, Fargate, S3, EC2), Docker, Nginx, Jenkins, GitHub
+              Actions, Playwright, Jest, Vitest, NX
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Experience</h2>
+
+        <article class="job">
+          <div class="job-head">
+            <h3>Senior Full Stack Engineer</h3>
+            <span class="dates">Aug 2025 – Jun 2026</span>
+          </div>
+          <p class="job-meta">
+            Australian energy retailer (confidential) — Internet / Broadband |
+            Remote / Australia
+          </p>
+          <ul>
+            <li>
+              Led frontend delivery for high-traffic internet/broadband customer
+              platforms in an NX monorepo and multiple microsite repositories
+              (React, TypeScript, Material UI).
+            </li>
+            <li>
+              Established reliable E2E coverage with Playwright and BrowserStack,
+              including browser overrides for cross-environment validation.
+            </li>
+            <li>
+              Shipped native macOS productivity apps used by engineering teams
+              to speed day-to-day workflows.
+            </li>
+            <li>
+              Raised code quality through PR reviews and cross-team standards;
+              owned CI/CD pipelines on GitHub and Jenkins.
+            </li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <div class="job-head">
+            <h3>Senior JavaScript Developer</h3>
+            <span class="dates">Apr 2024 – Aug 2024</span>
+          </div>
+          <p class="job-meta">Prostrive | Remote (Contract)</p>
+          <ul>
+            <li>
+              Built and shipped Deelscootmobiel web, mobile, and kiosk clients
+              with Next.js, React, TypeScript, NestJS, PostgreSQL, and Prisma.
+            </li>
+            <li>
+              Deployed and hardened AWS services (ECS, Fargate, EC2, S3) behind
+              Nginx for secure reverse-proxy and production traffic.
+            </li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <div class="job-head">
+            <h3>Next.js Developer</h3>
+            <span class="dates">Jul 2024 – Dec 2024</span>
+          </div>
+          <p class="job-meta">Coral Sourcing, LLC | Remote (Contract)</p>
+          <ul>
+            <li>
+              Delivered Web3/NFT gaming product features with Next.js,
+              TypeScript, NestJS, PostgreSQL, and Wagmi — including wallet/NFT
+              transaction flows and responsive performance work.
+            </li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <div class="job-head">
+            <h3>Next.js Developer</h3>
+            <span class="dates">May 2024 – Jul 2024</span>
+          </div>
+          <p class="job-meta">Narrasoft | Remote (Contract)</p>
+          <ul>
+            <li>
+              Shipped Metaverse product features with Next.js, TypeScript,
+              PostgreSQL, and NestJS.
+            </li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <div class="job-head">
+            <h3>Lead Engineer (CTO)</h3>
+            <span class="dates">Sep 2022 – Jul 2023</span>
+          </div>
+          <p class="job-meta">WOOP Scholarship | Pagadian City</p>
+          <ul>
+            <li>
+              Architected and shipped a scholarship matchmaking platform
+              end-to-end (Next.js, TypeScript, Redux Toolkit, Node.js, Express,
+              MongoDB, Vercel, AWS); also led Hooves Tech client builds.
+            </li>
+            <li>
+              Led engineering execution with QA, product, and design; mentored
+              junior developers on standards and delivery practices.
+            </li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <div class="job-head">
+            <h3>Software Engineer Analyst</h3>
+            <span class="dates">Sep 2021 – Aug 2022</span>
+          </div>
+          <p class="job-meta">Accenture | Cebu City</p>
+          <ul>
+            <li>
+              Built frontend UI and API integrations for Commonwealth Bank of
+              Australia Geared Investments (React, TypeScript, Material UI,
+              Redux, .NET) in a regulated fintech environment.
+            </li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <div class="job-head">
+            <h3>Full Stack Developer</h3>
+            <span class="dates">Apr 2021 – Nov 2021</span>
+          </div>
+          <p class="job-meta">Candid-I | Singapore (Concurrent)</p>
+          <ul>
+            <li>
+              Owned MVP delivery of a recruiting platform on React, Tailwind
+              CSS, and Firebase.
+            </li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <div class="job-head">
+            <h3>JavaScript Developer</h3>
+            <span class="dates">Jan 2021 – Jul 2022</span>
+          </div>
+          <p class="job-meta">Panteum Foundation | Cebu City</p>
+          <ul>
+            <li>
+              Built the Penumbra CSS framework (Node.js, Pug, SCSS) and
+              co-developed Hoody VPN desktop clients (Mithril.js, Tauri) plus
+              supporting web properties.
+            </li>
+          </ul>
+        </article>
+      </section>
+
+      <section>
+        <h2>Education</h2>
+        <div class="edu-row">
+          <div>
+            <strong>Associate of Science in Information Technology</strong>
+            — Siquijor State College – Lazi Campus
+          </div>
+          <span class="dates">2017 – 2019</span>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

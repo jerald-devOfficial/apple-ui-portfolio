@@ -26,59 +26,237 @@ export const sideIcons = [
 
 export const skills = [
   {
-    img: '/images/brands/next.js.png',
-    title: `The React Framework for the Web`,
-    desc: `Used by some of the world's largest companies, Next.js enables you to create high-quality web applications with the power of React components.`,
-    url: 'nextjs.org'
-  },
-  {
+    name: 'React',
+    category: 'Frontend',
     img: '/images/brands/react.png',
-    title: `React`,
-    desc: `The library for web and native user interfaces`,
+    title: 'React',
+    desc: 'Component-driven UI for web apps and design systems; core of most production frontends I ship.',
     url: 'react.dev'
   },
   {
-    img: '/images/brands/javascript.png',
-    title: `JavaScript`,
-    desc: `JavaScript (JS) is a lightweight interpreted (or just-in-time compiled) programming language with first-class functions. JavaScript is a prototype-based, multi-paradigm, single-threaded, dynamic language, supporting object-oriented, imperative, and declarative (e.g. functional programming) styles.`
+    name: 'Next.js',
+    category: 'Frontend',
+    img: '/images/brands/next.js.png',
+    darkInvert: true,
+    title: 'Next.js',
+    desc: 'App Router, SSR/SSG, and full-stack TypeScript apps — primary framework for product and enterprise UIs.',
+    url: 'nextjs.org'
   },
   {
+    name: 'TypeScript',
+    category: 'Frontend',
     img: '/images/brands/typescript.png',
-    title: `TypeScript is JavaScript with syntax for types.`,
-    desc: `TypeScript is a strongly typed programming language that builds on JavaScript, giving you better tooling at any scale.`,
+    title: 'TypeScript',
+    desc: 'Typed JavaScript across frontend and backend for safer refactors and clearer APIs.',
     url: 'typescriptlang.org'
   },
   {
+    name: 'JavaScript',
+    category: 'Frontend',
+    img: '/images/brands/javascript.png',
+    title: 'JavaScript',
+    desc: 'Language foundation for browser, Node, and tooling across the stack.'
+  },
+  {
+    name: 'React Native',
+    category: 'Frontend',
+    img: '/images/brands/react.png',
+    title: 'React Native',
+    desc: 'Cross-platform mobile UIs sharing React patterns with web codebases.',
+    url: 'reactnative.dev'
+  },
+  {
+    name: 'Redux Toolkit',
+    category: 'Frontend',
+    iconKey: 'redux',
+    iconColor: '#764ABC',
+    title: 'Redux Toolkit',
+    desc: 'Predictable client state for complex product workflows and shared app data.',
+    url: 'redux-toolkit.js.org'
+  },
+  {
+    name: 'Zustand',
+    category: 'Frontend',
+    title: 'Zustand',
+    desc: 'Lightweight React state management for focused client stores.',
+    url: 'zustand.docs.pmnd.rs'
+  },
+  {
+    name: 'Material UI',
+    category: 'Frontend',
+    iconKey: 'mui',
+    iconColor: '#007FFF',
+    title: 'Material UI',
+    desc: 'Enterprise-ready React component library used heavily on regulated and large-scale UIs.',
+    url: 'mui.com'
+  },
+  {
+    name: 'Tailwind CSS',
+    category: 'Frontend',
     img: '/images/brands/tailwindcss.png',
-    title: `Tailwind CSS`,
-    desc: `Rapidly build modern websites without ever leaving your HTML.`,
+    title: 'Tailwind CSS',
+    desc: 'Utility-first styling for fast, consistent UI delivery.',
     url: 'tailwindcss.com'
   },
   {
+    name: 'SCSS',
+    category: 'Frontend',
+    iconKey: 'sass',
+    iconColor: '#CC6699',
+    title: 'SCSS',
+    desc: 'Structured stylesheets for design systems and legacy CSS architecture.',
+    url: 'sass-lang.com'
+  },
+  {
+    name: 'Node.js',
+    category: 'Backend',
+    iconKey: 'nodedotjs',
+    iconColor: '#339933',
+    title: 'Node.js',
+    desc: 'Server runtime for APIs, tooling, and full-stack TypeScript services.',
+    url: 'nodejs.org'
+  },
+  {
+    name: 'NestJS',
+    category: 'Backend',
+    iconKey: 'nestjs',
+    iconColor: '#E0234E',
+    title: 'NestJS',
+    desc: 'Structured Node framework for modular REST APIs and backend services.',
+    url: 'nestjs.com'
+  },
+  {
+    name: 'Express',
+    category: 'Backend',
+    iconKey: 'express',
+    darkInvert: true,
+    title: 'Express',
+    desc: 'Lightweight HTTP APIs and middleware for Node services.',
+    url: 'expressjs.com'
+  },
+  {
+    name: 'Prisma',
+    category: 'Backend',
+    iconKey: 'prisma',
+    darkInvert: true,
+    title: 'Prisma',
+    desc: 'Type-safe ORM for PostgreSQL-backed product APIs.',
+    url: 'prisma.io'
+  },
+  {
+    name: 'PostgreSQL',
+    category: 'Backend',
+    iconKey: 'postgresql',
+    iconColor: '#4169E1',
+    title: 'PostgreSQL',
+    desc: 'Primary relational database for production product and Web3 backends.',
+    url: 'postgresql.org'
+  },
+  {
+    name: 'MongoDB',
+    category: 'Backend',
     img: '/images/brands/mongodb.png',
-    title: `MongoDB`,
-    desc: `MongoDB is a source-available, cross-platform, document-oriented database program. Classified as a NoSQL database product, MongoDB utilizes JSON-like documents with optional schemas.`,
+    title: 'MongoDB',
+    desc: 'Document database for flexible product data models and rapid iteration.',
     url: 'mongodb.com'
   },
   {
-    img: '/images/brands/web3js.png',
-    title: `Web3.js`,
-    desc: `A JavaScript library for building on Ethereum`,
-    url: 'web3js.org'
+    name: 'Mongoose',
+    category: 'Backend',
+    iconKey: 'mongodb',
+    iconColor: '#880000',
+    title: 'Mongoose',
+    desc: 'MongoDB ODM for schema modeling and typed data access in Node services.',
+    url: 'mongoosejs.com'
   },
   {
+    name: 'Firebase',
+    category: 'Backend',
+    iconKey: 'firebase',
+    iconColor: '#FFCA28',
+    title: 'Firebase',
+    desc: 'Auth, hosting, and serverless backends for MVPs and realtime apps.',
+    url: 'firebase.google.com'
+  },
+  {
+    name: 'AWS',
+    category: 'Cloud & DevOps',
     img: '/images/brands/aws.png',
-    title: `Cloud Computing Services - Amazon Web Services (AWS)`,
-    desc: `Amazon Web Services (AWS) is the world's most comprehensive and broadly adopted cloud, offering over 200 fully featured services from data centers globally. Millions of customers—including the fastest-growing startups, largest enterprises, and leading government agencies—are using AWS to lower costs, become more agile, and innovate faster.`,
+    title: 'AWS',
+    desc: 'ECS, Fargate, EC2, and S3 for deployable, production cloud workloads.',
     url: 'aws.amazon.com'
   },
   {
-    img: '/images/brands/figma.png',
-    title: `Figma: The Collaborative Interface Design Tool`,
-    desc: `Figma is the leading collaborative design tool for building meaningful products. Seamlessly design, prototype, develop, and collect feedback in a single platform.`,
-    url: 'figma.com'
+    name: 'Docker',
+    category: 'Cloud & DevOps',
+    iconKey: 'docker',
+    iconColor: '#2496ED',
+    title: 'Docker',
+    desc: 'Containerized services for consistent local and cloud deployments.',
+    url: 'docker.com'
+  },
+  {
+    name: 'NX',
+    category: 'Cloud & DevOps',
+    iconKey: 'nx',
+    darkInvert: true,
+    title: 'NX',
+    desc: 'Monorepo tooling for multi-app frontend platforms and shared libraries.',
+    url: 'nx.dev'
+  },
+  {
+    name: 'Playwright',
+    category: 'Cloud & DevOps',
+    iconKey: 'playwright',
+    iconColor: '#2EAD33',
+    title: 'Playwright',
+    desc: 'End-to-end browser automation for reliable UI regression coverage.',
+    url: 'playwright.dev'
+  },
+  {
+    name: 'Jest / Vitest',
+    category: 'Cloud & DevOps',
+    iconKey: 'vitest',
+    iconColor: '#729B1B',
+    title: 'Jest & Vitest',
+    desc: 'Unit and integration testing for TypeScript apps and shared libraries.',
+    url: 'vitest.dev'
+  },
+  {
+    name: 'GitHub Actions',
+    category: 'Cloud & DevOps',
+    iconKey: 'githubactions',
+    iconColor: '#2088FF',
+    title: 'GitHub Actions',
+    desc: 'CI/CD pipelines for build, test, and deploy automation.',
+    url: 'github.com/features/actions'
+  },
+  {
+    name: 'Jenkins',
+    category: 'Cloud & DevOps',
+    iconKey: 'jenkins',
+    iconColor: '#D24939',
+    title: 'Jenkins',
+    desc: 'Enterprise CI/CD used alongside GitHub for release pipelines.',
+    url: 'jenkins.io'
+  },
+  {
+    name: 'Nginx',
+    category: 'Cloud & DevOps',
+    iconKey: 'nginx',
+    iconColor: '#009639',
+    title: 'Nginx',
+    desc: 'Reverse proxy and edge routing in front of app and cloud services.',
+    url: 'nginx.org'
   }
 ]
+
+export const skillCategories = [
+  'Frontend',
+  'Backend',
+  'Cloud & DevOps'
+] as const
+
 
 export const projects = [
   {
@@ -121,81 +299,21 @@ export const projects = [
 
 export const workExperiences = [
   {
-    startDate: 'Jan 2021',
-    endDate: 'Jul 2022',
+    startDate: 'Aug 2025',
+    endDate: 'Jun 2026',
     isPresent: false,
-    company: 'Panteum Foundation',
-    logo: '/images/jobs/panteum.jpg',
+    company: 'Australian energy retailer (confidential)',
+    location: 'Remote / Australia',
+    logoPlaceholder: true,
     projects: [
       {
-        title: 'JavaScript Developer',
-        name: 'Penumbra CSS',
+        title: 'Senior Full Stack Engineer',
+        name: 'Internet / Broadband customer platforms',
         desc: [
-          'Creating and building a CSS Framework dynamically using Javascript, SASS/SCSS, PugJS, and NodeJS.'
-        ]
-      },
-      {
-        title: 'Web and Application Developer',
-        name: 'Hoody VPN',
-        desc: [
-          'Developed Hoody VPN application using MithrilJS, MobX and SCSS that runs on Tauri. Also developed the website blog of the application using NodeJS and TailwindCSS.'
-        ]
-      }
-    ]
-  },
-  {
-    startDate: 'Apr 2021',
-    endDate: 'Nov 2021',
-    isPresent: false,
-    company: 'Candid-I',
-    logo: '/images/jobs/candid-i.png',
-    projects: [
-      {
-        title: 'Full Stack Developer',
-        name: 'Candid-I Recruitment Platform',
-        desc: [
-          'Main developer, building a MVP recruiting web application through server-less stack with React JS and Firebase.'
-        ]
-      }
-    ]
-  },
-  {
-    startDate: 'Sep 2021',
-    endDate: 'Aug 2022',
-    isPresent: false,
-    company: 'Accenture',
-    logo: '/images/jobs/accenture.png',
-    projects: [
-      {
-        title: 'Software Engineer Analyst',
-        name: 'Geared Investments web app - Commonwealth Bank of Australia',
-        desc: [
-          'Frontend UI and API developer for a banking website using React JS, Typescript, Material UI, and .NET for one of the leading banks in Australia.'
-        ]
-      }
-    ]
-  },
-  {
-    startDate: 'Sep 2022',
-    isPresent: false,
-    endDate: 'Jul 2023',
-    company: 'WOOP Scholarship',
-    logo: '/images/jobs/woop.png',
-    projects: [
-      {
-        title: 'Chief Technology Officer',
-        name: 'Hooves Tech',
-        desc: [
-          'Web agency for clients wanting to build websites with Hooves Tech; built with Next.js, Redux Toolkit, TypeScript, and Tailwind CSS.'
-        ]
-      },
-      {
-        title: 'CTO, Software Engineer Architect',
-        name: 'WOOP Scholarship',
-        desc: [
-          'Developed and implemented software solutions utilizing Next.js 13.4, TypeScript, TailwindCSS, Node.js, Express, MongoDB, Vercel, and AWS.',
-          'Collaborated with other departments such as Quality Assurance, Product Management, Designers. to ensure successful project delivery.',
-          'Provided mentorship and guidance to junior software engineers on technical issues and best practices.'
+          'Led frontend delivery for high-traffic internet/broadband customer platforms in an NX monorepo and multiple microsite repositories (React, TypeScript, Material UI).',
+          'Established reliable E2E coverage with Playwright and BrowserStack, including browser overrides for cross-environment validation.',
+          'Shipped native macOS productivity apps used by engineering teams to speed day-to-day workflows.',
+          'Raised code quality through PR reviews and cross-team standards; owned CI/CD pipelines on GitHub and Jenkins.'
         ]
       }
     ]
@@ -205,30 +323,15 @@ export const workExperiences = [
     endDate: 'Aug 2024',
     isPresent: false,
     company: 'Prostrive',
+    location: 'Remote (Contract)',
     logo: '/images/jobs/prostrive.png',
     projects: [
       {
         title: 'Senior JavaScript Developer',
         name: 'Deelscootmobiel',
         desc: [
-          'One of the full-stack devs of Deelscootmobiel in web, mobile, and kiosk apps using Next.js, TypeScript, React.js, Nest.js, PostgreSQL, and Prisma.',
-          'Implemented AWS Cloud Solutions with Fargate, S3, EC2, ECS, and Nginx, with purposes like cloud security and reverse proxy.'
-        ]
-      }
-    ]
-  },
-  {
-    startDate: 'May 2024',
-    endDate: 'Jul 2024',
-    isPresent: false,
-    company: 'Narrasoft',
-    logo: '/images/jobs/narrasoft.png',
-    projects: [
-      {
-        title: 'Next.js Developer',
-        name: 'Metaverse Project',
-        desc: [
-          'Worked with a Metaverse project using Next.js, TypeScript, PostgreSQL, and Nest.js.'
+          'Built and shipped Deelscootmobiel web, mobile, and kiosk clients with Next.js, React, TypeScript, NestJS, PostgreSQL, and Prisma.',
+          'Deployed and hardened AWS services (ECS, Fargate, EC2, S3) behind Nginx for secure reverse-proxy and production traffic.'
         ]
       }
     ]
@@ -238,17 +341,100 @@ export const workExperiences = [
     endDate: 'Dec 2024',
     isPresent: false,
     company: 'Coral Sourcing, LLC',
-    logo: '/images/jobs/found-no-logo.png',
+    location: 'Remote (Contract)',
+    logoPlaceholder: true,
     projects: [
       {
         title: 'Next.js Developer',
         name: 'Web3 Application',
         desc: [
-          'Developed and maintained web applications using Next.js framework.',
-          'Integrated blockchain functionalities into gaming platforms, focusing on NFT transactions and management.',
-          'Collaborated with blockchain developers to design and implement seamless user experiences for NFT-based games.',
-          'Optimized applications for maximum speed and scalability, ensuring high performance across devices.',
-          'Stayed updated with emerging trends in blockchain technology, especially in relation to the gaming industry.'
+          'Delivered Web3/NFT gaming product features with Next.js, TypeScript, NestJS, PostgreSQL, and Wagmi — including wallet/NFT transaction flows and responsive performance work.'
+        ]
+      }
+    ]
+  },
+  {
+    startDate: 'May 2024',
+    endDate: 'Jul 2024',
+    isPresent: false,
+    company: 'Narrasoft',
+    location: 'Remote (Contract)',
+    logo: '/images/jobs/narrasoft.png',
+    projects: [
+      {
+        title: 'Next.js Developer',
+        name: 'Metaverse Project',
+        desc: [
+          'Shipped Metaverse product features with Next.js, TypeScript, PostgreSQL, and NestJS.'
+        ]
+      }
+    ]
+  },
+  {
+    startDate: 'Sep 2022',
+    isPresent: false,
+    endDate: 'Jul 2023',
+    company: 'WOOP Scholarship',
+    location: 'Pagadian City',
+    logo: '/images/jobs/woop.png',
+    projects: [
+      {
+        title: 'Lead Engineer (CTO)',
+        name: 'WOOP Scholarship & Hooves Tech',
+        desc: [
+          'Architected and shipped a scholarship matchmaking platform end-to-end (Next.js, TypeScript, Redux Toolkit, Node.js, Express, MongoDB, Vercel, AWS); also led Hooves Tech client builds.',
+          'Led engineering execution with QA, product, and design; mentored junior developers on standards and delivery practices.'
+        ]
+      }
+    ]
+  },
+  {
+    startDate: 'Sep 2021',
+    endDate: 'Aug 2022',
+    isPresent: false,
+    company: 'Accenture',
+    location: 'Cebu City',
+    logo: '/images/jobs/accenture.png',
+    projects: [
+      {
+        title: 'Software Engineer Analyst',
+        name: 'Geared Investments web app - Commonwealth Bank of Australia',
+        desc: [
+          'Built frontend UI and API integrations for Commonwealth Bank of Australia Geared Investments (React, TypeScript, Material UI, Redux, .NET) in a regulated fintech environment.'
+        ]
+      }
+    ]
+  },
+  {
+    startDate: 'Apr 2021',
+    endDate: 'Nov 2021',
+    isPresent: false,
+    company: 'Candid-I',
+    location: 'Singapore (Concurrent)',
+    logo: '/images/jobs/candid-i.png',
+    projects: [
+      {
+        title: 'Full Stack Developer',
+        name: 'Candid-I Recruitment Platform',
+        desc: [
+          'Owned MVP delivery of a recruiting platform on React, Tailwind CSS, and Firebase.'
+        ]
+      }
+    ]
+  },
+  {
+    startDate: 'Jan 2021',
+    endDate: 'Jul 2022',
+    isPresent: false,
+    company: 'Panteum Foundation',
+    location: 'Cebu City',
+    logo: '/images/jobs/panteum.jpg',
+    projects: [
+      {
+        title: 'JavaScript Developer',
+        name: 'Penumbra CSS & Hoody VPN',
+        desc: [
+          'Built the Penumbra CSS framework (Node.js, Pug, SCSS) and co-developed Hoody VPN desktop clients (Mithril.js, Tauri) plus supporting web properties.'
         ]
       }
     ]
