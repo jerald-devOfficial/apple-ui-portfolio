@@ -91,7 +91,17 @@ const ResponsiveUI = ({
       title: 'News',
       img: '/images/icons/macOS-news.png',
       path: '/news'
-    }
+    },
+    ...(session.status === 'authenticated'
+      ? [
+          {
+            name: 'chess',
+            title: 'Chess',
+            img: '/images/icons/macOS-chess.png',
+            path: '/chess'
+          }
+        ]
+      : [])
   ]
 
   // Group 2: Documents & Files

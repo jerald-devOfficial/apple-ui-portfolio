@@ -1,24 +1,21 @@
-import { Admin } from '@/models/Admin'
-import { Blog } from '@/models/Blog'
-import { Comment } from '@/models/Comment'
-import { Contact } from '@/models/Contact'
-import Diary from '@/models/Diary'
-import { User } from '@/models/User'
 import mongoose from 'mongoose'
 
-export { Admin, Blog, Comment, Contact, Diary, User }
+export { Admin } from '@/models/Admin'
+export { Blog } from '@/models/Blog'
+export { Comment } from '@/models/Comment'
+export { Contact } from '@/models/Contact'
+export { default as Diary } from '@/models/Diary'
+export { default as Repertoire } from '@/models/Repertoire'
+export { User } from '@/models/User'
 
-// Export a function to initialize models
-export const initModels = () => {
-  // Return the registered models for verification
-  return {
-    Admin: mongoose.models.Admin ? true : false,
-    Blog: mongoose.models.Blog ? true : false,
-    Comment: mongoose.models.Comment ? true : false,
-    Contact: mongoose.models.Contact ? true : false,
-    User: mongoose.models.User ? true : false,
-    Diary: mongoose.models.Diary ? true : false
-  }
-}
+export const initModels = () => ({
+  Admin: !!mongoose.models.Admin,
+  Blog: !!mongoose.models.Blog,
+  Comment: !!mongoose.models.Comment,
+  Contact: !!mongoose.models.Contact,
+  User: !!mongoose.models.User,
+  Diary: !!mongoose.models.Diary,
+  Repertoire: !!mongoose.models.Repertoire
+})
 
 export default initModels

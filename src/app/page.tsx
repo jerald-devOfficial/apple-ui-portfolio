@@ -45,6 +45,11 @@ const Home = () => {
       name: 'Web3',
       img: '/images/icons/metamask.png',
       path: '/web3'
+    },
+    {
+      name: 'Chess',
+      img: '/images/icons/chess.png',
+      path: '/chess'
     }
   ]
 
@@ -89,7 +94,8 @@ const Home = () => {
 
                 {!item.click &&
                   item.name !== 'Resume' &&
-                  item.name !== 'Mails' && (
+                  item.name !== 'Mails' &&
+                  item.name !== 'Chess' && (
                     <Link
                       href={`${item.path}`}
                       className="grid place-items-center gap-y-1.5 w-full"
@@ -151,30 +157,57 @@ const Home = () => {
                       </span>
                     </Link>
                   ) : null)}
+
+                {item.name === 'Chess' &&
+                  (session.status === 'authenticated' ? (
+                    <Link
+                      href={`${item.path}`}
+                      className="grid place-items-center gap-y-1.5 w-full"
+                    >
+                      <div className="relative size-[45px] xs:size-[50px] cursor-pointer">
+                        <Image
+                          alt={item.name}
+                          src={item.img}
+                          fill
+                          priority
+                          sizes="45px xs:50px"
+                        />
+                      </div>
+                      <span className="text-[9px] font-normal text-white text-center leading-tight">
+                        {item.name}
+                      </span>
+                    </Link>
+                  ) : null)}
               </Fragment>
             ))}
 
             {/* Web3 icon in second row if we have 7 icons */}
-            {icons.slice(6).map((item) => (
-              <Link
-                key={item.name}
-                href={`${item.path}`}
-                className="grid place-items-center gap-y-1.5 w-full"
-              >
-                <div className="relative size-[45px] xs:size-[50px] cursor-pointer">
-                  <Image
-                    alt={item.name}
-                    src={item.img}
-                    fill
-                    priority
-                    sizes="45px xs:50px"
-                  />
-                </div>
-                <span className="text-[9px] font-normal text-white text-center leading-tight">
-                  {item.name}
-                </span>
-              </Link>
-            ))}
+            {icons.slice(6).map((item) => {
+              if (item.name === 'Chess' && session.status !== 'authenticated') {
+                return null
+              }
+
+              return (
+                <Link
+                  key={item.name}
+                  href={`${item.path}`}
+                  className="grid place-items-center gap-y-1.5 w-full"
+                >
+                  <div className="relative size-[45px] xs:size-[50px] cursor-pointer">
+                    <Image
+                      alt={item.name}
+                      src={item.img}
+                      fill
+                      priority
+                      sizes="45px xs:50px"
+                    />
+                  </div>
+                  <span className="text-[9px] font-normal text-white text-center leading-tight">
+                    {item.name}
+                  </span>
+                </Link>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -215,7 +248,8 @@ const Home = () => {
 
               {!item.click &&
                 item.name !== 'Resume' &&
-                item.name !== 'Mails' && (
+                item.name !== 'Mails' &&
+                item.name !== 'Chess' && (
                   <Link
                     href={`${item.path}`}
                     className="grid place-items-center gap-y-2 w-full"
@@ -262,6 +296,29 @@ const Home = () => {
               )}
 
               {item.name === 'Mails' &&
+                (session.status === 'authenticated' ? (
+                  <Link
+                    href={`${item.path}`}
+                    className="grid place-items-center gap-y-2 w-full"
+                  >
+                    <div className="block">
+                      <div className="relative h-[60px] w-[60px] cursor-pointer">
+                        <Image
+                          alt={item.name}
+                          src={item.img}
+                          fill
+                          priority
+                          sizes="60px"
+                        />
+                      </div>
+                    </div>
+                    <span className="text-sm font-normal text-white text-center">
+                      {item.name}
+                    </span>
+                  </Link>
+                ) : null)}
+
+              {item.name === 'Chess' &&
                 (session.status === 'authenticated' ? (
                   <Link
                     href={`${item.path}`}
