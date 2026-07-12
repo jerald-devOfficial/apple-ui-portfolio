@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 
-import { education, projects, skills, workExperiences } from '@/constants'
+import { education, projects, skillCategories, skills, workExperiences } from '@/constants'
 import {
   CodeBracketIcon,
   SquaresPlusIcon,
@@ -17,6 +17,8 @@ import {
   ChevronRightIcon,
   XMarkIcon
 } from '@heroicons/react/24/solid'
+import CompanyLogo from '@/app/portfolio/_components/CompanyLogo'
+import SkillLogo from '@/app/portfolio/_components/SkillLogo'
 
 const montserrat = Montserrat({ subsets: ['latin'], display: 'swap' })
 
@@ -161,67 +163,78 @@ const Portfolio = () => {
           {activeCategory !== null ? (
             <div className='flex flex-col py-5 sm:py-10 px-4 sm:px-12 gap-y-5 sm:gap-y-10 relative overflow-y-auto h-full w-full md:flex-1 bg-white/95 dark:bg-zinc-800/95'>
               {activeCategory === 0 &&
-                skills.map((item) => (
-                  <div
-                    key={item.title}
-                    className='flex gap-x-5 sm:gap-x-10 w-full h-auto'
-                  >
-                    <div className='relative'>
-                      {item.url ? (
-                        <a
-                          href={`https://${item.url}`}
-                          className='h-auto w-24 block'
-                        >
-                          <Image
-                            src={item.img}
-                            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                            className='rounded-2xl'
-                            width={1}
-                            height={1}
-                            style={{
-                              height: 'auto',
-                              width: '100%'
-                            }}
-                            alt={item.title}
-                          />
-                        </a>
-                      ) : (
-                        <div className='h-auto w-24 block'>
-                          <Image
-                            src={item.img}
-                            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                            className='rounded-2xl'
-                            width={1}
-                            height={1}
-                            style={{
-                              height: 'auto',
-                              width: '100%'
-                            }}
-                            alt={item.title}
-                          />
-                        </div>
-                      )}
-                    </div>
-                    <div className='flex flex-col gap-y-2'>
-                      <h3 className='text-base font-semibold text-black dark:text-white'>
-                        {item.title}
-                      </h3>
-                      <div className='flex flex-col gap-y-1'>
-                        <p className='text-sm font-normal text-black dark:text-gray-300'>
-                          {item.desc}
-                        </p>
-                        {item.url && (
-                          <div className='block relative'>
-                            <a
-                              href={`https://${item.url}`}
-                              className='text-sm font-normal no-underline hover:underline text-violet-600 dark:text-violet-400 inline-flex items-center gap-x-2'
-                            >
-                              <LinkIcon height={16} />
-                              {item.url}
-                            </a>
+                skillCategories.map((category) => (
+                  <div key={category} className='flex flex-col gap-y-4'>
+                    <h2 className='text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400'>
+                      {category}
+                    </h2>
+                    <div className='flex flex-col gap-y-5 sm:gap-y-8'>
+                      {skills
+                        .filter((item) => item.category === category)
+                        .map((item) => (
+                          <div
+                            key={item.name}
+                            className='flex gap-x-5 sm:gap-x-8 w-full h-auto'
+                          >
+                            <div className='relative shrink-0'>
+                              {item.url ? (
+                                <a
+                                  href={
+                                    item.url.startsWith('http')
+                                      ? item.url
+                                      : `https://${item.url}`
+                                  }
+                                  target='_blank'
+                                  rel='noopener noreferrer'
+                                  className='block'
+                                >
+                                  <SkillLogo
+                                    name={item.name}
+                                    img={item.img}
+                                    iconKey={item.iconKey}
+                                    darkInvert={item.darkInvert}
+                                    iconColor={item.iconColor}
+                                  />
+                                </a>
+                              ) : (
+                                <SkillLogo
+                                  name={item.name}
+                                  img={item.img}
+                                  iconKey={item.iconKey}
+                                  darkInvert={item.darkInvert}
+                                  iconColor={item.iconColor}
+                                />
+                              )}
+                            </div>
+                            <div className='flex flex-col gap-y-2 min-w-0'>
+                              <h3 className='text-base font-semibold text-black dark:text-white'>
+                                {item.title}
+                              </h3>
+                              <div className='flex flex-col gap-y-1'>
+                                <p className='text-sm font-normal text-black dark:text-gray-300'>
+                                  {item.desc}
+                                </p>
+                                {item.url && (
+                                  <div className='block relative'>
+                                    <a
+                                      href={
+                                        item.url.startsWith('http')
+                                          ? item.url
+                                          : `https://${item.url}`
+                                      }
+                                      target='_blank'
+                                      rel='noopener noreferrer'
+                                      className='text-sm font-normal no-underline hover:underline text-violet-600 dark:text-violet-400 inline-flex items-center gap-x-2'
+                                    >
+                                      <LinkIcon height={16} />
+                                      {item.url.replace(/^https?:\/\//, '')}
+                                    </a>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
                           </div>
-                        )}
-                      </div>
+                        ))}
                     </div>
                   </div>
                 ))}
@@ -345,47 +358,44 @@ const Portfolio = () => {
               {activeCategory === 2 &&
                 workExperiences.map((item) => (
                   <div
-                    key={item.company}
-                    className='flex gap-x-10 w-full h-auto'
+                    key={`${item.company}-${item.startDate}`}
+                    className='flex gap-x-6 sm:gap-x-10 w-full h-auto'
                   >
-                    <div className='relative'>
-                      <div className='h-auto w-24 block'>
-                        <Image
-                          src={item.logo}
-                          sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                          className='rounded-2xl'
-                          width={1}
-                          height={1}
-                          style={{
-                            height: 'auto',
-                            width: '100%'
-                          }}
-                          alt={item.company}
-                        />
-                      </div>
+                    <div className='relative shrink-0'>
+                      <CompanyLogo
+                        company={item.company}
+                        logo={item.logo}
+                        placeholder={item.logoPlaceholder}
+                      />
                     </div>
-                    <div className='flex flex-col gap-y-2'>
+                    <div className='flex flex-col gap-y-2 min-w-0'>
                       <div className='flex flex-col'>
                         <h2 className='text-base font-semibold text-black dark:text-white'>
                           {item.company}
                         </h2>
                         <h5 className='text-xs font-normal text-gray-600 dark:text-gray-400'>
-                          {item.startDate} -{' '}
+                          {item.startDate} –{' '}
                           {item.isPresent ? 'Present' : item.endDate}
+                          {item.location ? ` · ${item.location}` : ''}
                         </h5>
                       </div>
                       {item.projects.map((project) => (
                         <div
-                          key={project.name}
-                          className='flex flex-col gap-y-2'
+                          key={`${project.title}-${project.name}`}
+                          className='flex flex-col gap-y-1.5'
                         >
-                          <h3 className='text-sm font-medium text-black dark:text-white'>
-                            {project.title}
-                          </h3>
-                          <ul className='flex flex-col gap-y-1 list-disc'>
-                            {project.desc.map((desc: string, i: number) => (
+                          <div className='flex flex-col sm:flex-row sm:items-baseline sm:gap-x-2'>
+                            <h3 className='text-sm font-medium text-black dark:text-white'>
+                              {project.title}
+                            </h3>
+                            <span className='text-xs text-gray-500 dark:text-gray-400'>
+                              {project.name}
+                            </span>
+                          </div>
+                          <ul className='flex flex-col gap-y-1 list-disc pl-4'>
+                            {project.desc.map((desc: string) => (
                               <li
-                                key={i}
+                                key={desc}
                                 className='text-sm font-normal text-gray-800 dark:text-gray-300'
                               >
                                 {desc}

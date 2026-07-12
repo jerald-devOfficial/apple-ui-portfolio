@@ -56,25 +56,29 @@ const AboutMeWidget = () => {
 
           {/* Features Skeleton */}
           <div className="space-y-2 sm:space-y-3 mb-3 sm:mb-4">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="flex items-center gap-2 sm:gap-3">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-                <div className="flex-1">
-                  <div className="h-3 sm:h-4 bg-gray-200 dark:bg-gray-700 rounded w-20 sm:w-28 mb-1"></div>
-                  <div className="h-2 sm:h-3 bg-gray-200 dark:bg-gray-700 rounded w-16 sm:w-24 hidden sm:block"></div>
+            {['about-feature-1', 'about-feature-2', 'about-feature-3'].map(
+              (id) => (
+                <div key={id} className="flex items-center gap-2 sm:gap-3">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+                  <div className="flex-1">
+                    <div className="h-3 sm:h-4 bg-gray-200 dark:bg-gray-700 rounded w-20 sm:w-28 mb-1"></div>
+                    <div className="h-2 sm:h-3 bg-gray-200 dark:bg-gray-700 rounded w-16 sm:w-24 hidden sm:block"></div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            )}
           </div>
 
           {/* Tech Stack Skeleton */}
           <div className="flex flex-wrap gap-1 sm:gap-2 mb-3 sm:mb-4">
-            {[...Array(4)].map((_, i) => (
-              <div
-                key={i}
-                className="h-6 bg-gray-200 dark:bg-gray-700 rounded-full w-12 sm:w-16"
-              ></div>
-            ))}
+            {['about-tech-1', 'about-tech-2', 'about-tech-3', 'about-tech-4'].map(
+              (id) => (
+                <div
+                  key={id}
+                  className="h-6 bg-gray-200 dark:bg-gray-700 rounded-full w-12 sm:w-16"
+                ></div>
+              )
+            )}
           </div>
 
           {/* Buttons Skeleton */}
@@ -113,7 +117,7 @@ const AboutMeWidget = () => {
                 Jerald Baroro
               </h2>
               <p className="text-[10px] text-gray-600 dark:text-gray-400">
-                Full Stack Developer
+                Senior Full Stack Engineer
               </p>
               <div className="flex items-center gap-1 mt-0.5">
                 <div className="w-1 h-1 bg-green-500 rounded-full"></div>
@@ -128,7 +132,7 @@ const AboutMeWidget = () => {
           <div className="grid grid-cols-2 gap-1 mb-1">
             <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-1 text-center">
               <div className="text-sm font-bold text-blue-600 dark:text-blue-400">
-                5+
+                6+
               </div>
               <div className="text-[8px] text-blue-700 dark:text-blue-300">
                 Years Exp
@@ -136,7 +140,7 @@ const AboutMeWidget = () => {
             </div>
             <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-1 text-center">
               <div className="text-sm font-bold text-purple-600 dark:text-purple-400">
-                7
+                8
               </div>
               <div className="text-[8px] text-purple-700 dark:text-purple-300">
                 Companies
@@ -177,7 +181,7 @@ const AboutMeWidget = () => {
               Jerald Baroro
             </h2>
             <p className="text-xs sm:text-sm xl:text-base text-gray-600 dark:text-gray-400">
-              Full Stack Developer
+              Senior Full Stack Engineer
             </p>
             <div className="flex items-center gap-2 mt-1 xl:mt-2">
               <div className="w-2 h-2 xl:w-3 xl:h-3 bg-green-500 rounded-full"></div>
@@ -201,10 +205,10 @@ const AboutMeWidget = () => {
             </div>
             <div>
               <p className="text-xs sm:text-sm xl:text-base font-medium text-gray-900 dark:text-white">
-                Software Engineer
+                Senior Full Stack Engineer
               </p>
               <p className="text-xs xl:text-sm text-gray-600 dark:text-gray-400 hidden sm:block">
-                React, Next.js, TypeScript
+                React, Next.js, TypeScript, NestJS
               </p>
             </div>
           </div>
@@ -225,10 +229,10 @@ const AboutMeWidget = () => {
             </div>
             <div>
               <p className="text-xs sm:text-sm xl:text-base font-medium text-gray-900 dark:text-white">
-                5+ Years Experience
+                6+ Years Experience
               </p>
               <p className="text-xs xl:text-sm text-gray-600 dark:text-gray-400 hidden sm:block">
-                Web & Mobile Development
+                Web, Mobile & Cloud
               </p>
             </div>
           </div>
