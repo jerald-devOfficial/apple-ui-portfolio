@@ -2,6 +2,9 @@
   "name": "apple-ui-design",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "next dev -p 4000 --turbopack",
     "build": "next build",
@@ -12,6 +15,7 @@
     "@aws-sdk/client-s3": "^3.837.0",
     "@aws-sdk/s3-request-presigner": "^3.837.0",
     "@heroicons/react": "^2.1.3",
+    "@marsidev/react-turnstile": "^1.5.3",
     "@mliebelt/pgn-parser": "^1.4.19",
     "@tanstack/react-query": "^5.62.3",
     "@tinymce/tinymce-react": "^6.1.0",
@@ -22,6 +26,7 @@
     "date-fns": "^3.6.0",
     "immer": "^11.1.8",
     "isomorphic-dompurify": "^2.22.0",
+    "mailchecker": "^6.0.20",
     "mongoose": "^8.3.0",
     "multer": "^2.0.1",
     "next": "15.2.8",
@@ -33,6 +38,7 @@
     "react-dom": "^19.0.0",
     "react-icons": "^5.0.1",
     "react-toastify": "^11.0.5",
+    "resend": "^6.17.2",
     "sharp": "^0.33.3",
     "swr": "^2.2.5",
     "tailwindcss-animate": "^1.0.7",
@@ -44,7 +50,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.1",
-    "@types/node": "^20",
+    "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^8",

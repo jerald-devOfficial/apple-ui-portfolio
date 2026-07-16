@@ -1,3 +1,4 @@
+import { requireAdminSession, unauthorizedResponse } from '@/lib/require-admin'
 import { Contact } from '@/models/Contact'
 import dbConnect from '@/utils/db'
 import { NextResponse } from 'next/server'
@@ -6,6 +7,11 @@ export const PATCH = async (
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) => {
+  const session = await requireAdminSession()
+  if (!session) {
+    return unauthorizedResponse()
+  }
+
   try {
     await dbConnect()
     const { id } = await params
@@ -25,7 +31,17 @@ export const PATCH = async (
         { new: true }
       )
     } else {
-      throw new Error('Invalid request body')
+      return NextResponse.json(
+        { msg: ['Invalid request body'], success: false },
+        { status: 400 }
+      )
+    }
+
+    if (!updatedMail) {
+      return NextResponse.json(
+        { msg: ['Message not found'], success: false },
+        { status: 404 }
+      )
     }
 
     return new NextResponse(JSON.stringify(updatedMail), { status: 200 })
@@ -36,15 +52,26 @@ export const PATCH = async (
 }
 
 export const DELETE = async (
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) => {
+  const session = await requireAdminSession()
+  if (!session) {
+    return unauthorizedResponse()
+  }
+
   try {
     await dbConnect()
     const { id } = await params
 
-    // Delete the mail with the specified ID
     const deletedMail = await Contact.findByIdAndDelete(id)
+
+    if (!deletedMail) {
+      return NextResponse.json(
+        { msg: ['Message not found'], success: false },
+        { status: 404 }
+      )
+    }
 
     return new NextResponse(JSON.stringify(deletedMail), { status: 200 })
   } catch (err) {
