@@ -1,8 +1,8 @@
+import '@/app/globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import 'react-toastify/dist/ReactToastify.css'
-import './globals.css'
 
+import AppleToastContainer from '@/components/AppleToastContainer'
 import AuthProvider from '@/components/Auth/AuthProvider'
 import Wallpapers from '@/components/Wallpapers'
 import ResponsiveUI from '@/components/layouts'
@@ -10,7 +10,6 @@ import ResponsiveUI from '@/components/layouts'
 import { Providers } from '@/app/providers'
 import { getConfig } from '@/wagmi'
 import { headers } from 'next/headers'
-import { ToastContainer } from 'react-toastify'
 import { cookieToInitialState } from 'wagmi'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -73,18 +72,7 @@ export default async function RootLayout({
           <AuthProvider>
             <ResponsiveUI>{children}</ResponsiveUI>
           </AuthProvider>
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="colored"
-          />
+          <AppleToastContainer />
         </Providers>
       </body>
     </html>

@@ -3,6 +3,7 @@
 import DeviceStatus from '@/components/DeviceStatus'
 import DisplayTime from '@/components/DisplayTime'
 import ThemeToggle from '@/components/ThemeToggle'
+import { isAdminRole } from '@/lib/admin'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -16,6 +17,7 @@ const ResponsiveUI = ({
 }>) => {
   const pathname = usePathname()
   const session = useSession()
+  const isAdmin = isAdminRole(session.data?.user?.role)
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
 
   // Menu links for desktop header
@@ -40,11 +42,21 @@ const ResponsiveUI = ({
       img: '/images/icons/contacts.png',
       path: '/portfolio'
     },
-    {
-      name: 'Contact',
-      img: '/images/icons/mail.png',
-      path: '/contact'
-    },
+    ...(isAdmin
+      ? [
+          {
+            name: 'Mails',
+            img: '/images/icons/gmail.png',
+            path: '/mails'
+          }
+        ]
+      : [
+          {
+            name: 'Contact',
+            img: '/images/icons/mail.png',
+            path: '/contact'
+          }
+        ]),
     {
       name: 'Auth',
       img: `/images/icons/${
@@ -116,13 +128,17 @@ const ResponsiveUI = ({
 
   // Group 3: Communication
   const dockGroup3 = [
-    {
-      name: 'contact',
-      title: 'Contact',
-      img: '/images/icons/macOS-mail.png',
-      path: '/contact'
-    },
-    ...(session.status === 'authenticated'
+    ...(!isAdmin
+      ? [
+          {
+            name: 'contact',
+            title: 'Contact',
+            img: '/images/icons/macOS-mail.png',
+            path: '/contact'
+          }
+        ]
+      : []),
+    ...(isAdmin
       ? [
           {
             name: 'mails',

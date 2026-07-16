@@ -1,6 +1,7 @@
 'use client'
 
 import { IContact } from '@/models/Contact'
+import { isAdminRole } from '@/lib/admin'
 import { formatDate, getInitials, hoursAgo } from '@/utils'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { ChevronLeftIcon } from '@heroicons/react/24/solid'
@@ -8,24 +9,49 @@ import { useSession } from 'next-auth/react'
 import { Montserrat } from 'next/font/google'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import useSWR, { Fetcher } from 'swr'
 
 const montserrat = Montserrat({ subsets: ['latin'], display: 'swap' })
 
 const Mails = () => {
-  const { status } = useSession()
+  const { status, data: session } = useSession()
   const router = useRouter()
+  const isAdmin = isAdminRole(session?.user?.role)
 
   const [selectedMail, setSelectedMail] = useState<IContact | null>(null)
 
-  const fetcher: Fetcher<IContact[], string> = (url) =>
-    fetch(url).then((res) => res.json())
+  const fetcher: Fetcher<IContact[], string> = async (url) => {
+    const res = await fetch(url)
 
-  const { data, error, isLoading, mutate } = useSWR('/api/contact', fetcher)
+    if (!res.ok) {
+      const errorBody = await res.json().catch(() => null)
+      const message =
+        (Array.isArray(errorBody?.msg) && errorBody.msg[0]) ||
+        'Failed to load messages.'
+      throw new Error(message)
+    }
 
-  if (status === 'unauthenticated') {
-    router.push('/')
+    return res.json()
+  }
+
+  const { data, error, isLoading, mutate } = useSWR(
+    isAdmin ? '/api/contact' : null,
+    fetcher
+  )
+
+  useEffect(() => {
+    if (status === 'unauthenticated' || (status === 'authenticated' && !isAdmin)) {
+      router.push('/')
+    }
+  }, [status, isAdmin, router])
+
+  if (
+    status === 'loading' ||
+    status === 'unauthenticated' ||
+    (status === 'authenticated' && !isAdmin)
+  ) {
+    return null
   }
 
   const handleMailClick = async (mailId: string) => {
@@ -120,64 +146,68 @@ const Mails = () => {
 
   return (
     <main
-      className={`flex overflow-hidden h-full w-full xl:max-w-[1024px] sm:pt-6 xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 ${montserrat.className} my-2 sm:my-0`}
+      className={`flex overflow-hidden h-full min-h-0 w-full xl:max-w-[1024px] sm:pt-6 xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 ${montserrat.className} my-2 sm:my-0`}
     >
-      <div className='flex grow h-full rounded-xl shadow-xl overflow-hidden'>
-        <div className='sm:w-[200px] bg-[#F5F5F5] dark:bg-zinc-800 opacity-[97%] lg:w-[300px] w-full relative sidebar overflow-hidden shadow-inner flex flex-col rounded-l-[inherit] sm:rounded-r-none rounded-r-[inherit]'>
-          <div className='border-b border-[#3C3C43]/36 dark:border-zinc-700 border-solid px-4 pt-5 pb-3 hidden sm:flex gap-x-4 items-center hover:bg-[#F5F5F5] dark:hover:bg-zinc-700'>
+      <div className="flex grow h-full min-h-0 rounded-xl shadow-xl overflow-hidden">
+        <div className="sm:w-[200px] bg-[#F5F5F5] dark:bg-zinc-800 opacity-[97%] lg:w-[300px] w-full sidebar overflow-hidden shadow-inner flex flex-col min-h-0 rounded-l-[inherit] sm:rounded-r-none rounded-r-[inherit]">
+          <div className="border-b border-[#3C3C43]/36 dark:border-zinc-700 border-solid px-4 pt-5 pb-3 hidden sm:flex shrink-0 gap-x-4 items-center hover:bg-[#F5F5F5] dark:hover:bg-zinc-700">
             <Image
-              src='/images/icons/gmail.png'
+              src="/images/icons/gmail.png"
               height={60}
               width={60}
-              alt='GMail icon'
+              alt="GMail icon"
             />
-            <div className='flex flex-col'>
-              <h1 className='font-normal text-base text-black dark:text-white'>Inbox</h1>
-              <h3 className='font-normal text-xs text-[#3C3C43]/60 dark:text-gray-400 tracking-tight'>
+            <div className="flex flex-col">
+              <h1 className="font-normal text-base text-black dark:text-white">
+                Inbox
+              </h1>
+              <h3 className="font-normal text-xs text-[#3C3C43]/60 dark:text-gray-400 tracking-tight">
                 Read emails from visitors
               </h3>
             </div>
           </div>
 
           {selectedMail ? (
-            <div className='flex flex-col sm:hidden justify-between items-start border-b border-[#3C3C43]/37 dark:border-zinc-700 border-solid px-4 py-4 gap-y-4 gap-x-4 hover:bg-[#F5F5F5] dark:hover:bg-zinc-700'>
-              <div className='flex justify-between items-center w-full'>
+            <div className="flex flex-col sm:hidden justify-between items-start border-b border-[#3C3C43]/37 dark:border-zinc-700 border-solid px-4 py-4 gap-y-4 gap-x-4 hover:bg-[#F5F5F5] dark:hover:bg-zinc-700">
+              <div className="flex justify-between items-center w-full">
                 <button
-                  className='text-blue-600 dark:text-blue-400 flex items-center gap-x-1'
+                  className="text-blue-600 dark:text-blue-400 flex items-center gap-x-1"
                   onClick={() => setSelectedMail(null)}
                 >
-                  <ChevronLeftIcon className='h-4 w-4' />{' '}
-                  <span className='xs:text-base text-sm'>Back</span>
+                  <ChevronLeftIcon className="h-4 w-4" />{' '}
+                  <span className="xs:text-base text-sm">Back</span>
                 </button>
-                <div className='flex gap-x-4 items-center'>
+                <div className="flex gap-x-4 items-center">
                   {selectedMail.read && (
                     <button
                       onClick={() => handleMarkAsUnread(selectedMail?._id)}
-                      className='block font-medium xs:text-base text-sm text-blue-600 dark:text-blue-400'
+                      className="block font-medium xs:text-base text-sm text-blue-600 dark:text-blue-400"
                     >
                       Mark as Unread
                     </button>
                   )}
                   <button onClick={() => handleDeleteMail(selectedMail?._id)}>
-                    <TrashIcon className='xs:h-5 xs:w-5 h-4 w-4 text-rose-600 stroke-2' />
+                    <TrashIcon className="xs:h-5 xs:w-5 h-4 w-4 text-rose-600 stroke-2" />
                   </button>
                 </div>
               </div>
-              <h2 className='xs:text-lg text-base font-bold text-left dark:text-white'>
+              <h2 className="xs:text-lg text-base font-bold text-left dark:text-white">
                 {selectedMail.subject}
               </h2>
             </div>
           ) : (
-            <div className='border-b border-[#3C3C43]/36 dark:border-zinc-700 border-solid px-4 pt-5 pb-3 flex sm:hidden gap-x-4 items-center hover:bg-[#F5F5F5] dark:hover:bg-zinc-700'>
+            <div className="border-b border-[#3C3C43]/36 dark:border-zinc-700 border-solid px-4 pt-5 pb-3 flex sm:hidden gap-x-4 items-center hover:bg-[#F5F5F5] dark:hover:bg-zinc-700">
               <Image
-                src='/images/icons/gmail.png'
+                src="/images/icons/gmail.png"
                 height={60}
                 width={60}
-                alt='GMail icon'
+                alt="GMail icon"
               />
-              <div className='flex flex-col'>
-                <h1 className='font-normal text-base text-black dark:text-white'>Inbox</h1>
-                <h3 className='font-normal text-xs text-[#3C3C43]/60 dark:text-gray-400 tracking-tight'>
+              <div className="flex flex-col">
+                <h1 className="font-normal text-base text-black dark:text-white">
+                  Inbox
+                </h1>
+                <h3 className="font-normal text-xs text-[#3C3C43]/60 dark:text-gray-400 tracking-tight">
                   Read emails from visitors
                 </h3>
               </div>
@@ -185,85 +215,89 @@ const Mails = () => {
           )}
 
           {isLoading && (
-            <div className='bg-white dark:bg-zinc-800 px-4 py-2'>
-              <h3 className='text-sm font-medium dark:text-white'>Fetching data...</h3>
+            <div className="bg-white dark:bg-zinc-800 px-4 py-2">
+              <h3 className="text-sm font-medium dark:text-white">
+                Fetching data...
+              </h3>
             </div>
           )}
           {error && (
-            <div className='bg-white dark:bg-zinc-800 px-4 py-2'>
-              <h3 className='text-sm font-medium text-red-600'>
+            <div className="bg-white dark:bg-zinc-800 px-4 py-2">
+              <h3 className="text-sm font-medium text-red-600">
                 Error: {error}
               </h3>
             </div>
           )}
           {data && data?.length > 0 && (
             <>
-              {/* hidden sm */}
-              <div className='bg-white dark:bg-zinc-800 py-2 gap-y-2 relative w-full hidden sm:flex flex-col'>
-                {data.map((mail, index) => (
-                  <Fragment key={mail._id}>
-                    <button
-                      className='flex px-4 gap-x-2 cursor-pointer py-2 w-full relative overflow-hidden'
-                      onClick={() => handleMailClick(mail._id)}
-                    >
-                      <div className='block'>
-                        <div className='h-[50px] w-[50px] rounded-full relative'>
-                          <Image
-                            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                            className='rounded-full object-cover object-center'
-                            src={`https://placehold.co/50x50/${
-                              mail.avatarColor
-                            }/png?text=${getInitials(mail.fullName)}`}
-                            alt={mail.fullName}
-                            fill
-                          />
+              {/* desktop inbox list */}
+              <div className="hidden sm:block flex-1 min-h-0 overflow-y-auto bg-white dark:bg-zinc-800">
+                <div className="py-2">
+                  {data.map((mail, index) => (
+                    <Fragment key={mail._id}>
+                      <button
+                        className="flex shrink-0 px-4 gap-x-2 cursor-pointer py-2 w-full relative overflow-hidden"
+                        onClick={() => handleMailClick(mail._id)}
+                      >
+                        <div className="block">
+                          <div className="h-[50px] w-[50px] rounded-full relative">
+                            <Image
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                              className="rounded-full object-cover object-center"
+                              src={`https://placehold.co/50x50/${
+                                mail.avatarColor
+                              }/png?text=${getInitials(mail.fullName)}`}
+                              alt={mail.fullName}
+                              fill
+                            />
+                          </div>
                         </div>
-                      </div>
 
-                      <div className='flex flex-col items-start overflow-hidden relative w-full'>
-                        <div className='flex justify-between items-center w-full gap-x-2'>
+                        <div className="flex flex-col items-start overflow-hidden relative w-full">
+                          <div className="flex justify-between items-center w-full gap-x-2">
+                            <h3
+                              className={`text-sm truncate ${
+                                mail.read ? 'font-normal' : 'font-bold'
+                              }`}
+                            >
+                              {mail.fullName}
+                            </h3>
+                            <span
+                              className={`text-xs ${
+                                mail.read ? 'font-normal' : 'font-bold'
+                              } text-nowrap`}
+                            >
+                              {formatDate(mail.createdAt)}
+                            </span>
+                          </div>
                           <h3
-                            className={`text-sm truncate ${
-                              mail.read ? 'font-normal' : 'font-bold'
-                            }`}
+                            className={`text-sm text-left ${
+                              mail.read ? 'font-normal' : 'font-medium'
+                            } text-left truncate w-full`}
                           >
-                            {mail.fullName}
+                            {mail.subject}
                           </h3>
-                          <span
-                            className={`text-xs ${
-                              mail.read ? 'font-normal' : 'font-bold'
-                            } text-nowrap`}
-                          >
-                            {formatDate(mail.createdAt)}
-                          </span>
+                          <h5 className="text-xs text-left font-normal truncate w-full">
+                            {mail.message}
+                          </h5>
                         </div>
-                        <h3
-                          className={`text-sm text-left ${
-                            mail.read ? 'font-normal' : 'font-medium'
-                          } text-left truncate w-full`}
-                        >
-                          {mail.subject}
-                        </h3>
-                        <h5 className='text-xs text-left font-normal truncate w-full'>
-                          {mail.message}
-                        </h5>
-                      </div>
-                    </button>
-                    {data.length > 1 && index < data.length - 1 && <hr />}
-                  </Fragment>
-                ))}
+                      </button>
+                      {data.length > 1 && index < data.length - 1 && <hr />}
+                    </Fragment>
+                  ))}
+                </div>
               </div>
 
-              {/* when iOS */}
+              {/* mobile */}
               {selectedMail ? (
-                <div className='sm:hidden flex flex-col gap-x-10 w-full h-auto p-4'>
-                  <div className='flex justify-between'>
-                    <div className='flex gap-x-4'>
-                      <div className='block'>
-                        <div className='h-[50px] w-[50px] rounded-full relative'>
+                <div className="sm:hidden flex flex-col gap-x-10 w-full h-auto p-4">
+                  <div className="flex justify-between">
+                    <div className="flex gap-x-4">
+                      <div className="block">
+                        <div className="h-[50px] w-[50px] rounded-full relative">
                           <Image
-                            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                            className='rounded-full object-cover object-center'
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="rounded-full object-cover object-center"
                             src={`https://placehold.co/50x50/${
                               selectedMail.avatarColor
                             }/png?text=${getInitials(selectedMail.fullName)}`}
@@ -272,17 +306,17 @@ const Mails = () => {
                           />
                         </div>
                       </div>
-                      <div className='flex flex-col'>
-                        <h3 className='font-bold text-base text-black dark:text-white'>
+                      <div className="flex flex-col">
+                        <h3 className="font-bold text-base text-black dark:text-white">
                           {selectedMail.fullName}
                         </h3>
-                        <span className='font-normal text-sm text-gray-600 dark:text-gray-300'>
+                        <span className="font-normal text-sm text-gray-600 dark:text-gray-300">
                           {`<${selectedMail.email}>`}
                         </span>
                       </div>
                     </div>
-                    <div className='flex gap-x-1'>
-                      <span className='text-sm font-normal text-gray-600 dark:text-gray-300 tracking-tighter'>
+                    <div className="flex gap-x-1">
+                      <span className="text-sm font-normal text-gray-600 dark:text-gray-300 tracking-tighter">
                         {hoursAgo(selectedMail.createdAt) > 24 ? (
                           formatDate(selectedMail.createdAt)
                         ) : (
@@ -296,25 +330,25 @@ const Mails = () => {
                       </span>
                     </div>
                   </div>
-                  <div className='pt-10 px-2'>
-                    <p className='text-gray-800 dark:text-gray-200 text-xl font-medium'>
+                  <div className="pt-10 px-2">
+                    <p className="text-gray-800 dark:text-gray-200 text-xl font-medium">
                       {selectedMail.message}
                     </p>
                   </div>
                 </div>
               ) : (
-                <div className='bg-white dark:bg-zinc-800 py-2 gap-y-2 relative w-full flex flex-col sm:hidden h-full overflow-y-auto'>
+                <div className="bg-white dark:bg-zinc-800 py-2 relative w-full flex flex-col sm:hidden flex-1 min-h-0 overflow-y-auto">
                   {data.map((mail, index) => (
                     <Fragment key={mail._id}>
                       <button
-                        className='flex px-4 gap-x-2 cursor-pointer py-2 w-full relative'
+                        className="flex shrink-0 px-4 gap-x-2 cursor-pointer py-2 w-full relative"
                         onClick={() => handleMailClick(mail._id)}
                       >
-                        <div className='block'>
-                          <div className='h-[50px] w-[50px] rounded-full relative'>
+                        <div className="block">
+                          <div className="h-[50px] w-[50px] rounded-full relative">
                             <Image
-                              sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                              className='rounded-full object-cover object-center'
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                              className="rounded-full object-cover object-center"
                               src={`https://placehold.co/50x50/${
                                 mail.avatarColor
                               }/png?text=${getInitials(mail.fullName)}`}
@@ -324,8 +358,8 @@ const Mails = () => {
                           </div>
                         </div>
 
-                        <div className='flex flex-col items-start relative w-full'>
-                          <div className='flex justify-between items-center w-full gap-x-2'>
+                        <div className="flex flex-col items-start relative w-full">
+                          <div className="flex justify-between items-center w-full gap-x-2">
                             <h3
                               className={`text-sm truncate ${
                                 mail.read ? 'font-normal' : 'font-bold'
@@ -358,27 +392,27 @@ const Mails = () => {
             </>
           )}
         </div>
-        <div className='flex flex-col bg-white/95 dark:bg-zinc-800/95 flex-1 h-[inherit] panel overflow-hidden relative rounded-r-[inherit]'>
+        <div className="flex flex-col bg-white/95 dark:bg-zinc-800/95 flex-1 h-[inherit] panel overflow-hidden rounded-r-[inherit]">
           <div
             className={`border-b border-[#3C3C43]/36 dark:border-zinc-700 border-solid px-4 pt-2.5 pb-3 flex gap-x-4 h-[92px] flex-col justify-end`}
           >
             {selectedMail && (
-              <div className='flex justify-between items-center'>
-                <h2 className='md:text-xl sm:text-base xl:text-2xl font-bold flex-1 dark:text-white'>
+              <div className="flex justify-between items-center">
+                <h2 className="md:text-xl sm:text-base xl:text-2xl font-bold flex-1 dark:text-white">
                   {selectedMail.subject}
                 </h2>
 
-                <div className='flex gap-x-4 items-center'>
+                <div className="flex gap-x-4 items-center">
                   {selectedMail.read && (
                     <button
                       onClick={() => handleMarkAsUnread(selectedMail?._id)}
-                      className='block font-medium sm:text-sm md:text-base text-blue-600 dark:text-blue-400'
+                      className="block font-medium sm:text-sm md:text-base text-blue-600 dark:text-blue-400"
                     >
                       Mark as Unread
                     </button>
                   )}
                   <button onClick={() => handleDeleteMail(selectedMail?._id)}>
-                    <TrashIcon className='md:h-5 md:w-5 sm:h-4 sm:w-4 text-rose-600 stroke-2' />
+                    <TrashIcon className="md:h-5 md:w-5 sm:h-4 sm:w-4 text-rose-600 stroke-2" />
                   </button>
                 </div>
               </div>
@@ -386,14 +420,14 @@ const Mails = () => {
           </div>
 
           {selectedMail ? (
-            <div className='flex flex-col gap-x-10 w-full h-auto p-4'>
-              <div className='flex justify-between'>
-                <div className='flex gap-x-4'>
-                  <div className='block'>
-                    <div className='h-[50px] w-[50px] rounded-full relative'>
+            <div className="flex flex-col gap-x-10 w-full h-auto p-4">
+              <div className="flex justify-between">
+                <div className="flex gap-x-4">
+                  <div className="block">
+                    <div className="h-[50px] w-[50px] rounded-full relative">
                       <Image
-                        sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                        className='rounded-full object-cover object-center'
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="rounded-full object-cover object-center"
                         src={`https://placehold.co/50x50/${
                           selectedMail.avatarColor
                         }/png?text=${getInitials(selectedMail.fullName)}`}
@@ -402,25 +436,25 @@ const Mails = () => {
                       />
                     </div>
                   </div>
-                  <div className='flex flex-col'>
-                    <div className='flex gap-x-4'>
-                      <h3 className='font-bold sm:text-sm md:text-base  text-black dark:text-white'>
+                  <div className="flex flex-col">
+                    <div className="flex gap-x-4">
+                      <h3 className="font-bold sm:text-sm md:text-base  text-black dark:text-white">
                         {selectedMail.fullName}
                       </h3>
-                      <span className='font-normal sm:text-xs md:text-sm text-gray-600 dark:text-gray-300 sm:hidden md:block'>
+                      <span className="font-normal sm:text-xs md:text-sm text-gray-600 dark:text-gray-300 sm:hidden md:block">
                         {`<${selectedMail.email}>`}
                       </span>
                     </div>
-                    <span className='text-gray-600 dark:text-gray-300 text-sm font-normal hidden md:block'>
+                    <span className="text-gray-600 dark:text-gray-300 text-sm font-normal hidden md:block">
                       to Jerald
                     </span>
-                    <span className='font-normal sm:block md:hidden sm:text-xs md:text-sm text-gray-600 dark:text-gray-300'>
+                    <span className="font-normal sm:block md:hidden sm:text-xs md:text-sm text-gray-600 dark:text-gray-300">
                       {`<${selectedMail.email}>`}
                     </span>
                   </div>
                 </div>
-                <div className='flex gap-x-1'>
-                  <span className='md:text-sm sm:text-xs font-normal text-gray-600 dark:text-gray-300 tracking-tighter'>
+                <div className="flex gap-x-1">
+                  <span className="md:text-sm sm:text-xs font-normal text-gray-600 dark:text-gray-300 tracking-tighter">
                     {hoursAgo(selectedMail.createdAt) > 24 ? (
                       formatDate(selectedMail.createdAt)
                     ) : (
@@ -434,18 +468,18 @@ const Mails = () => {
                   </span>
                 </div>
               </div>
-              <div className='pt-10 lg:px-16 sm:px-2'>
-                <p className='text-gray-800 dark:text-gray-200 text-xl font-medium'>
+              <div className="pt-10 lg:px-16 sm:px-2">
+                <p className="text-gray-800 dark:text-gray-200 text-xl font-medium">
                   {selectedMail.message}
                 </p>
               </div>
             </div>
           ) : (
-            <div className='flex items-center flex-col justify-center gap-y-2 grow'>
-              <h4 className='text-base font-medium text-slate-600 dark:text-slate-400'>
+            <div className="flex items-center flex-col justify-center gap-y-2 grow">
+              <h4 className="text-base font-medium text-slate-600 dark:text-slate-400">
                 Nothing to see here.
               </h4>
-              <p className='text-xs font-normal text-slate-500 dark:text-slate-400'>
+              <p className="text-xs font-normal text-slate-500 dark:text-slate-400">
                 Please select one of the emails.
               </p>
             </div>

@@ -125,6 +125,10 @@ html.dark body {
 }
 
 @utility sidebar {
+  position: relative;
+}
+
+@scope (.sidebar) {
   &::before {
     content: '';
     position: absolute;
@@ -141,6 +145,10 @@ html.dark body {
 }
 
 @utility panel {
+  position: relative;
+}
+
+@scope (.panel) {
   &::before {
     content: '';
     position: absolute;
@@ -445,7 +453,6 @@ p {
 [class*='prose'] strong,
 [class*='prose'] em,
 [class*='prose'] a {
-  word-break: break-word !important;
   overflow-wrap: break-word !important;
   max-width: 100% !important;
 }
@@ -460,7 +467,7 @@ p {
   font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
   font-size: 0.875em !important;
   border: 1px solid #404040 !important;
-  word-break: break-word !important;
+  overflow-wrap: break-word !important;
 }
 
 /* Fix prose container overflow */
@@ -486,7 +493,6 @@ p code {
   max-width: 100% !important;
   display: inline !important;
   overflow-wrap: break-word !important;
-  word-break: break-word !important;
   vertical-align: baseline !important;
 }
 
@@ -501,7 +507,6 @@ span.markdown-inline-code {
   font-size: 0.875em !important;
   border: 1px solid #404040 !important;
   white-space: normal !important;
-  word-break: break-word !important;
   overflow-wrap: break-word !important;
   max-width: 100% !important;
   display: inline !important;
@@ -869,4 +874,108 @@ pre[class='language-markup'] code,
 .prose pre:has(+ .language-powershell),
 .prose pre + pre {
   margin-top: 0.5rem !important;
+}
+
+/* Apple-style toast notifications (macOS / iOS vibrancy) */
+.apple-toast-container.Toastify__toast-container {
+  width: min(22.5rem, calc(100vw - 2rem));
+  padding: 0;
+  z-index: 9999;
+}
+
+.apple-toast-container.Toastify__toast-container--bottom-right {
+  bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+  right: max(1.25rem, env(safe-area-inset-right, 0px));
+}
+
+.apple-toast-container .apple-toast.Toastify__toast {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 0.5px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.5) inset,
+    0 8px 28px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.06);
+  color: #1d1d1f;
+  cursor: pointer;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Inter,
+    sans-serif;
+  margin-bottom: 0.625rem;
+  min-height: 3.25rem;
+  overflow: hidden;
+  padding: 0.75rem 0.875rem;
+}
+
+.dark .apple-toast-container .apple-toast.Toastify__toast {
+  background: rgba(44, 44, 46, 0.82);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.06) inset,
+    0 8px 28px rgba(0, 0, 0, 0.45),
+    0 2px 8px rgba(0, 0, 0, 0.25);
+  color: #f5f5f7;
+}
+
+.apple-toast-container .apple-toast .Toastify__toast-body,
+.apple-toast-container .Toastify__toast-body {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  margin: 0;
+  padding: 0;
+}
+
+.apple-toast-container .Toastify__toast-icon {
+  align-self: flex-start;
+  flex-shrink: 0;
+  margin-inline-end: 0.75rem;
+  margin-top: 0.0625rem;
+  width: auto;
+}
+
+.apple-toast-container .Toastify__toast--success,
+.apple-toast-container .Toastify__toast--error,
+.apple-toast-container .Toastify__toast--warning,
+.apple-toast-container .Toastify__toast--info,
+.apple-toast-container .Toastify__toast--default {
+  background: rgba(255, 255, 255, 0.78);
+  color: #1d1d1f;
+}
+
+.dark .apple-toast-container .Toastify__toast--success,
+.dark .apple-toast-container .Toastify__toast--error,
+.dark .apple-toast-container .Toastify__toast--warning,
+.dark .apple-toast-container .Toastify__toast--info,
+.dark .apple-toast-container .Toastify__toast--default {
+  background: rgba(44, 44, 46, 0.82);
+  color: #f5f5f7;
+}
+
+@media (max-width: 640px) {
+  .apple-toast-container.Toastify__toast-container--bottom-right {
+    bottom: max(5.5rem, calc(env(safe-area-inset-bottom, 0px) + 4.5rem));
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+  }
+
+  .apple-toast-container .apple-toast.Toastify__toast {
+    border-radius: 16px;
+    min-height: 3.5rem;
+    padding: 0.875rem 1rem;
+  }
+
+  .apple-toast-container .apple-toast .Toastify__toast-body,
+  .apple-toast-container .Toastify__toast-body {
+    font-size: 0.875rem;
+  }
+
+  .apple-toast-container .Toastify__toast-icon {
+    margin-inline-end: 0.875rem;
+  }
 }
