@@ -2,9 +2,13 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { isAdminRole } from '@/lib/admin'
+import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 
 const AboutMeWidget = () => {
+  const { data: session } = useSession()
+  const isAdmin = isAdminRole(session?.user?.role)
   const [isLoading] = useState(false) // Set to true if you want to test loading state
 
   if (isLoading) {
@@ -282,12 +286,21 @@ const AboutMeWidget = () => {
           >
             View Portfolio
           </Link>
-          <Link
-            href="/contact"
-            className="w-full bg-white/50 hover:bg-white/70 dark:bg-gray-800/50 dark:hover:bg-gray-800/70 text-gray-900 dark:text-white py-2 xl:py-3 px-3 sm:px-4 xl:px-6 rounded-lg xl:rounded-xl font-medium transition-colors text-center block text-xs sm:text-sm xl:text-base border border-gray-200 dark:border-gray-700"
-          >
-            Get in Touch
-          </Link>
+          {isAdmin ? (
+            <Link
+              href="/mails"
+              className="w-full bg-white/50 hover:bg-white/70 dark:bg-gray-800/50 dark:hover:bg-gray-800/70 text-gray-900 dark:text-white py-2 xl:py-3 px-3 sm:px-4 xl:px-6 rounded-lg xl:rounded-xl font-medium transition-colors text-center block text-xs sm:text-sm xl:text-base border border-gray-200 dark:border-gray-700"
+            >
+              View Mails
+            </Link>
+          ) : (
+            <Link
+              href="/contact"
+              className="w-full bg-white/50 hover:bg-white/70 dark:bg-gray-800/50 dark:hover:bg-gray-800/70 text-gray-900 dark:text-white py-2 xl:py-3 px-3 sm:px-4 xl:px-6 rounded-lg xl:rounded-xl font-medium transition-colors text-center block text-xs sm:text-sm xl:text-base border border-gray-200 dark:border-gray-700"
+            >
+              Get in Touch
+            </Link>
+          )}
         </div>
 
         {/* Availability notice - hide on very small screens */}

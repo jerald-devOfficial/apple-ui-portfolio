@@ -27,6 +27,11 @@ type Data = {
   nextPage: string
 }
 
+const NEWS_BASE_URL = `https://newsdata.io/api/1/news?apikey=${process.env.NEXT_PUBLIC_NEWS_DATA_API_KEY}&q=Programming,%20software%20development,%20Technology`
+
+const buildNewsUrl = (page: string) =>
+  page ? `${NEWS_BASE_URL}&page=${page}` : NEWS_BASE_URL
+
 const News = () => {
   const [currentPage, setCurrentPage] = useState('')
   const [nextPage, setNextPage] = useState('')
@@ -44,10 +49,6 @@ const News = () => {
   }
 
   const fetcher: Fetcher<Result[], string> = async (url: string) => {
-    if (currentPage !== '') {
-      url += `&page=${currentPage}`
-    }
-
     const response = await fetch(url)
     if (!response.ok) {
       throw new Error(`Failed to fetch news. Status: ${response.status}`)
@@ -75,21 +76,17 @@ const News = () => {
     return uniqueNews
   }
 
-  const { data, mutate, error, isLoading } = useSWR(
-    `https://newsdata.io/api/1/news?apikey=${process.env.NEXT_PUBLIC_NEWS_DATA_API_KEY}&q=Programming,%20software%20development,%20Technology`,
-    fetcher
-  )
+  const { data, error, isLoading } = useSWR(buildNewsUrl(currentPage), fetcher)
 
-  const handleNextPage = async () => {
-    await setCurrentPage(nextPage)
-    mutate()
+  const handleNextPage = () => {
+    setCurrentPage(nextPage)
   }
 
   return (
     <main
       className={`flex overflow-hidden h-full w-full xl:max-w-[1024px] sm:pt-6 xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 py-2 sm:py-0`}
     >
-      <div className='w-[768px] flex flex-col bg-white/95 dark:bg-zinc-900 flex-1 h-[inherit] panel shadow-xl overflow-hidden relative rounded-xl'>
+      <div className='w-[768px] flex flex-col bg-white/95 dark:bg-zinc-900 flex-1 h-[inherit] panel shadow-xl overflow-hidden rounded-xl'>
         <div
           className={`border-b border-[#3C3C43]/36 dark:border-zinc-700 border-solid px-4 flex gap-x-4 h-[92px] items-end`}
         >

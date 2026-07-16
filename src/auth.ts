@@ -5,6 +5,7 @@ import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
+  secret: process.env.AUTH_SECRET,
   providers: [
     GoogleProvider({
       clientId: process.env.AUTH_GOOGLE_ID!,
@@ -17,6 +18,36 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     })
   ],
   callbacks: {
+    async jwt({ token, trigger }) {
+      if (!token.email) {
+        return token
+      }
+
+      if (trigger === 'signIn' || trigger === 'signUp' || !token.role) {
+        await dbConnect()
+
+        const admin = await Admin.findOne({
+          email: (token.email as string).toLowerCase()
+        }).lean()
+
+        if (admin) {
+          token.role = 'admin'
+          token.sub = admin._id.toString()
+          return token
+        }
+
+        const user = await User.findOne({
+          email: (token.email as string).toLowerCase()
+        }).lean()
+
+        if (user) {
+          token.role = 'user'
+          token.sub = user._id.toString()
+        }
+      }
+
+      return token
+    },
     async signIn({ user, account, profile }) {
       // Add debug logging
       console.log('Sign-in attempt:', {
@@ -68,30 +99,17 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       return true
     },
-    async session({ session }) {
-      if (session?.user?.email) {
-        await dbConnect()
+    async session({ session, token }) {
+      if (session.user) {
+        if (token.role === 'admin' || token.role === 'user') {
+          session.user.role = token.role
+        }
 
-        // Check if user is admin
-        const admin = await Admin.findOne({
-          email: session.user.email.toLowerCase()
-        }).lean()
-
-        if (admin) {
-          session.user.role = 'admin'
-          session.user.id = admin._id.toString()
-        } else {
-          // Check if regular user
-          const user = await User.findOne({
-            email: session.user.email.toLowerCase()
-          }).lean()
-
-          if (user) {
-            session.user.role = 'user'
-            session.user.id = user._id.toString()
-          }
+        if (token.sub) {
+          session.user.id = token.sub
         }
       }
+
       return session
     }
   },
