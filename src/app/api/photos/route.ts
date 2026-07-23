@@ -1,4 +1,10 @@
 import { auth } from '@/auth'
+import { resolveCapturedAt } from '@/lib/photo-metadata.server'
+import { getPhotoDisplayDate } from '@/lib/photo-metadata'
+import {
+  resolveContentType,
+  validatePhotoFile
+} from '@/lib/photos'
 import { uploadFileToR2 } from '@/lib/r2'
 import { Photo } from '@/models/Photo'
 import dbConnect from '@/utils/db'
@@ -12,12 +18,15 @@ export const GET = async () => {
 
     let photos
     if (session?.user?.role === 'admin') {
-      photos = await Photo.find().sort({ createdAt: -1 }).lean()
+      photos = await Photo.find().lean()
     } else {
-      photos = await Photo.find({ isPublic: true })
-        .sort({ createdAt: -1 })
-        .lean()
+      photos = await Photo.find({ isPublic: true }).lean()
     }
+
+    photos.sort(
+      (a, b) =>
+        getPhotoDisplayDate(b).getTime() - getPhotoDisplayDate(a).getTime()
+    )
 
     return NextResponse.json(photos)
   } catch (error) {
@@ -45,6 +54,7 @@ export const POST = async (req: NextRequest) => {
     const title = formData.get('title') as string
     const description = formData.get('description') as string
     const isPublic = formData.get('isPublic') === 'true'
+    const manualCapturedAt = formData.get('capturedAt') as string | null
 
     if (!file || !title) {
       return NextResponse.json(
@@ -53,9 +63,15 @@ export const POST = async (req: NextRequest) => {
       )
     }
 
+    const validationError = validatePhotoFile(file)
+    if (validationError) {
+      return NextResponse.json({ error: validationError }, { status: 400 })
+    }
+
     // Convert file to buffer
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
+    const contentType = resolveContentType(file)
 
     // Generate unique key for the file
     const timestamp = Date.now()
@@ -65,7 +81,13 @@ export const POST = async (req: NextRequest) => {
     )}`
 
     // Upload to R2
-    const imageUrl = await uploadFileToR2(buffer, key, file.type)
+    const imageUrl = await uploadFileToR2(buffer, key, contentType)
+
+    const capturedAt = await resolveCapturedAt(
+      buffer,
+      file.name,
+      manualCapturedAt
+    )
 
     // Save to database
     const photo = new Photo({
@@ -74,7 +96,8 @@ export const POST = async (req: NextRequest) => {
       imageUrl,
       imageKey: key,
       uploadedBy: session.user.email,
-      isPublic
+      isPublic,
+      ...(capturedAt ? { capturedAt } : {})
     })
 
     await photo.save()
