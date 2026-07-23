@@ -4579,6 +4579,7 @@ __metadata:
     date-fns: "npm:^3.6.0"
     eslint: "npm:^8"
     eslint-config-next: "npm:^15.0.4"
+    exif-reader: "npm:^2.0.3"
     immer: "npm:^11.1.8"
     isomorphic-dompurify: "npm:^2.22.0"
     mailchecker: "npm:^6.0.20"
@@ -6941,6 +6942,13 @@ __metadata:
     signal-exit: "npm:^4.1.0"
     strip-final-newline: "npm:^3.0.0"
   checksum: 10c0/2c52d8775f5bf103ce8eec9c7ab3059909ba350a5164744e9947ed14a53f51687c040a250bda833f906d1283aa8803975b84e6c8f7a7c42f99dc8ef80250d1af
+  languageName: node
+  linkType: hard
+
+"exif-reader@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "exif-reader@npm:2.0.3"
+  checksum: 10c0/c27b02c7ed386d0029207de1294cde2c241e616ee9ed766558105c44eb72568d0eb216e06c96a954f0be2514aafc2ad09bc247ba8478a469742a630f76d62d23
   languageName: node
   linkType: hard
 

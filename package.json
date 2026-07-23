@@ -9,7 +9,8 @@
     "dev": "next dev -p 4000 --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "node --test scripts/photo-metadata.test.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.837.0",
@@ -24,6 +25,7 @@
     "@web3modal/wagmi": "^5.1.11",
     "chess.js": "^1.4.0",
     "date-fns": "^3.6.0",
+    "exif-reader": "^2.0.3",
     "immer": "^11.1.8",
     "isomorphic-dompurify": "^2.22.0",
     "mailchecker": "^6.0.20",

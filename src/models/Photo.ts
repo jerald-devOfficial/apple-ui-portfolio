@@ -8,6 +8,7 @@ export interface IPhoto extends Document {
   imageKey: string
   uploadedBy: string
   isPublic: boolean
+  capturedAt?: Date
   createdAt: Date
   updatedAt: Date
 }
@@ -38,6 +39,9 @@ const photoSchema = new Schema(
     isPublic: {
       type: Boolean,
       default: true
+    },
+    capturedAt: {
+      type: Date
     }
   },
   { timestamps: true }
