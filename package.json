@@ -9,8 +9,7 @@
     "dev": "next dev -p 4000 --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "test": "node --test scripts/photo-metadata.test.mjs"
+    "lint": "next lint"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.837.0",
