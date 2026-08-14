@@ -73,7 +73,7 @@ const MyMetaMask = () => {
                 <div className="flex gap-x-2 items-start">
                   <div className="rounded-full block bg-gray-200 dark:bg-zinc-800 p-1.5 relative">
                     <EthereumIcon className="h-3.5 w-3.5" />
-                    <div className="-top-1 -right-0 absolute rounded-full bg-gray-50 dark:bg-zinc-900 p-0.5">
+                    <div className="-top-1 right-0 absolute rounded-full bg-gray-50 dark:bg-zinc-900 p-0.5">
                       <EthereumIcon className="h-2 w-2" />
                     </div>
                   </div>
