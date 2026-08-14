@@ -63,7 +63,7 @@ const DiaryCard: FC<DiaryCardProps> = ({
       <div className="group rounded-xl overflow-hidden bg-white dark:bg-zinc-800 shadow-sm border border-gray-200 dark:border-zinc-700 hover:shadow-md transition duration-300 h-full flex flex-col">
         <div className="p-5 flex flex-col h-full">
           <div className="flex justify-between items-start mb-2">
-            <Link href={`/diary/${diary._id}`} className="flex-grow min-w-0">
+            <Link href={`/diary/${diary._id}`} className="grow min-w-0">
               <h3 className="font-medium text-lg text-blue-500 dark:text-blue-400 group-hover:text-blue-600 dark:group-hover:text-blue-500 transition-colors truncate">
                 {diary.title}
                 {isOwner && (
@@ -124,7 +124,7 @@ const DiaryCard: FC<DiaryCardProps> = ({
             </span>
           </div>
 
-          <div className="flex-grow flex flex-col">
+          <div className="grow flex flex-col">
             <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3">
               {contentPreview}
             </p>

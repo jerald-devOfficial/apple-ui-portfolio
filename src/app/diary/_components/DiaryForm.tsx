@@ -1,11 +1,8 @@
 'use client'
 
-import {
-  createDiaryAction,
-  updateDiaryAction
-} from '@/app/diary/actions'
-import { initialDiaryState } from '@/app/diary/state'
 import DiarySaveButton from '@/app/diary/_components/DiarySaveButton'
+import { createDiaryAction, updateDiaryAction } from '@/app/diary/actions'
+import { initialDiaryState } from '@/app/diary/state'
 import TinyMCEEditor from '@/components/TinyMCEEditor'
 import { IDiary } from '@/models/Diary'
 import { useRouter } from 'next/navigation'
@@ -41,7 +38,7 @@ const DiaryForm = ({ diary }: DiaryFormProps) => {
   }
 
   return (
-    <div className="flex-grow overflow-y-auto p-4 sm:p-6 bg-white/80 dark:bg-zinc-900/80">
+    <div className="grow overflow-y-auto p-4 sm:p-6 bg-white/80 dark:bg-zinc-900/80">
       <div className="max-w-3xl mx-auto">
         <div className="bg-white dark:bg-zinc-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-zinc-700">
           <div className="p-6">
