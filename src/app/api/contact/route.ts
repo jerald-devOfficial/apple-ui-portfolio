@@ -1,14 +1,7 @@
-import {
-  contactFormSchema,
-  isTurnstileConfigured
-} from '@/lib/contact-validation'
-import { sendContactNotification } from '@/lib/email'
+import { processContactSubmission } from '@/lib/process-contact'
 import { requireAdminSession, unauthorizedResponse } from '@/lib/require-admin'
-import { verifyTurnstileToken } from '@/lib/turnstile'
 import { Contact } from '@/models/Contact'
-import { getRandomHexColor } from '@/utils'
 import dbConnect from '@/utils/db'
-import mongoose from 'mongoose'
 import { NextResponse } from 'next/server'
 
 const getClientIp = (req: Request) => {
@@ -29,82 +22,19 @@ export async function POST(req: Request) {
     )
   }
 
-  const validated = contactFormSchema.safeParse(body)
+  const result = await processContactSubmission({
+    body,
+    clientIp: getClientIp(req)
+  })
 
-  if (!validated.success) {
-    const errorList = validated.error.issues.map((issue) => issue.message)
-    return NextResponse.json({ msg: errorList, success: false }, { status: 400 })
-  }
-
-  const { fullName, email, message, subject, website, turnstileToken } =
-    validated.data
-
-  if (website) {
-    return NextResponse.json({
-      msg: ['Message sent successfully'],
-      success: true,
-      emailSent: false
-    })
-  }
-
-  if (isTurnstileConfigured()) {
-    const turnstileResult = await verifyTurnstileToken(
-      turnstileToken ?? '',
-      getClientIp(req)
-    )
-
-    if (!turnstileResult.success) {
-      return NextResponse.json(
-        {
-          msg: [turnstileResult.error ?? 'Security verification failed.'],
-          success: false
-        },
-        { status: 403 }
-      )
-    }
-  }
-
-  const avatarColor = getRandomHexColor() + '/' + getRandomHexColor()
-
-  try {
-    await dbConnect()
-
-    await Contact.create({ fullName, email, message, avatarColor, subject })
-
-    const { error, skipped } = await sendContactNotification({
-      fullName,
-      email,
-      subject,
-      message
-    })
-
-    const emailSent = !skipped && !error
-
-    return NextResponse.json({
-      msg: emailSent
-        ? ['Message sent successfully']
-        : [
-            'Your message was received, but the email notification could not be delivered yet.'
-          ],
-      success: true,
-      emailSent
-    })
-  } catch (error) {
-    if (error instanceof mongoose.Error.ValidationError) {
-      const errorList = []
-      for (const e in error.errors) {
-        errorList.push(error.errors[e].message)
-      }
-      console.error('contact: validation failed', errorList)
-      return NextResponse.json({ msg: errorList, success: false }, { status: 400 })
-    }
-
-    console.error('contact: failed to save message', error)
-    return NextResponse.json({
-      msg: ['Unable to send message.'],
-      success: false
-    })
-  }
+  return NextResponse.json(
+    {
+      msg: result.msg,
+      success: result.success,
+      emailSent: result.emailSent
+    },
+    { status: result.status }
+  )
 }
 
 export async function GET() {
