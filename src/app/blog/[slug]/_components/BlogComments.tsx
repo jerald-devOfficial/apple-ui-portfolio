@@ -1,104 +1,122 @@
 'use client'
 
+import { fetcher } from '@/lib/fetcher'
 import { IComment } from '@/models/Comment'
 import { HeartIcon } from '@heroicons/react/24/outline'
 import { formatDistanceToNow } from 'date-fns'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
-import { useCallback, useEffect, useState } from 'react'
+import { useOptimistic, useState, useTransition } from 'react'
 import { toast } from 'react-toastify'
+import useSWR from 'swr'
 
 interface BlogCommentsProps {
   blogId: string
 }
 
-interface Session {
-  user?: {
-    email: string
-    name: string
-  }
-}
-
 const BlogComments = ({ blogId }: BlogCommentsProps) => {
-  const [comments, setComments] = useState<IComment[]>([])
+  const { data: session, status } = useSession()
   const [newComment, setNewComment] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [session, setSession] = useState<Session | null>(null)
+  const [isPending, startTransition] = useTransition()
+  const {
+    data: comments = [],
+    mutate,
+    isLoading
+  } = useSWR<IComment[]>(
+    status === 'authenticated' ? `/api/blog/${blogId}/comments` : null,
+    fetcher
+  )
+  const userId = session?.user?.id
 
-  const checkAuth = async () => {
-    try {
-      const response = await fetch('/api/auth/session')
-      const sessionData = await response.json()
-      setSession(sessionData)
-    } catch (error) {
-      console.error('Error checking auth:', error)
-    }
-  }
+  const [optimisticComments, updateOptimisticComment] = useOptimistic(
+    comments,
+    (state, likedCommentId: string) => {
+      if (!userId) return state
 
-  const fetchComments = useCallback(async () => {
-    try {
-      const response = await fetch(`/api/blog/${blogId}/comments`)
-      if (response.ok) {
-        const data = await response.json()
-        setComments(data)
-      }
-    } catch (error) {
-      console.error('Error fetching comments:', error)
-    }
-  }, [blogId])
+      return state.map((comment) => {
+        if (comment._id !== likedCommentId) return comment
 
-  useEffect(() => {
-    fetchComments()
-    checkAuth()
-  }, [blogId, fetchComments])
+        const likedBy = comment.likedBy || []
+        const alreadyLiked = likedBy.includes(userId)
 
-  const handleSubmitComment = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!newComment.trim() || isSubmitting) return
-
-    setIsSubmitting(true)
-    try {
-      const response = await fetch(`/api/blog/${blogId}/comments`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: newComment.trim() })
+        return {
+          ...comment,
+          likes: alreadyLiked
+            ? Math.max((comment.likes || 0) - 1, 0)
+            : (comment.likes || 0) + 1,
+          likedBy: alreadyLiked
+            ? likedBy.filter((id) => id !== userId)
+            : [...likedBy, userId]
+        }
       })
-
-      if (response.ok) {
-        setNewComment('')
-        await fetchComments()
-        toast.success('Comment added successfully!')
-      } else {
-        const error = await response.json()
-        toast.error(error.error || 'Failed to add comment')
-      }
-    } catch (error) {
-      console.error('Error submitting comment:', error)
-      toast.error('Failed to add comment')
-    } finally {
-      setIsSubmitting(false)
     }
+  )
+
+  const handleSubmitComment = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!newComment.trim() || isPending) return
+
+    const content = newComment.trim()
+
+    startTransition(async () => {
+      try {
+        const response = await fetch(`/api/blog/${blogId}/comments`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content })
+        })
+
+        if (response.ok) {
+          setNewComment('')
+          await mutate()
+          toast.success('Comment added successfully!')
+        } else {
+          const error = await response.json()
+          toast.error(error.error || 'Failed to add comment')
+        }
+      } catch (error) {
+        console.error('Error submitting comment:', error)
+        toast.error('Failed to add comment')
+      }
+    })
   }
 
-  const handleLike = async (commentId: string) => {
-    if (!session?.user) {
+  const handleLike = (commentId: string) => {
+    if (!userId) {
       toast.error('Please sign in to like comments')
       return
     }
 
-    try {
-      const response = await fetch(
-        `/api/blog/${blogId}/comments/${commentId}/like`,
-        {
-          method: 'POST'
-        }
-      )
+    startTransition(async () => {
+      updateOptimisticComment(commentId)
 
-      if (response.ok) {
-        await fetchComments()
+      try {
+        const response = await fetch(
+          `/api/blog/${blogId}/comments/${commentId}/like`,
+          { method: 'POST' }
+        )
+
+        await mutate()
+        if (!response.ok) {
+          toast.error('Failed to update like')
+        }
+      } catch (error) {
+        console.error('Error liking comment:', error)
+        await mutate()
+        toast.error('Failed to update like')
       }
-    } catch (error) {
-      console.error('Error liking comment:', error)
-    }
+    })
+  }
+
+  if (status === 'loading' || isLoading) {
+    return (
+      <div className="bg-white dark:bg-zinc-800 rounded-lg p-6 border border-gray-200 dark:border-zinc-700">
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          Comments
+        </h3>
+        <p className="text-gray-600 dark:text-gray-300">Loading comments...</p>
+      </div>
+    )
   }
 
   if (!session?.user) {
@@ -117,10 +135,9 @@ const BlogComments = ({ blogId }: BlogCommentsProps) => {
   return (
     <div className="bg-white dark:bg-zinc-800 rounded-lg p-6 border border-gray-200 dark:border-zinc-700">
       <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-        Comments ({comments.length})
+        Comments ({optimisticComments.length})
       </h3>
 
-      {/* Add Comment Form */}
       <form onSubmit={handleSubmitComment} className="mb-8">
         <textarea
           value={newComment}
@@ -132,23 +149,22 @@ const BlogComments = ({ blogId }: BlogCommentsProps) => {
         <div className="flex justify-end mt-2">
           <button
             type="submit"
-            disabled={!newComment.trim() || isSubmitting}
+            disabled={!newComment.trim() || isPending}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {isSubmitting ? 'Posting...' : 'Post Comment'}
+            {isPending ? 'Posting...' : 'Post Comment'}
           </button>
         </div>
       </form>
 
-      {/* Comments List */}
       <div className="space-y-6">
-        {comments.map((comment) => (
+        {optimisticComments.map((comment) => (
           <div
             key={comment._id}
             className="border-b border-gray-200 dark:border-zinc-700 pb-4 last:border-b-0"
           >
             <div className="flex space-x-3">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <Image
                   src={comment.author.avatar || '/images/icons/login.png'}
                   alt={comment.author.name}
@@ -164,12 +180,9 @@ const BlogComments = ({ blogId }: BlogCommentsProps) => {
                   </span>
                   <span className="text-sm text-gray-500 dark:text-gray-400">
                     {comment.createdAt
-                      ? formatDistanceToNow(
-                          new Date(comment.createdAt || Date.now()),
-                          {
-                            addSuffix: true
-                          }
-                        )
+                      ? formatDistanceToNow(new Date(comment.createdAt), {
+                          addSuffix: true
+                        })
                       : 'Recently'}
                   </span>
                 </div>
@@ -182,7 +195,7 @@ const BlogComments = ({ blogId }: BlogCommentsProps) => {
                   <button
                     onClick={() => handleLike(comment._id)}
                     className={`flex items-center space-x-1 transition-colors ${
-                      comment.likedBy?.includes(session?.user?.email || '')
+                      comment.likedBy?.includes(userId || '')
                         ? 'text-red-600 dark:text-red-400'
                         : 'text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400'
                     }`}
@@ -197,7 +210,7 @@ const BlogComments = ({ blogId }: BlogCommentsProps) => {
         ))}
       </div>
 
-      {comments.length === 0 && (
+      {optimisticComments.length === 0 && (
         <p className="text-gray-500 dark:text-gray-400 text-center py-8">
           No comments yet. Be the first to comment!
         </p>
