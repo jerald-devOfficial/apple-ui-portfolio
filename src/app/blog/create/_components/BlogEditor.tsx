@@ -18,8 +18,6 @@ interface BlogEditorProps {
   blog?: IBlog
 }
 
-let blogBlockSeq = 0
-
 const BlogEditor = ({ blog }: BlogEditorProps) => {
   const isEditing = !!blog
   const [state, formAction] = useActionState(saveBlogAction, initialBlogState)
@@ -37,9 +35,8 @@ const BlogEditor = ({ blog }: BlogEditorProps) => {
   )
 
   const addContentBlock = (type: ContentBlock['type']) => {
-    blogBlockSeq += 1
     const newBlock: ContentBlock = {
-      id: `block-${blogBlockSeq}`,
+      id: `block-${crypto.randomUUID()}`,
       type,
       content: '',
       order: contentBlocks.length,
