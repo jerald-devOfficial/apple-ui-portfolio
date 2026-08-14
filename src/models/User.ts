@@ -5,7 +5,7 @@ import mongoose, {
   Schema
 } from 'mongoose'
 
-export interface IUser extends Omit<MongooseDocument, 'location'> {
+export interface IUser extends Omit<MongooseDocument, 'location' | '_id'> {
   _id: string
   name: string
   email: string
@@ -27,6 +27,7 @@ export interface IUser extends Omit<MongooseDocument, 'location'> {
 
   // User activity
   likedPosts: string[]
+  likedDiaries?: string[]
   bio?: string
   profession?: string
   location?: string
@@ -73,6 +74,12 @@ const userSchema = new Schema(
         ref: 'Blog'
       }
     ],
+    likedDiaries: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Diary'
+      }
+    ],
     bio: String,
     profession: String,
     location: String
@@ -81,7 +88,6 @@ const userSchema = new Schema(
 )
 
 // Create an index for faster lookups
-userSchema.index({ email: 1 })
 userSchema.index({ 'socialProfiles.github': 1 })
 userSchema.index({ 'socialProfiles.linkedin': 1 })
 
