@@ -1,15 +1,31 @@
 'use client'
 
+import { useMounted } from '@/hooks/useMounted'
 import { IDiary } from '@/models/Diary'
-import { Editor } from '@tinymce/tinymce-react'
 import { useTheme } from 'next-themes'
+import dynamic from 'next/dynamic'
+
+const Editor = dynamic(
+  () => import('@tinymce/tinymce-react').then(({ Editor }) => Editor),
+  { ssr: false }
+)
 
 const DiaryView = ({ diary }: { diary: IDiary }) => {
   const { resolvedTheme } = useTheme()
+  const mounted = useMounted()
+
+  if (!mounted) {
+    return (
+      <div className="grow p-6 overflow-y-auto">
+        <div className="min-h-40 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800" />
+      </div>
+    )
+  }
 
   return (
     <div className="grow p-6 overflow-y-auto">
       <Editor
+        id={`diary-view-${diary._id}`}
         value={diary.content}
         apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
         disabled={true}
