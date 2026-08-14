@@ -65,19 +65,11 @@ const ChessLayout = () => {
     null
   const resolvedSectionId = resolvedSection ? String(resolvedSection._id) : null
 
-  if (resolvedSectionId && resolvedSectionId !== selectedSectionId) {
-    setSelectedSectionId(resolvedSectionId)
-  }
-
   const resolvedLine =
     resolvedSection?.lines.find((l) => String(l._id) === selectedLineId) ??
     resolvedSection?.lines[0] ??
     null
   const resolvedLineId = resolvedLine ? String(resolvedLine._id) : null
-
-  if (resolvedLineId && resolvedLineId !== selectedLineId) {
-    setSelectedLineId(resolvedLineId)
-  }
 
   const selectedLine = useMemo(() => {
     if (!repertoire || !resolvedSectionId || !resolvedLineId) return null
@@ -140,8 +132,8 @@ const ChessLayout = () => {
 
   useEffect(() => {
     const lineKey =
-      selectedSectionId && selectedLineId
-        ? `${selectedSectionId}:${selectedLineId}`
+      resolvedSectionId && resolvedLineId
+        ? `${resolvedSectionId}:${resolvedLineId}`
         : null
 
     if (prevLineKeyRef.current && lineKey !== prevLineKeyRef.current) {
@@ -149,7 +141,7 @@ const ChessLayout = () => {
     }
 
     prevLineKeyRef.current = lineKey
-  }, [selectedSectionId, selectedLineId])
+  }, [resolvedSectionId, resolvedLineId])
 
   useEffect(() => {
     if (saveRequest === 0) return
@@ -163,17 +155,17 @@ const ChessLayout = () => {
 
   const debouncedSaveTree = useCallback(
     (updatedTree: NonNullable<typeof tree>) => {
-      if (!selectedSectionId || !selectedLineId) return
+      if (!resolvedSectionId || !resolvedLineId) return
 
       pendingSaveRef.current = {
-        sectionId: selectedSectionId,
-        lineId: selectedLineId,
+        sectionId: resolvedSectionId,
+        lineId: resolvedLineId,
         tree: updatedTree
       }
 
       setSaveRequest((count) => count + 1)
     },
-    [selectedSectionId, selectedLineId]
+    [resolvedSectionId, resolvedLineId]
   )
 
   const onPieceDrop = useCallback(
@@ -196,12 +188,12 @@ const ChessLayout = () => {
 
   const handleSaveAnnotation = async (comment?: string, nags?: number[]) => {
     const updated = saveAnnotation(comment, nags)
-    if (updated && selectedSectionId && selectedLineId) {
+    if (updated && resolvedSectionId && resolvedLineId) {
       try {
         await updateRepertoire({
           action: 'updateLineTree',
-          sectionId: selectedSectionId,
-          lineId: selectedLineId,
+          sectionId: resolvedSectionId,
+          lineId: resolvedLineId,
           tree: updated
         })
         toast.success('Annotation saved')
@@ -212,13 +204,13 @@ const ChessLayout = () => {
   }
 
   const handleImportPgn = async (pgn: string) => {
-    if (!selectedSectionId || !selectedLineId) return
+    if (!resolvedSectionId || !resolvedLineId) return
     try {
-      const updated = await importPgn(selectedSectionId, selectedLineId, pgn)
+      const updated = await importPgn(resolvedSectionId, resolvedLineId, pgn)
       const section = updated.sections.find(
-        (s) => String(s._id) === selectedSectionId
+        (s) => String(s._id) === resolvedSectionId
       )
-      const line = section?.lines.find((l) => String(l._id) === selectedLineId)
+      const line = section?.lines.find((l) => String(l._id) === resolvedLineId)
       if (line?.tree) {
         resetTree(line.tree)
       }
@@ -229,9 +221,9 @@ const ChessLayout = () => {
   }
 
   const handleExportPgn = () => {
-    if (!selectedSectionId || !selectedLineId) return
+    if (!resolvedSectionId || !resolvedLineId) return
     window.open(
-      `/api/chess/repertoire/export/${selectedLineId}?sectionId=${selectedSectionId}`,
+      `/api/chess/repertoire/export/${resolvedLineId}?sectionId=${resolvedSectionId}`,
       '_blank'
     )
   }
@@ -265,7 +257,7 @@ const ChessLayout = () => {
   const handleDeleteSection = async (sectionId: string) => {
     try {
       await updateRepertoire({ action: 'deleteSection', sectionId })
-      if (selectedSectionId === sectionId) {
+      if (selectedSectionId === sectionId || resolvedSectionId === sectionId) {
         setSelectedSectionId(null)
         setSelectedLineId(null)
       }
@@ -278,7 +270,7 @@ const ChessLayout = () => {
   const handleDeleteLine = async (sectionId: string, lineId: string) => {
     try {
       await updateRepertoire({ action: 'deleteLine', sectionId, lineId })
-      if (selectedLineId === lineId) {
+      if (selectedLineId === lineId || resolvedLineId === lineId) {
         setSelectedLineId(null)
         setShowBoardOnMobile(false)
       }
@@ -299,13 +291,13 @@ const ChessLayout = () => {
     const parentPath = currentPath.slice(0, -1)
     const updated = promoteVariationInTree(varIndex)
 
-    if (!updated || !selectedSectionId || !selectedLineId) return
+    if (!updated || !resolvedSectionId || !resolvedLineId) return
 
     try {
       await updateRepertoire({
         action: 'updateLineTree',
-        sectionId: selectedSectionId,
-        lineId: selectedLineId,
+        sectionId: resolvedSectionId,
+        lineId: resolvedLineId,
         tree: updated
       })
       selectPath([...parentPath, 'main'])
@@ -357,7 +349,7 @@ const ChessLayout = () => {
               {selectedLine?.title ?? 'Select an opening line'}
             </p>
           </div>
-          {selectedLineId && (
+          {resolvedLineId && (
             <div className="hidden sm:flex items-center gap-2">
               <button
                 type="button"
@@ -388,7 +380,7 @@ const ChessLayout = () => {
           >
             <RepertoireSidebar
               sections={repertoire.sections}
-              selectedLineId={selectedLineId}
+              selectedLineId={resolvedLineId}
               activeColor={activeColor}
               onColorChange={setActiveColor}
               onSelectLine={handleSelectLine}
@@ -464,7 +456,7 @@ const ChessLayout = () => {
                     onSelectPath={selectPath}
                   />
                   <MoveAnnotationEditor
-                    key={currentNode?.san ?? currentPath.join('-') ?? 'root'}
+                    key={currentPath.join('-') || 'root'}
                     comment={currentNode?.comment}
                     nags={currentNode?.nags}
                     moveSan={currentNode?.san || undefined}

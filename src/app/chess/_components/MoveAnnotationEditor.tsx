@@ -21,10 +21,24 @@ const MoveAnnotationEditor = ({
   moveSan,
   onSave
 }: MoveAnnotationEditorProps) => {
+  const initialNag = initialNags?.[0]
   const [comment, setComment] = useState(initialComment ?? '')
-  const [selectedNag, setSelectedNag] = useState<number | undefined>(
-    initialNags?.[0]
-  )
+  const [selectedNag, setSelectedNag] = useState<number | undefined>(initialNag)
+  const [prevProps, setPrevProps] = useState({
+    comment: initialComment,
+    nag: initialNag,
+    moveSan
+  })
+
+  if (
+    initialComment !== prevProps.comment ||
+    initialNag !== prevProps.nag ||
+    moveSan !== prevProps.moveSan
+  ) {
+    setPrevProps({ comment: initialComment, nag: initialNag, moveSan })
+    setComment(initialComment ?? '')
+    setSelectedNag(initialNag)
+  }
 
   const handleSave = () => {
     onSave(
