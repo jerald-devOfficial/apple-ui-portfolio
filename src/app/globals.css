@@ -116,14 +116,6 @@ html.dark body {
   }
 }
 
-@utility from-eth-bg-top {
-  background-color: #081d35;
-}
-
-@utility to-eth-bg-bottom {
-  background-color: #182c42;
-}
-
 @utility sidebar {
   position: relative;
 }

@@ -1,8 +1,9 @@
 'use client'
 
+import { useMounted } from '@/hooks/useMounted'
 import { useTheme } from 'next-themes'
 import dynamic from 'next/dynamic'
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 
 // Dynamically import TinyMCE Editor
 const Editor = dynamic(
@@ -24,22 +25,10 @@ const TinyMCEEditor: FC<TinyMCEEditorProps> = ({
   height = 300
 }) => {
   const { theme, resolvedTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-  const [key, setKey] = useState(0) // Add key for forcing remount
-
-  // Handle mounting to avoid hydration mismatch
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  // Force editor remount when theme changes
-  useEffect(() => {
-    if (!mounted) return
-    setKey((prev) => prev + 1)
-  }, [theme, resolvedTheme, mounted])
-
+  const mounted = useMounted()
   const currentTheme = theme === 'system' ? resolvedTheme : theme
   const isDark = currentTheme === 'dark'
+  const editorKey = `${currentTheme ?? 'system'}-${isDark ? 'dark' : 'light'}`
 
   const editorConfig = {
     height,
@@ -100,14 +89,14 @@ const TinyMCEEditor: FC<TinyMCEEditorProps> = ({
 
   if (!mounted) {
     return (
-      <div className="min-h-[300px] bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg" />
+      <div className="min-h-75 bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg" />
     )
   }
 
   return (
     <div className={className}>
       <Editor
-        key={key} // Add key to force remount
+        key={editorKey}
         value={value}
         onEditorChange={onEditorChange}
         apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}

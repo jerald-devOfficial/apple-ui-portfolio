@@ -16,18 +16,18 @@ import {
   ArrowUpTrayIcon,
   ChevronLeftIcon
 } from '@heroicons/react/24/outline'
-import { Montserrat } from 'next/font/google'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 import { toast } from 'react-toastify'
 
-const montserrat = Montserrat({ subsets: ['latin'], display: 'swap' })
-
 const ChessLayout = () => {
-  const { status } = useSession()
-  const router = useRouter()
   const { repertoire, isLoading, error, mutate, updateRepertoire, importPgn } =
     useRepertoire()
 
@@ -39,22 +39,53 @@ const ChessLayout = () => {
   const [boardOrientation, setBoardOrientation] = useState<'white' | 'black'>(
     'white'
   )
+  const [prevActiveColor, setPrevActiveColor] = useState(activeColor)
   const [showBoardOnMobile, setShowBoardOnMobile] = useState(false)
   const [importModalOpen, setImportModalOpen] = useState(false)
-  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const pendingSaveRef = useRef<{
     sectionId: string
     lineId: string
     tree: IMoveNode
   } | null>(null)
+  const [saveRequest, setSaveRequest] = useState(0)
+
+  if (activeColor !== prevActiveColor) {
+    setPrevActiveColor(activeColor)
+    setBoardOrientation(activeColor)
+  }
+
+  const colorSections = useMemo(
+    () => repertoire?.sections.filter((s) => s.color === activeColor) ?? [],
+    [repertoire, activeColor]
+  )
+
+  const resolvedSection =
+    colorSections.find((s) => String(s._id) === selectedSectionId) ??
+    colorSections[0] ??
+    null
+  const resolvedSectionId = resolvedSection ? String(resolvedSection._id) : null
+
+  if (resolvedSectionId && resolvedSectionId !== selectedSectionId) {
+    setSelectedSectionId(resolvedSectionId)
+  }
+
+  const resolvedLine =
+    resolvedSection?.lines.find((l) => String(l._id) === selectedLineId) ??
+    resolvedSection?.lines[0] ??
+    null
+  const resolvedLineId = resolvedLine ? String(resolvedLine._id) : null
+
+  if (resolvedLineId && resolvedLineId !== selectedLineId) {
+    setSelectedLineId(resolvedLineId)
+  }
 
   const selectedLine = useMemo(() => {
-    if (!repertoire || !selectedSectionId || !selectedLineId) return null
+    if (!repertoire || !resolvedSectionId || !resolvedLineId) return null
     const section = repertoire.sections.find(
-      (s) => String(s._id) === selectedSectionId
+      (s) => String(s._id) === resolvedSectionId
     )
-    return section?.lines.find((l) => String(l._id) === selectedLineId) ?? null
-  }, [repertoire, selectedSectionId, selectedLineId])
+    return section?.lines.find((l) => String(l._id) === resolvedLineId) ?? null
+  }, [repertoire, resolvedSectionId, resolvedLineId])
 
   const {
     tree,
@@ -74,37 +105,6 @@ const ChessLayout = () => {
   const prevLineKeyRef = useRef<string | null>(null)
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/')
-    }
-  }, [status, router])
-
-  useEffect(() => {
-    if (!repertoire) return
-
-    const colorSections = repertoire.sections.filter(
-      (s) => s.color === activeColor
-    )
-    if (colorSections.length === 0) return
-
-    const section =
-      colorSections.find((s) => String(s._id) === selectedSectionId) ??
-      colorSections[0]
-
-    if (String(section._id) !== selectedSectionId) {
-      setSelectedSectionId(String(section._id))
-    }
-
-    const line =
-      section.lines.find((l) => String(l._id) === selectedLineId) ??
-      section.lines[0]
-
-    if (line && String(line._id) !== selectedLineId) {
-      setSelectedLineId(String(line._id))
-    }
-  }, [repertoire, activeColor, selectedSectionId, selectedLineId])
-
-  useEffect(() => {
     if (!selectedLine?.tree) return
 
     const lineId = String(selectedLine._id)
@@ -114,16 +114,7 @@ const ChessLayout = () => {
     }
   }, [selectedLine?._id, selectedLine?.tree, resetTree])
 
-  useEffect(() => {
-    setBoardOrientation(activeColor)
-  }, [activeColor])
-
-  const flushPendingSave = useCallback(async () => {
-    if (saveTimeoutRef.current) {
-      clearTimeout(saveTimeoutRef.current)
-      saveTimeoutRef.current = null
-    }
-
+  const flushPendingSave = useEffectEvent(async () => {
     const pending = pendingSaveRef.current
     if (!pending) return
 
@@ -139,13 +130,13 @@ const ChessLayout = () => {
     } catch {
       toast.error('Failed to save moves')
     }
-  }, [updateRepertoire])
+  })
 
   useEffect(() => {
     return () => {
       void flushPendingSave()
     }
-  }, [flushPendingSave])
+  }, [])
 
   useEffect(() => {
     const lineKey =
@@ -158,7 +149,17 @@ const ChessLayout = () => {
     }
 
     prevLineKeyRef.current = lineKey
-  }, [selectedSectionId, selectedLineId, flushPendingSave])
+  }, [selectedSectionId, selectedLineId])
+
+  useEffect(() => {
+    if (saveRequest === 0) return
+
+    const timeoutId = setTimeout(() => {
+      void flushPendingSave()
+    }, 400)
+
+    return () => clearTimeout(timeoutId)
+  }, [saveRequest])
 
   const debouncedSaveTree = useCallback(
     (updatedTree: NonNullable<typeof tree>) => {
@@ -170,15 +171,9 @@ const ChessLayout = () => {
         tree: updatedTree
       }
 
-      if (saveTimeoutRef.current) {
-        clearTimeout(saveTimeoutRef.current)
-      }
-
-      saveTimeoutRef.current = setTimeout(() => {
-        void flushPendingSave()
-      }, 400)
+      setSaveRequest((count) => count + 1)
     },
-    [selectedSectionId, selectedLineId, flushPendingSave]
+    [selectedSectionId, selectedLineId]
   )
 
   const onPieceDrop = useCallback(
@@ -243,7 +238,11 @@ const ChessLayout = () => {
 
   const handleAddSection = async (title: string, color: 'white' | 'black') => {
     try {
-      await updateRepertoire({ action: 'addSection', sectionTitle: title, color })
+      await updateRepertoire({
+        action: 'addSection',
+        sectionTitle: title,
+        color
+      })
       toast.success('Section added')
     } catch {
       toast.error('Failed to add section')
@@ -319,40 +318,28 @@ const ChessLayout = () => {
   const displayFen = currentFen ?? selectedLine?.tree?.fen ?? STARTING_FEN
 
   // Session still resolving, or guest — show loading while redirecting (avoids error flash)
-  if (status === 'loading' || status === 'unauthenticated' || isLoading) {
+  if (isLoading) {
     return (
-      <main
-        className={`flex overflow-hidden h-full w-full xl:max-w-[1024px] sm:pt-6 xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 ${montserrat.className} my-2 sm:my-0`}
-      >
-        <div className="flex grow h-full rounded-xl bg-stone-200/95 dark:bg-zinc-900 flex-col shadow-xl overflow-hidden">
-          <EmptyRepertoireState variant="loading" />
-        </div>
-      </main>
+      <div className="flex grow h-full rounded-xl bg-stone-200/95 dark:bg-zinc-900 flex-col shadow-xl overflow-hidden">
+        <EmptyRepertoireState variant="loading" />
+      </div>
     )
   }
 
   if (error || !repertoire) {
     return (
-      <main
-        className={`flex overflow-hidden h-full w-full xl:max-w-[1024px] sm:pt-6 xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 ${montserrat.className} my-2 sm:my-0`}
-      >
-        <div className="flex grow h-full rounded-xl bg-stone-200/95 dark:bg-zinc-900 flex-col shadow-xl overflow-hidden">
-          <EmptyRepertoireState
-            variant="error"
-            message={
-              error instanceof Error ? error.message : undefined
-            }
-            onRetry={() => mutate()}
-          />
-        </div>
-      </main>
+      <div className="flex grow h-full rounded-xl bg-stone-200/95 dark:bg-zinc-900 flex-col shadow-xl overflow-hidden">
+        <EmptyRepertoireState
+          variant="error"
+          message={error instanceof Error ? error.message : undefined}
+          onRetry={() => mutate()}
+        />
+      </div>
     )
   }
 
   return (
-    <main
-      className={`flex overflow-hidden h-full w-full xl:max-w-[1200px] sm:pt-6 xl:pt-12 lg:max-w-[1100px] mx-auto sm:px-12 lg:px-0 ${montserrat.className} my-2 sm:my-0`}
-    >
+    <>
       <div className="flex grow h-full rounded-xl bg-stone-200/95 dark:bg-zinc-900 flex-col shadow-xl overflow-hidden">
         <header className="flex items-center gap-3 px-4 py-3 border-b border-gray-200/50 dark:border-zinc-700/50 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-md shrink-0">
           <Image
@@ -397,7 +384,7 @@ const ChessLayout = () => {
           <aside
             className={`${
               showBoardOnMobile ? 'hidden sm:flex' : 'flex'
-            } flex-col w-full sm:w-[220px] lg:w-[260px] shrink-0 border-r border-gray-200/50 dark:border-zinc-700/50 p-3 overflow-y-auto bg-stone-100/50 dark:bg-zinc-900/80`}
+            } flex-col w-full sm:w-55 lg:w-65 shrink-0 border-r border-gray-200/50 dark:border-zinc-700/50 p-3 overflow-y-auto bg-stone-100/50 dark:bg-zinc-900/80`}
           >
             <RepertoireSidebar
               sections={repertoire.sections}
@@ -470,13 +457,14 @@ const ChessLayout = () => {
                   </div>
                 </div>
 
-                <div className="lg:w-[320px] xl:w-[360px] shrink-0 border-t lg:border-t-0 lg:border-l border-gray-200/50 dark:border-zinc-700/50 p-4 overflow-y-auto flex flex-col gap-6 bg-white/30 dark:bg-zinc-900/30">
+                <div className="lg:w-[320px] xl:w-90 shrink-0 border-t lg:border-t-0 lg:border-l border-gray-200/50 dark:border-zinc-700/50 p-4 overflow-y-auto flex flex-col gap-6 bg-white/30 dark:bg-zinc-900/30">
                   <PgnNotationPanel
                     tree={tree}
                     currentPath={currentPath}
                     onSelectPath={selectPath}
                   />
                   <MoveAnnotationEditor
+                    key={currentNode?.san ?? currentPath.join('-') ?? 'root'}
                     comment={currentNode?.comment}
                     nags={currentNode?.nags}
                     moveSan={currentNode?.san || undefined}
@@ -499,7 +487,7 @@ const ChessLayout = () => {
         onImport={handleImportPgn}
         lineTitle={selectedLine?.title}
       />
-    </main>
+    </>
   )
 }
 

@@ -1,28 +1,25 @@
 'use client'
 
+import { useMounted } from '@/hooks/useMounted'
 import { addSeconds, format } from 'date-fns'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 
 const DisplayTime = () => {
   const [currentTime, setCurrentTime] = useState(new Date())
-  const [mounted, setMounted] = useState(false)
-  // Using useTheme hook for consistency with other components
+  const mounted = useMounted()
   useTheme()
 
   useEffect(() => {
-    // Update time every second
+    if (!mounted) return
+
     const intervalId = setInterval(() => {
       setCurrentTime((prevTime) => addSeconds(prevTime, 1))
     }, 1000)
 
-    // Handle mounting
-    setMounted(true)
-
     return () => clearInterval(intervalId)
-  }, [])
+  }, [mounted])
 
-  // Avoid hydration mismatch
   if (!mounted) {
     return <div className="opacity-0 text-xs sm:text-sm">00:00 AM</div>
   }

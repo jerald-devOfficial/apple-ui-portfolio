@@ -1,5 +1,6 @@
 'use client'
 
+import { useMounted } from '@/hooks/useMounted'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
@@ -38,42 +39,44 @@ interface BatteryManager extends EventTarget {
 
 const BatteryStatus = () => {
   const [batteryPercentage, setBatteryPercentage] = useState(0)
-  const [isIOS, setIsIOS] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  // Using useTheme hook for consistency with other components
+  const mounted = useMounted()
+  const isIOS =
+    mounted && /iPad|iPhone|iPod/.test(navigator.userAgent)
   useTheme()
 
   useEffect(() => {
-    setMounted(true)
+    if (!mounted || isIOS) return
 
-    // Check if the Battery Status API is supported
+    let battery: BatteryManager | null = null
+    let cancelled = false
+
+    const updateBatteryPercentage = (manager: BatteryManager) => {
+      setBatteryPercentage(manager.level * 100)
+    }
+
+    const onLevelChange = () => {
+      if (battery) updateBatteryPercentage(battery)
+    }
+
     if ('getBattery' in navigator) {
       ;(navigator as NavigatorWithBattery)
         .getBattery()
-        .then((battery: BatteryManager) => {
-          // Update battery percentage
-          updateBatteryPercentage(battery)
-
-          // Listen for changes in battery level
-          battery.addEventListener('levelchange', () => {
-            updateBatteryPercentage(battery)
-          })
+        .then((manager: BatteryManager) => {
+          if (cancelled) return
+          battery = manager
+          updateBatteryPercentage(manager)
+          manager.addEventListener('levelchange', onLevelChange)
         })
-    } else if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-      // Check if the user agent indicates iOS
-      setIsIOS(true)
     }
-  }, [])
 
-  const updateBatteryPercentage = (battery: BatteryManager) => {
-    const percentage = battery.level * 100
-    setBatteryPercentage(percentage)
-  }
+    return () => {
+      cancelled = true
+      battery?.removeEventListener('levelchange', onLevelChange)
+    }
+  }, [mounted, isIOS])
 
-  // Don't render until mounted to avoid hydration mismatch
   if (!mounted) return null
 
-  // Dynamic styling based on theme
   const outlineColorClass = 'outline-black/50 dark:outline-white/50'
   const fillClass = 'bg-black dark:bg-white'
   const tipClass = 'bg-black/50 dark:bg-white/50'
@@ -85,7 +88,6 @@ const BatteryStatus = () => {
           <span
             className={`outline-2 ${outlineColorClass} outline-offset-2 rounded-xs h-2 w-5 relative`}
           >
-            {/* Percentage bar */}
             <span
               className={`w-full h-full ${fillClass} absolute rounded-xs flex items-center justify-center`}
               style={{ width: `100%` }}
@@ -100,7 +102,6 @@ const BatteryStatus = () => {
           <span
             className={`outline-2 ${outlineColorClass} outline-offset-2 rounded-xs h-2 w-5 relative`}
           >
-            {/* Percentage bar */}
             <span
               className={`w-full h-full ${fillClass} absolute rounded-xs`}
               style={{ width: `${batteryPercentage}%` }}

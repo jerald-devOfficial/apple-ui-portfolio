@@ -1,6 +1,6 @@
-import mongoose, { Document, Model, model, Schema } from 'mongoose'
+import mongoose, { Model, model, Schema } from 'mongoose'
 
-export interface IPhoto extends Document {
+export interface IPhoto {
   _id: string
   title: string
   description?: string
