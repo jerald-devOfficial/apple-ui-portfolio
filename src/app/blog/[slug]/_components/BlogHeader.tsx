@@ -106,7 +106,7 @@ const BlogHeader = ({ blog, isAdmin }: BlogHeaderProps) => {
                 <span>
                   {blog.createdAt
                     ? formatDistanceToNow(
-                        new Date(blog.createdAt || Date.now()),
+                        new Date(blog.createdAt),
                         {
                           addSuffix: true
                         }
@@ -203,7 +203,7 @@ const BlogHeader = ({ blog, isAdmin }: BlogHeaderProps) => {
               <span>
                 {blog.createdAt
                   ? formatDistanceToNow(
-                      new Date(blog.createdAt || Date.now()),
+                      new Date(blog.createdAt),
                       {
                         addSuffix: true
                       }

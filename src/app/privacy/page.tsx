@@ -5,7 +5,7 @@ const montserrat = Montserrat({ subsets: ['latin'], display: 'swap' })
 export default function PrivacyPolicy() {
   return (
     <main
-      className={`flex overflow-hidden h-full w-full xl:max-w-[1024px] sm:pt-6 xl:pt-12 lg:max-w-[924px] mx-auto sm:px-12 lg:px-0 ${montserrat.className} my-2 sm:my-0`}
+      className={`flex overflow-hidden h-full w-full xl:max-w-5xl sm:pt-6 xl:pt-12 lg:max-w-231 mx-auto sm:px-12 lg:px-0 ${montserrat.className} my-2 sm:my-0`}
     >
       <div className="flex grow h-full rounded-xl bg-stone-200/95 dark:bg-zinc-900 flex-col shadow-xl overflow-hidden">
         <div className="p-8 md:p-12 overflow-y-auto">

@@ -31,7 +31,7 @@ An opening repertoire app (Chessable / Fritz style) integrated into the Apple UI
 | Route | `/chess` | Auth-gated |
 | macOS dock | `src/components/layouts/index.tsx` | Visible when logged in |
 | iOS / iPadOS home | `src/app/page.tsx` | Visible when logged in |
-| Middleware | `src/middleware.ts` | Cookie-based session check |
+| Middleware | `src/proxy.ts` | Cookie-based session check |
 
 Icons: `public/images/icons/chess.png`, `macOS-chess.png`
 

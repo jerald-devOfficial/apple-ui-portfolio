@@ -1,5 +1,8 @@
 'use client'
 
+import { saveBlogAction } from '@/app/blog/actions'
+import { initialBlogState } from '@/app/blog/state'
+import BlogSaveButton from '@/app/blog/create/_components/BlogSaveButton'
 import TinyMCEEditor from '@/components/TinyMCEEditor'
 import { ContentBlock, IBlog } from '@/models/Blog'
 import {
@@ -9,17 +12,15 @@ import {
   TrashIcon
 } from '@heroicons/react/24/outline'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
+import { useActionState, useState } from 'react'
 
 interface BlogEditorProps {
   blog?: IBlog
 }
 
 const BlogEditor = ({ blog }: BlogEditorProps) => {
-  const router = useRouter()
   const isEditing = !!blog
+  const [state, formAction] = useActionState(saveBlogAction, initialBlogState)
 
   const [title, setTitle] = useState(blog?.title || '')
   const [summary, setSummary] = useState(blog?.summary || '')
@@ -32,18 +33,10 @@ const BlogEditor = ({ blog }: BlogEditorProps) => {
   const [contentBlocks, setContentBlocks] = useState<ContentBlock[]>(
     blog?.contentBlocks || []
   )
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  // Initialize content blocks when editing
-  useEffect(() => {
-    if (blog?.contentBlocks && blog.contentBlocks.length > 0) {
-      setContentBlocks(blog.contentBlocks)
-    }
-  }, [blog])
 
   const addContentBlock = (type: ContentBlock['type']) => {
     const newBlock: ContentBlock = {
-      id: `block-${Date.now()}`,
+      id: `block-${crypto.randomUUID()}`,
       type,
       content: '',
       order: contentBlocks.length,
@@ -77,77 +70,37 @@ const BlogEditor = ({ blog }: BlogEditorProps) => {
     })
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!title.trim() || !summary.trim()) {
-      toast.error('Title and summary are required')
-      return
-    }
-
-    if (contentBlocks.length === 0) {
-      toast.error('Add at least one content block')
-      return
-    }
-
-    setIsSubmitting(true)
-    try {
-      const url = isEditing ? `/api/blog/${blog._id}` : '/api/blog'
-      const method = isEditing ? 'PATCH' : 'POST'
-
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          update: {
-            title: title.trim(),
-            summary: summary.trim(),
-            category,
-            tags: tags
-              .split(',')
-              .map((tag) => tag.trim())
-              .filter(Boolean),
-            status,
-            coverImage: coverImage.trim() || undefined,
-            contentBlocks: contentBlocks.filter((block) =>
-              block.content.trim()
-            ),
-            content: contentBlocks
-              .filter((block) => block.type === 'text')
-              .map((block) => block.content)
-              .join('\n\n')
-          }
-        })
-      })
-
-      if (response.ok) {
-        const result = await response.json()
-        toast.success(
-          isEditing
-            ? 'Blog updated successfully!'
-            : 'Blog created successfully!'
-        )
-        router.push(`/blog/${isEditing ? blog.slug : result.slug}`)
-      } else {
-        const error = await response.json()
-        toast.error(
-          error.error || `Failed to ${isEditing ? 'update' : 'create'} blog`
-        )
-      }
-    } catch (error) {
-      console.error(`Error ${isEditing ? 'updating' : 'creating'} blog:`, error)
-      toast.error(`Failed to ${isEditing ? 'update' : 'create'} blog`)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+  const derivedContent = contentBlocks
+    .filter((block) => block.type === 'text')
+    .map((block) => block.content)
+    .join('\n\n')
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Header */}
+    <form action={formAction} className="flex flex-col h-full">
+      {blog ? <input type="hidden" name="blogId" value={blog._id} /> : null}
+      <input type="hidden" name="title" value={title} />
+      <input type="hidden" name="summary" value={summary} />
+      <input type="hidden" name="category" value={category} />
+      <input type="hidden" name="tags" value={tags} />
+      <input type="hidden" name="status" value={status} />
+      <input type="hidden" name="coverImage" value={coverImage} />
+      <input type="hidden" name="content" value={derivedContent} />
+      <input
+        type="hidden"
+        name="contentBlocks"
+        value={JSON.stringify(
+          contentBlocks.filter(
+            (block) => block.content.trim() || block.metadata?.url
+          )
+        )}
+      />
+
       <div className="flex justify-between items-center bg-white/90 dark:bg-zinc-800/90 backdrop-blur-md px-6 py-4 border-b border-gray-200 dark:border-zinc-700">
         <Link href="/blog">
-          <button className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-x-1">
+          <button
+            type="button"
+            className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-x-1"
+          >
             <ArrowLeftIcon className="w-5 h-5" />
             <span>Back to Blog</span>
           </button>
@@ -155,24 +108,17 @@ const BlogEditor = ({ blog }: BlogEditorProps) => {
         <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
           {isEditing ? 'Edit Blog' : 'Create New Blog'}
         </h1>
-        <button
-          onClick={handleSubmit}
-          disabled={isSubmitting}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          {isSubmitting
-            ? isEditing
-              ? 'Updating...'
-              : 'Creating...'
-            : isEditing
-            ? 'Update Blog'
-            : 'Create Blog'}
-        </button>
+        <div className="flex flex-col items-end">
+          <BlogSaveButton isEditing={isEditing} />
+          {state.error ? (
+            <p className="text-red-500 text-xs mt-1">{state.error}</p>
+          ) : null}
+        </div>
       </div>
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="space-y-6">
           {/* Basic Info */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div>
@@ -337,9 +283,9 @@ const BlogEditor = ({ blog }: BlogEditorProps) => {
               </div>
             )}
           </div>
-        </form>
+        </div>
       </div>
-    </div>
+    </form>
   )
 }
 

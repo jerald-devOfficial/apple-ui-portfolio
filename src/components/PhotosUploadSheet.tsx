@@ -1,10 +1,6 @@
 'use client'
 
-import {
-  MAX_PHOTO_SIZE_MB,
-  uploadPhoto,
-  validatePhotoFile
-} from '@/lib/photos'
+import { MAX_PHOTO_SIZE_MB, uploadPhoto, validatePhotoFile } from '@/lib/photos'
 import Image from 'next/image'
 import { useRef, useState } from 'react'
 import { toast } from 'react-toastify'
@@ -69,7 +65,9 @@ const PhotosUploadSheet = ({
 
     if (validFiles.length) {
       setSelectedFiles((prev) => {
-        const existing = new Set(prev.map((f) => `${f.name}-${f.size}-${f.lastModified}`))
+        const existing = new Set(
+          prev.map((f) => `${f.name}-${f.size}-${f.lastModified}`)
+        )
         const next = [...prev]
 
         validFiles.forEach((file) => {
@@ -129,7 +127,9 @@ const PhotosUploadSheet = ({
         successCount++
       } catch (error) {
         failures.push(
-          error instanceof Error ? error.message : `Failed to upload photo ${i + 1}`
+          error instanceof Error
+            ? error.message
+            : `Failed to upload photo ${i + 1}`
         )
       }
     }
@@ -162,7 +162,7 @@ const PhotosUploadSheet = ({
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center"
+      className="fixed inset-0 z-60 flex items-end sm:items-center justify-center"
       onClick={handleClose}
     >
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
@@ -214,9 +214,14 @@ const PhotosUploadSheet = ({
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="w-full min-h-[52px] flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white rounded-xl font-medium transition-colors text-base"
+            className="w-full min-h-13 flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white rounded-xl font-medium transition-colors text-base"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -234,7 +239,8 @@ const PhotosUploadSheet = ({
           {selectedFiles.length > 0 && (
             <div className="space-y-2">
               <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                {selectedFiles.length} photo{selectedFiles.length !== 1 ? 's' : ''} selected
+                {selectedFiles.length} photo
+                {selectedFiles.length !== 1 ? 's' : ''} selected
               </p>
               <ul className="space-y-2 max-h-40 overflow-y-auto">
                 {selectedFiles.map((file, index) => (
@@ -255,7 +261,11 @@ const PhotosUploadSheet = ({
                         className="text-red-500 hover:text-red-600 p-1 shrink-0"
                         aria-label={`Remove ${file.name}`}
                       >
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <svg
+                          className="w-4 h-4"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
                           <path
                             fillRule="evenodd"
                             d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -341,7 +351,7 @@ const PhotosUploadSheet = ({
             </p>
           )}
 
-          <label className="flex items-center gap-3 min-h-[44px] cursor-pointer">
+          <label className="flex items-center gap-3 min-h-11 cursor-pointer">
             <input
               type="checkbox"
               checked={isPublic}
@@ -365,7 +375,7 @@ const PhotosUploadSheet = ({
             type="button"
             onClick={handleUpload}
             disabled={!selectedFiles.length || isUploading}
-            className="w-full min-h-[52px] bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:text-gray-500 text-white rounded-xl font-medium transition-colors text-base"
+            className="w-full min-h-13 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:text-gray-500 text-white rounded-xl font-medium transition-colors text-base"
           >
             {isUploading
               ? `Uploading${uploadProgress.total ? ` (${uploadProgress.current}/${uploadProgress.total})` : ''}...`

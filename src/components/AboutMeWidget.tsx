@@ -1,9 +1,9 @@
 'use client'
 
-import Image from 'next/image'
-import Link from 'next/link'
 import { isAdminRole } from '@/lib/admin'
 import { useSession } from 'next-auth/react'
+import Image from 'next/image'
+import Link from 'next/link'
 import { useState } from 'react'
 
 const AboutMeWidget = () => {
@@ -75,14 +75,17 @@ const AboutMeWidget = () => {
 
           {/* Tech Stack Skeleton */}
           <div className="flex flex-wrap gap-1 sm:gap-2 mb-3 sm:mb-4">
-            {['about-tech-1', 'about-tech-2', 'about-tech-3', 'about-tech-4'].map(
-              (id) => (
-                <div
-                  key={id}
-                  className="h-6 bg-gray-200 dark:bg-gray-700 rounded-full w-12 sm:w-16"
-                ></div>
-              )
-            )}
+            {[
+              'about-tech-1',
+              'about-tech-2',
+              'about-tech-3',
+              'about-tech-4'
+            ].map((id) => (
+              <div
+                key={id}
+                className="h-6 bg-gray-200 dark:bg-gray-700 rounded-full w-12 sm:w-16"
+              ></div>
+            ))}
           </div>
 
           {/* Buttons Skeleton */}
@@ -198,7 +201,7 @@ const AboutMeWidget = () => {
 
         <div className="space-y-2 sm:space-y-3 xl:space-y-4 mb-3 sm:mb-4 xl:mb-6">
           <div className="flex items-center gap-2 sm:gap-3 xl:gap-4">
-            <div className="w-6 h-6 sm:w-8 sm:h-8 xl:w-10 xl:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 xl:w-10 xl:h-10 bg-linear-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
               <svg
                 className="w-3 h-3 sm:w-4 sm:h-4 xl:w-5 xl:h-5 text-white"
                 fill="currentColor"
@@ -218,7 +221,7 @@ const AboutMeWidget = () => {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3 xl:gap-4">
-            <div className="w-6 h-6 sm:w-8 sm:h-8 xl:w-10 xl:h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 xl:w-10 xl:h-10 bg-linear-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
               <svg
                 className="w-3 h-3 sm:w-4 sm:h-4 xl:w-5 xl:h-5 text-white"
                 fill="currentColor"
@@ -242,7 +245,7 @@ const AboutMeWidget = () => {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3 xl:gap-4">
-            <div className="w-6 h-6 sm:w-8 sm:h-8 xl:w-10 xl:h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 xl:w-10 xl:h-10 bg-linear-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
               <svg
                 className="w-3 h-3 sm:w-4 sm:h-4 xl:w-5 xl:h-5 text-white"
                 fill="currentColor"

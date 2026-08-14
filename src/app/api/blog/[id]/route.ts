@@ -2,6 +2,7 @@ import { auth } from '@/auth'
 import { Admin } from '@/models/Admin'
 import { Blog, IBlog } from '@/models/Blog'
 import dbConnect from '@/utils/db'
+import { blogUpdateSchema } from '@/lib/blog-fields'
 import { NextRequest, NextResponse } from 'next/server'
 
 // GET - Fetch single blog
@@ -88,9 +89,24 @@ export const PATCH = async (
     }
 
     const body = await req.json()
-    const { update } = body
+    const parsed = blogUpdateSchema.safeParse(body?.update)
 
-    // Only update provided fields
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues[0]?.message ?? 'Invalid update payload' },
+        { status: 400 }
+      )
+    }
+
+    const update = parsed.data
+
+    if (Object.keys(update).length === 0) {
+      return NextResponse.json(
+        { error: 'No valid fields to update' },
+        { status: 400 }
+      )
+    }
+
     const updatedBlog = await Blog.findByIdAndUpdate(
       id,
       { $set: update },

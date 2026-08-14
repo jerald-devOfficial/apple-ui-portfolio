@@ -1,7 +1,7 @@
 'use client'
 
 import { NAG_SYMBOLS } from '@/app/chess/_lib/board-theme'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 type MoveAnnotationEditorProps = {
   comment?: string
@@ -21,15 +21,24 @@ const MoveAnnotationEditor = ({
   moveSan,
   onSave
 }: MoveAnnotationEditorProps) => {
+  const initialNag = initialNags?.[0]
   const [comment, setComment] = useState(initialComment ?? '')
-  const [selectedNag, setSelectedNag] = useState<number | undefined>(
-    initialNags?.[0]
-  )
+  const [selectedNag, setSelectedNag] = useState<number | undefined>(initialNag)
+  const [prevProps, setPrevProps] = useState({
+    comment: initialComment,
+    nag: initialNag,
+    moveSan
+  })
 
-  useEffect(() => {
+  if (
+    initialComment !== prevProps.comment ||
+    initialNag !== prevProps.nag ||
+    moveSan !== prevProps.moveSan
+  ) {
+    setPrevProps({ comment: initialComment, nag: initialNag, moveSan })
     setComment(initialComment ?? '')
-    setSelectedNag(initialNags?.[0])
-  }, [initialComment, initialNags, moveSan])
+    setSelectedNag(initialNag)
+  }
 
   const handleSave = () => {
     onSave(

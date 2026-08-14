@@ -2,14 +2,13 @@
 
 import PhotoDetailModal from '@/components/PhotoDetailModal'
 import PhotosUploadSheet from '@/components/PhotosUploadSheet'
-import { IPhoto } from '@/models/Photo'
+import { fetcher } from '@/lib/fetcher'
+import type { IPhoto } from '@/models/Photo'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 const PhotosWidget = () => {
   const { data: session } = useSession()
@@ -76,7 +75,11 @@ const PhotosWidget = () => {
                 alt="Loading"
                 width={compact ? 12 : 24}
                 height={compact ? 12 : 24}
-                className={compact ? 'opacity-50' : 'opacity-50 sm:w-8 sm:h-8 xl:w-10 xl:h-10'}
+                className={
+                  compact
+                    ? 'opacity-50'
+                    : 'opacity-50 sm:w-8 sm:h-8 xl:w-10 xl:h-10'
+                }
               />
             </div>
             <p
@@ -106,7 +109,11 @@ const PhotosWidget = () => {
                 alt="No photos"
                 width={compact ? 16 : 24}
                 height={compact ? 16 : 24}
-                className={compact ? 'opacity-50' : 'opacity-50 sm:w-8 sm:h-8 xl:w-10 xl:h-10'}
+                className={
+                  compact
+                    ? 'opacity-50'
+                    : 'opacity-50 sm:w-8 sm:h-8 xl:w-10 xl:h-10'
+                }
               />
             </div>
             <p
@@ -131,7 +138,7 @@ const PhotosWidget = () => {
         <div
           className={`grid grid-cols-3 ${compact ? 'gap-1' : 'gap-1.5 sm:gap-2 xl:gap-4'}`}
         >
-          {photos.map((photo) => (
+          {photos.map((photo, index) => (
             <button
               key={photo._id}
               type="button"
@@ -143,8 +150,13 @@ const PhotosWidget = () => {
                   src={photo.imageUrl}
                   alt={photo.title}
                   fill
-                  sizes={compact ? '33vw' : '(max-width: 640px) 25vw, (max-width: 1024px) 15vw, 10vw'}
+                  sizes={
+                    compact
+                      ? '33vw'
+                      : '(max-width: 640px) 25vw, (max-width: 1024px) 15vw, 10vw'
+                  }
                   className="object-cover"
+                  priority={index === 0}
                 />
               </div>
               <div className="absolute inset-0 z-10 bg-black/0 group-hover:bg-black/20 transition-colors pointer-events-none" />
@@ -176,7 +188,7 @@ const PhotosWidget = () => {
               <button
                 type="button"
                 onClick={openUploadSheet}
-                className="relative z-20 min-w-[44px] min-h-[44px] flex items-center justify-center -mr-2 text-blue-500 hover:text-blue-600 transition-colors text-sm font-semibold bg-blue-50 dark:bg-blue-900/30 rounded-full"
+                className="relative z-20 min-w-11 min-h-11 flex items-center justify-center -mr-2 text-blue-500 hover:text-blue-600 transition-colors text-sm font-semibold bg-blue-50 dark:bg-blue-900/30 rounded-full"
                 aria-label="Add photos"
               >
                 +
@@ -204,7 +216,7 @@ const PhotosWidget = () => {
               <button
                 type="button"
                 onClick={openUploadSheet}
-                className="relative z-20 min-h-[44px] px-4 text-blue-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors text-xs sm:text-sm xl:text-base font-medium rounded-lg"
+                className="relative z-20 min-h-11 px-4 text-blue-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors text-xs sm:text-sm xl:text-base font-medium rounded-lg"
               >
                 Add
               </button>

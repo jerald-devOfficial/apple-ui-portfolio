@@ -30,6 +30,7 @@ export interface IDiary {
   createdAt?: string
   updatedAt?: string
   wordCount?: number
+  liked?: boolean
 }
 
 // Document interface with Mongoose types (for database operations)

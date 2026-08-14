@@ -9,7 +9,7 @@ import {
   UserIcon
 } from '@heroicons/react/24/outline'
 import Link from 'next/link'
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 
 interface DiaryCardProps {
   diary: IDiary
@@ -17,14 +17,27 @@ interface DiaryCardProps {
   onDelete?: (id: string) => void
 }
 
+const getContentPreview = (htmlContent: string) => {
+  const text = htmlContent
+    .replace(/<pre[\s\S]*?<\/pre>/gi, ' [code block] ')
+    .replace(/<code[\s\S]*?<\/code>/gi, ' [code block] ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+
+  const maxLength = 120
+  return text.length > maxLength
+    ? `${text.substring(0, maxLength).trim()}...`
+    : text
+}
+
 const DiaryCard: FC<DiaryCardProps> = ({
   diary,
   isOwner = false,
   onDelete
 }) => {
-  const [contentPreview, setContentPreview] = useState<string>('')
+  const contentPreview = getContentPreview(diary.content)
 
-  // Handle delete click
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.preventDefault()
     if (onDelete) {
@@ -32,7 +45,6 @@ const DiaryCard: FC<DiaryCardProps> = ({
     }
   }
 
-  // Format date consistently
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'Recent'
     try {
@@ -46,36 +58,12 @@ const DiaryCard: FC<DiaryCardProps> = ({
     }
   }
 
-  useEffect(() => {
-    // Parse HTML content to extract plain text for preview
-    const getContentPreview = (htmlContent: string) => {
-      const tempDiv = document.createElement('div')
-      tempDiv.innerHTML = htmlContent
-
-      // Clean up TinyMCE specific elements for code blocks
-      const codeBlocks = tempDiv.querySelectorAll('pre, code')
-      codeBlocks.forEach((block) => {
-        block.textContent = '[code block]'
-      })
-
-      // Get plain text and limit to appropriate length
-      const text = tempDiv.textContent || tempDiv.innerText || ''
-      const maxLength = 120
-      return text.length > maxLength
-        ? `${text.substring(0, maxLength).trim()}...`
-        : text
-    }
-
-    setContentPreview(getContentPreview(diary.content))
-  }, [diary.content])
-
   return (
     <div className="h-full">
       <div className="group rounded-xl overflow-hidden bg-white dark:bg-zinc-800 shadow-sm border border-gray-200 dark:border-zinc-700 hover:shadow-md transition duration-300 h-full flex flex-col">
         <div className="p-5 flex flex-col h-full">
-          {/* Header with title and action buttons */}
           <div className="flex justify-between items-start mb-2">
-            <Link href={`/diary/${diary._id}`} className="flex-grow min-w-0">
+            <Link href={`/diary/${diary._id}`} className="grow min-w-0">
               <h3 className="font-medium text-lg text-blue-500 dark:text-blue-400 group-hover:text-blue-600 dark:group-hover:text-blue-500 transition-colors truncate">
                 {diary.title}
                 {isOwner && (
@@ -89,7 +77,6 @@ const DiaryCard: FC<DiaryCardProps> = ({
               </h3>
             </Link>
 
-            {/* Action buttons for owner */}
             {isOwner && (
               <div className="flex items-center gap-2 ml-4 shrink-0">
                 <Link
@@ -109,7 +96,6 @@ const DiaryCard: FC<DiaryCardProps> = ({
             )}
           </div>
 
-          {/* Meta information row */}
           <div className="flex items-center justify-between mb-3 text-xs">
             <span className="flex items-center text-gray-500 dark:text-gray-400">
               <CalendarIcon className="h-3.5 w-3.5 mr-1" />
@@ -138,13 +124,11 @@ const DiaryCard: FC<DiaryCardProps> = ({
             </span>
           </div>
 
-          {/* Content preview with fixed height */}
-          <div className="flex-grow flex flex-col">
+          <div className="grow flex flex-col">
             <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3">
               {contentPreview}
             </p>
 
-            {/* Footer with tags and read more */}
             <div className="flex justify-between items-center mt-auto pt-4">
               <div className="flex flex-wrap gap-2 items-center">
                 {diary.tags && diary.tags.length > 0

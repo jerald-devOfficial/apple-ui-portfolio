@@ -5,7 +5,7 @@ import { Inter } from 'next/font/google'
 import Image from 'next/image'
 import { FormEvent, useState } from 'react'
 import { IoSearchSharp } from 'react-icons/io5'
-import Web3 from 'web3'
+import { formatEther, hexToBigInt } from 'viem'
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
@@ -24,6 +24,15 @@ type Transaction = {
   v?: string
   r: string
   s: string
+}
+
+const formatTransactionValue = (value: string) => {
+  try {
+    if (!value || value === '0x') return '0'
+    return toFixedFour(formatEther(hexToBigInt(value as `0x${string}`)))
+  } catch {
+    return '0'
+  }
 }
 
 const EtherScan = () => {
@@ -84,7 +93,7 @@ const EtherScan = () => {
         </div>
       </div>
       <div className="flex flex-col flex-1 gap-y-4">
-        <div className="h-[100px] bg-linear-to-b from-eth-bg-top to-eth-bg-bottom relative overflow-hidden w-full flex">
+        <div className="h-25 bg-linear-to-b from-[#081d35] to-[#182c42] relative overflow-hidden w-full flex">
           <div className="absolute overflow-hidden inset-0 h-[inherit] wave px-4 flex grow justify-center items-center w-full">
             <form
               onSubmit={fetchTransaction}
@@ -175,12 +184,7 @@ const EtherScan = () => {
                   <span>{hashShortener(transaction.blockHash ?? '', 10)}</span>
                   <span>{hashShortener(transaction.from ?? '', 10)}</span>
                   <span>{hashShortener(transaction.to ?? '', 10)}</span>
-                  <span>
-                    {toFixedFour(
-                      Web3.utils.fromWei(transaction.value, 'ether')
-                    )}{' '}
-                    ETH
-                  </span>
+                  <span>{formatTransactionValue(transaction.value)} ETH</span>
                 </div>
               </div>
             </div>

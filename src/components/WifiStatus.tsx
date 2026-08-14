@@ -1,38 +1,29 @@
 'use client'
 
+import { useMounted } from '@/hooks/useMounted'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 
 const WifiStatus = () => {
   const [wifiStrength, setWifiStrength] = useState(0)
-  const [mounted, setMounted] = useState(false)
-  // Using useTheme hook for consistency with other components
+  const mounted = useMounted()
   useTheme()
 
   useEffect(() => {
-    setMounted(true)
+    if (!mounted) return
 
-    // Fetch real-time WiFi signal strength
-    const fetchWifiStrength = () => {
-      // For demonstration, using a random number between 0 and 100
-      const strength = Math.floor(Math.random() * 101)
-      setWifiStrength(strength)
+    const tick = () => setWifiStrength(Math.floor(Math.random() * 101))
+    const timeoutId = setTimeout(tick, 0)
+    const intervalId = setInterval(tick, 5000)
+
+    return () => {
+      clearTimeout(timeoutId)
+      clearInterval(intervalId)
     }
+  }, [mounted])
 
-    // Fetch WiFi strength initially
-    fetchWifiStrength()
-
-    // Fetch WiFi strength every 5 seconds
-    const intervalId = setInterval(fetchWifiStrength, 5000)
-
-    // Clear interval on component unmount
-    return () => clearInterval(intervalId)
-  }, [])
-
-  // Don't render anything until after hydration to avoid mismatch
   if (!mounted) return null
 
-  // Dynamic text color based on theme
   const textColorClass = 'text-black dark:text-white'
 
   return wifiStrength <= 33 ? (

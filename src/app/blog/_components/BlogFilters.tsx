@@ -2,7 +2,7 @@
 
 import { FunnelIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useEffectEvent, useState } from 'react'
 
 interface BlogFiltersProps {
   categories: string[]
@@ -18,7 +18,7 @@ const BlogFilters = ({ categories }: BlogFiltersProps) => {
     searchParams.get('featured') === 'true'
   )
 
-  const updateFilters = useCallback(() => {
+  const applyFilters = useEffectEvent(() => {
     const params = new URLSearchParams()
 
     if (search) params.set('search', search)
@@ -27,7 +27,7 @@ const BlogFilters = ({ categories }: BlogFiltersProps) => {
 
     const queryString = params.toString()
     router.push(`/blog${queryString ? `?${queryString}` : ''}`)
-  }, [search, category, featured, router])
+  })
 
   const clearFilters = () => {
     setSearch('')
@@ -37,15 +37,14 @@ const BlogFilters = ({ categories }: BlogFiltersProps) => {
   }
 
   useEffect(() => {
-    const timeoutId = setTimeout(updateFilters, 500)
+    const timeoutId = setTimeout(() => applyFilters(), 500)
     return () => clearTimeout(timeoutId)
-  }, [search, category, featured, updateFilters])
+  }, [search, category, featured])
 
   const hasActiveFilters = search || category || featured
 
   return (
     <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-      {/* Search */}
       <div className="relative flex-1 max-w-md">
         <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
         <input
@@ -57,7 +56,6 @@ const BlogFilters = ({ categories }: BlogFiltersProps) => {
         />
       </div>
 
-      {/* Category Filter */}
       <div className="flex items-center space-x-2">
         <FunnelIcon className="w-5 h-5 text-gray-400" />
         <select
@@ -74,7 +72,6 @@ const BlogFilters = ({ categories }: BlogFiltersProps) => {
         </select>
       </div>
 
-      {/* Featured Filter */}
       <label className="flex items-center space-x-2 cursor-pointer">
         <input
           type="checkbox"
@@ -87,7 +84,6 @@ const BlogFilters = ({ categories }: BlogFiltersProps) => {
         </span>
       </label>
 
-      {/* Clear Filters */}
       {hasActiveFilters && (
         <button
           onClick={clearFilters}

@@ -157,7 +157,7 @@ const BlogCard = ({ blog, isAdmin }: BlogCardProps) => {
               <span className="truncate">
                 {blog.createdAt
                   ? formatDistanceToNow(
-                      new Date(blog.createdAt || Date.now()),
+                      new Date(blog.createdAt),
                       {
                         addSuffix: true
                       }

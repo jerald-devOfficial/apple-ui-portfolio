@@ -3,14 +3,10 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
 import AppleToastContainer from '@/components/AppleToastContainer'
-import AuthProvider from '@/components/Auth/AuthProvider'
 import Wallpapers from '@/components/Wallpapers'
 import ResponsiveUI from '@/components/layouts'
 
 import { Providers } from '@/app/providers'
-import { getConfig } from '@/wagmi'
-import { headers } from 'next/headers'
-import { cookieToInitialState } from 'wagmi'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -45,16 +41,11 @@ export const metadata: Metadata = {
   }
 }
 
-export default async function RootLayout({
+const RootLayout = ({
   children
 }: Readonly<{
   children: React.ReactNode
-}>) {
-  const headersList = await headers()
-  const initialState = cookieToInitialState(
-    getConfig(),
-    headersList.get('cookie')
-  )
+}>) => {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -67,14 +58,14 @@ export default async function RootLayout({
       <body
         className={`${inter.className} flex h-screen flex-col items-center justify-between relative transition-colors`}
       >
-        <Providers initialState={initialState}>
+        <Providers>
           <Wallpapers />
-          <AuthProvider>
-            <ResponsiveUI>{children}</ResponsiveUI>
-          </AuthProvider>
+          <ResponsiveUI>{children}</ResponsiveUI>
           <AppleToastContainer />
         </Providers>
       </body>
     </html>
   )
 }
+
+export default RootLayout

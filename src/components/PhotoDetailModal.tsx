@@ -2,7 +2,7 @@
 
 import { formatPhotoDate, getPhotoDisplayDate } from '@/lib/photo-metadata'
 import { getDisplayTitle } from '@/lib/photos'
-import { IPhoto } from '@/models/Photo'
+import type { IPhoto } from '@/models/Photo'
 import Image from 'next/image'
 import { useState } from 'react'
 
@@ -47,13 +47,13 @@ const PhotoDetailModal = ({
       onClick={handleClose}
     >
       <article
-        className="relative w-full max-w-[470px] bg-white dark:bg-neutral-950 border border-gray-300 dark:border-neutral-800 shadow-2xl overflow-hidden"
+        className="relative w-full max-w-117.5 bg-white dark:bg-neutral-950 border border-gray-300 dark:border-neutral-800 shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Instagram-style header */}
         <header className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-neutral-800">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="shrink-0 w-8 h-8 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 p-[2px]">
+            <div className="shrink-0 w-8 h-8 rounded-full bg-linear-to-tr from-yellow-400 via-pink-500 to-purple-600 p-0.5">
               <div className="w-full h-full rounded-full bg-white dark:bg-neutral-950 flex items-center justify-center overflow-hidden">
                 <Image
                   src="/images/icons/photos.png"
@@ -78,7 +78,11 @@ const PhotoDetailModal = ({
                   className="w-9 h-9 flex items-center justify-center text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-neutral-900 rounded-full transition-colors"
                   aria-label="More options"
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
                     <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
                   </svg>
                 </button>
@@ -135,7 +139,12 @@ const PhotoDetailModal = ({
         {/* Action bar */}
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-4 text-gray-900 dark:text-white">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -143,7 +152,12 @@ const PhotoDetailModal = ({
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
               />
             </svg>
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -151,7 +165,12 @@ const PhotoDetailModal = ({
                 d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
               />
             </svg>
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -204,7 +223,7 @@ const PhotoDetailModal = ({
             className="absolute inset-0 z-30 flex items-center justify-center bg-black/50 backdrop-blur-[2px] p-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="w-full max-w-[280px] bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-neutral-700">
+            <div className="w-full max-w-70 bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-neutral-700">
               <div className="px-5 pt-5 pb-3 text-center">
                 <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-1">
                   Delete photo?

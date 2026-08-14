@@ -1,59 +1,38 @@
 'use client'
 
 import { EthereumIcon } from '@/components/svg-icons'
-import {
-  copyAddressToClipboard,
-  fetchExchangeRateFromAPI,
-  hashShortener,
-  toFixedFour
-} from '@/utils'
-import { useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import useEthBalance from '@/hooks/useEthBalance'
+import { useInjectedMetaMask } from '@/hooks/useInjectedMetaMask'
+import { copyAddressToClipboard, hashShortener } from '@/utils'
 import { BiSolidCopy } from 'react-icons/bi'
 import { HiOutlineEllipsisVertical } from 'react-icons/hi2'
 import { LuLoader } from 'react-icons/lu'
 import { RiLineChartLine } from 'react-icons/ri'
-import { formatEther } from 'viem'
-import { useAccount, useBalance } from 'wagmi'
 
 const YourMetaMask = () => {
-  const { address, isConnected } = useAccount()
-  const { data: balanceData, isLoading: isLoadingBalance } = useBalance({
-    address
-  })
-
-  const [error, setError] = useState<null | string>(null)
-
-  useEffect(() => {
-    if (!isConnected) {
-      setError('MetaMask browser extension not detected or not connected.')
-    } else {
-      setError(null)
-    }
-  }, [isConnected])
-
-  const fetchBalanceUSD = async () => {
-    if (balanceData) {
-      const ethToUSD = await fetchExchangeRateFromAPI()
-      return (parseFloat(formatEther(balanceData.value)) * ethToUSD).toFixed(2)
-    }
-    return '0.00'
-  }
-
-  const { data: balanceUSD = '0.00' } = useQuery({
-    queryKey: ['balanceUSD', balanceData?.value?.toString() || '0'],
-    queryFn: fetchBalanceUSD,
-    enabled: !!balanceData
-  })
+  const {
+    address,
+    isConnected,
+    hasProvider,
+    hasResolved,
+    isConnecting,
+    connect,
+    error
+  } = useInjectedMetaMask()
+  const {
+    balance,
+    usdBalance,
+    isLoading: isLoadingBalance
+  } = useEthBalance(address)
 
   return (
     <section className="grow h-full bg-white dark:bg-zinc-900">
       <div className="h-16 w-full shadow-md shadow-gray-200 dark:shadow-zinc-800 flex justify-between items-center px-4 bg-white dark:bg-zinc-900">
-        {error && (
+        {error ? (
           <p className="text-xs font-bold text-rose-600 dark:text-rose-400">
             {error}
           </p>
-        )}
+        ) : null}
         {isConnected && address ? (
           <>
             <span className="rounded-full bg-gray-100 dark:bg-zinc-800 border border-solid border-gray-200 dark:border-zinc-700 py-2 px-4">
@@ -80,7 +59,7 @@ const YourMetaMask = () => {
         ) : null}
       </div>
       <div className="flex flex-col px-4 py-6">
-        {error && (
+        {error ? (
           <div className="overflow-x-hidden overflow-y-auto px-4 space-y-2">
             <p className="text-xs font-medium text-left text-wrap leading-6 text-blue-600 dark:text-blue-400">
               Please make sure to:
@@ -102,7 +81,23 @@ const YourMetaMask = () => {
               <li>{`And it will display your MetaMask here.`}</li>
             </ul>
           </div>
-        )}
+        ) : null}
+        {hasProvider && hasResolved && !isConnected ? (
+          <div className="flex flex-col items-center gap-y-4 px-4 py-8">
+            <p className="text-xs text-center leading-6 text-gray-600 dark:text-gray-300">
+              MetaMask is installed. Connect to show this account&apos;s ETH
+              balance.
+            </p>
+            <button
+              type="button"
+              onClick={() => void connect()}
+              disabled={isConnecting}
+              className="rounded-full bg-sky-600 px-4 py-2 text-xs font-medium text-white hover:bg-sky-700 disabled:opacity-50"
+            >
+              {isConnecting ? 'Connecting...' : 'Connect MetaMask'}
+            </button>
+          </div>
+        ) : null}
         {isConnected && address ? (
           <div className="my-4 flex flex-col items-center gap-y-10">
             {isLoadingBalance ? (
@@ -111,7 +106,7 @@ const YourMetaMask = () => {
               </h3>
             ) : (
               <h3 className="font-medium text-3xl text-black dark:text-white">
-                ${balanceUSD} USD
+                ${usdBalance ?? '0.00'} USD
               </h3>
             )}
             <div className="grid place-items-center gap-1">
@@ -134,7 +129,7 @@ const YourMetaMask = () => {
                 <div className="flex gap-x-2 items-start">
                   <div className="rounded-full block bg-gray-200 dark:bg-zinc-800 p-1.5 relative">
                     <EthereumIcon className="h-3.5 w-3.5" />
-                    <div className="-top-1 -right-0 absolute rounded-full bg-gray-50 dark:bg-zinc-900 p-0.5">
+                    <div className="-top-1 right-0 absolute rounded-full bg-gray-50 dark:bg-zinc-900 p-0.5">
                       <EthereumIcon className="h-2 w-2" />
                     </div>
                   </div>
@@ -145,10 +140,11 @@ const YourMetaMask = () => {
                 </div>
                 <div className="flex flex-col items-end gap-y-1">
                   <span className="dark:text-white">
-                    {toFixedFour(formatEther(balanceData?.value ?? BigInt(0)))}{' '}
-                    ETH
+                    {isLoadingBalance ? '...' : `${balance ?? '0.0000'} ETH`}
                   </span>
-                  <span className="dark:text-gray-300">${balanceUSD} USD</span>
+                  <span className="dark:text-gray-300">
+                    ${usdBalance ?? '0.00'} USD
+                  </span>
                 </div>
               </div>
             </div>
