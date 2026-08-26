@@ -1,21 +1,19 @@
 'use client'
 
 import { Result } from '@/app/news/_components/News'
+import { NEWS_IMAGE_PLACEHOLDER, resolveNewsImage } from '@/lib/news-image'
 import { formatDate } from '@/utils'
 import Image from 'next/image'
 import { useState } from 'react'
-
-const PLACEHOLDER =
-  'https://placehold.co/600x400/000000/FFFFFF.png?text=No+Image'
 
 type NonFeaturedNewsProps = {
   news: Result
 }
 
 const NonFeaturedNews = ({ news }: NonFeaturedNewsProps) => {
-  const source = news?.image_url || PLACEHOLDER
+  const source = resolveNewsImage(news?.image_url)
   const [brokenUrl, setBrokenUrl] = useState<string | null>(null)
-  const img = brokenUrl === source ? PLACEHOLDER : source
+  const img = brokenUrl === source ? NEWS_IMAGE_PLACEHOLDER : source
 
   return (
     <a

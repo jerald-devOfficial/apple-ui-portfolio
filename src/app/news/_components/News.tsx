@@ -2,6 +2,7 @@
 
 import FeaturedNews from '@/components/News/FeaturedNews'
 import NonFeaturedNews from '@/components/News/NonFeaturedNews'
+import { isDisplayableNewsImage } from '@/lib/news-image'
 import { useState } from 'react'
 import useSWR, { Fetcher } from 'swr'
 
@@ -34,13 +35,6 @@ const News = () => {
   const [currentPage, setCurrentPage] = useState('')
   const [nextPage, setNextPage] = useState('')
 
-  const isValidImageUrl = (url: string): boolean => {
-    const imageExtensions = /\.(jpg|jpeg|png|gif|bmp)$/i
-    const excludedDomains = /cdn\.openpr\.com/i
-
-    return imageExtensions.test(url) && !excludedDomains.test(url)
-  }
-
   const fetcher: Fetcher<Result[], string> = async (url: string) => {
     const response = await fetch(url)
     if (!response.ok) {
@@ -54,8 +48,7 @@ const News = () => {
         fetchNews.title &&
         fetchNews.description &&
         fetchNews.link &&
-        fetchNews.image_url &&
-        isValidImageUrl(fetchNews.image_url)
+        isDisplayableNewsImage(fetchNews.image_url)
     )
 
     const uniqueNews = filteredNews.filter(
