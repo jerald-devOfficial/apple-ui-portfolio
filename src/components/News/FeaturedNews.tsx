@@ -1,21 +1,19 @@
 'use client'
 
 import { Result } from '@/app/news/_components/News'
+import { NEWS_IMAGE_PLACEHOLDER, resolveNewsImage } from '@/lib/news-image'
 import { formatDate } from '@/utils'
 import Image from 'next/image'
 import { useState } from 'react'
-
-const PLACEHOLDER =
-  'https://placehold.co/600x400/000000/FFFFFF.png?text=No+Image'
 
 type FeaturedNewsProps = {
   featured: Result
 }
 
 const FeaturedNews = ({ featured }: FeaturedNewsProps) => {
-  const source = featured?.image_url || PLACEHOLDER
+  const source = resolveNewsImage(featured?.image_url)
   const [brokenUrl, setBrokenUrl] = useState<string | null>(null)
-  const featuredImg = brokenUrl === source ? PLACEHOLDER : source
+  const featuredImg = brokenUrl === source ? NEWS_IMAGE_PLACEHOLDER : source
 
   return (
     <a
@@ -30,7 +28,9 @@ const FeaturedNews = ({ featured }: FeaturedNewsProps) => {
           src={featuredImg}
           width={1}
           height={1}
-          loading="lazy"
+          // The featured story is the hero image at the top of /news, so it is
+          // the LCP element — lazy loading it delays the metric.
+          priority
           style={{
             height: 'auto',
             width: '100%'

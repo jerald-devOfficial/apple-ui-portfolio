@@ -19,25 +19,25 @@ For package versions and remaining majors, see [PACKAGE_AND_CODE_AUDIT.md](./PAC
 
 ## 1. Adoption scorecard
 
-| Feature | Used? | Correct? | Where |
-|---------|-------|----------|-------|
-| `useActionState` + Server Action | **Yes** | **Yes** | Contact, diary create/edit, blog editor |
-| `useFormStatus` | **Yes** | **Yes** | Contact submit + fieldset; diary save; blog save |
-| `useOptimistic` | **Yes** | **Yes** | Diary like, blog comment like, mails read/unread/delete |
-| Async `useTransition` | **Yes** | **Yes** | Likes, comments, mails |
-| `use()` (Promise unwrap) | **No** | — | Blog/diary detail are Server Components; client lists use SWR. Do not replace SWR with `use()`. |
-| `useEffectEvent` | **Yes** | **Yes** | `BlogFilters` debounce; chess save flush |
-| `useSyncExternalStore` (`useMounted`) | **Yes** | **Yes** | Hydration-safe mount flag; no `setState` in an effect |
-| Adjust state during render | **Yes** | **Yes** | `ChessLayout` derives selected section/line/orientation |
-| `ref` as a prop (no `forwardRef`) | **Yes** | **Yes** | No `forwardRef` in `src/` |
-| React Compiler | **No** | — | `reactCompiler` not set in `next.config.ts` |
-| `<Activity>` / View Transitions | **No** | — | Optional; Web3 tabs and diary navigation do not use them |
-| `"use cache"` / `cacheTag` | **No** | — | Optional; blog list still queries Mongo per request |
-| Async `params` / `searchParams` / `headers()` | **Yes** | **Yes** | Blog + diary pages, API routes, contact action |
-| `proxy.ts` (was middleware) | **Yes** | **Yes** | Auth redirects for `/mails`, diary create/edit, `/chess`, `/contact` |
-| ESLint 9 flat config | **Yes** | **Yes** | `eslint.config.mjs`; script is `eslint .` |
-| Turbopack default | **Yes** | **Yes** | `next dev` has no `--turbopack` flag |
-| Server Components by default | **Yes** | **Yes** | Pages own static chrome (`<main>`, headings, layout). `'use client'` only on islands that need state/events. |
+| Feature                                       | Used?   | Correct? | Where                                                                                                        |
+| --------------------------------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------ |
+| `useActionState` + Server Action              | **Yes** | **Yes**  | Contact, diary create/edit, blog editor                                                                      |
+| `useFormStatus`                               | **Yes** | **Yes**  | Contact submit + fieldset; diary save; blog save                                                             |
+| `useOptimistic`                               | **Yes** | **Yes**  | Diary like, blog comment like, mails read/unread/delete                                                      |
+| Async `useTransition`                         | **Yes** | **Yes**  | Likes, comments, mails                                                                                       |
+| `use()` (Promise unwrap)                      | **No**  | —        | Blog/diary detail are Server Components; client lists use SWR. Do not replace SWR with `use()`.              |
+| `useEffectEvent`                              | **Yes** | **Yes**  | `BlogFilters` debounce; chess save flush                                                                     |
+| `useSyncExternalStore` (`useMounted`)         | **Yes** | **Yes**  | Hydration-safe mount flag; no `setState` in an effect                                                        |
+| Adjust state during render                    | **Yes** | **Yes**  | `ChessLayout` derives selected section/line/orientation                                                      |
+| `ref` as a prop (no `forwardRef`)             | **Yes** | **Yes**  | No `forwardRef` in `src/`                                                                                    |
+| React Compiler                                | **No**  | —        | `reactCompiler` not set in `next.config.ts`                                                                  |
+| `<Activity>` / View Transitions               | **No**  | —        | Optional; Web3 tabs and diary navigation do not use them                                                     |
+| `"use cache"` / `cacheTag`                    | **No**  | —        | Optional; blog list still queries Mongo per request                                                          |
+| Async `params` / `searchParams` / `headers()` | **Yes** | **Yes**  | Blog + diary pages, API routes, contact action                                                               |
+| `proxy.ts` (was middleware)                   | **Yes** | **Yes**  | Auth redirects for `/mails`, diary create/edit, `/chess`, `/contact`                                         |
+| ESLint 9 flat config                          | **Yes** | **Yes**  | `eslint.config.mjs`; script is `eslint .`                                                                    |
+| Turbopack default                             | **Yes** | **Yes**  | `next dev` has no `--turbopack` flag                                                                         |
+| Server Components by default                  | **Yes** | **Yes**  | Pages own static chrome (`<main>`, headings, layout). `'use client'` only on islands that need state/events. |
 
 **Verdict:** The stack is on current Next 16 / React 19, and the hooks that matter for this app are in place: Server Actions + `useActionState` / `useFormStatus`, `useOptimistic` inside `startTransition`, `useEffectEvent` for chess flush and blog filters, and server pages with static chrome plus client islands. Remaining optionals are React Compiler, `"use cache"`, `<Activity>`, and View Transitions.
 
@@ -47,12 +47,12 @@ For package versions and remaining majors, see [PACKAGE_AND_CODE_AUDIT.md](./PAC
 
 ### `use()` — read a Promise or Context during render
 
-| | |
-|---|---|
-| **What** | Unwraps a Promise (suspends) or reads Context. Can be called conditionally. |
-| **Use when** | A parent Server Component already started a fetch; a client child needs the resolved value under Suspense. |
-| **Instead of** | `useEffect` + `useState` to store fetched data. |
-| **Avoid** | Creating a new Promise inside render. |
+|                |                                                                                                            |
+| -------------- | ---------------------------------------------------------------------------------------------------------- |
+| **What**       | Unwraps a Promise (suspends) or reads Context. Can be called conditionally.                                |
+| **Use when**   | A parent Server Component already started a fetch; a client child needs the resolved value under Suspense. |
+| **Instead of** | `useEffect` + `useState` to store fetched data.                                                            |
+| **Avoid**      | Creating a new Promise inside render.                                                                      |
 
 **Status:** Not used. That is the right call here. Project rules say **SWR** for client fetching. Blog list/detail already `await` Mongo in Server Components and pass props into client islands (`BlogFilters`, `BlogComments`). Introducing `use(commentsPromise)` would duplicate SWR without a clear win.
 
@@ -60,11 +60,11 @@ For package versions and remaining majors, see [PACKAGE_AND_CODE_AUDIT.md](./PAC
 
 ### `useActionState` — form / action result + pending
 
-| | |
-|---|---|
-| **What** | Wraps an async Action; returns `[state, formAction, isPending]`. Replaces `useFormState`. |
-| **Use when** | Forms that return success/error state. |
-| **Instead of** | `isSubmitting` / `error` / `success` + `preventDefault` + manual `fetch`. |
+|                |                                                                                           |
+| -------------- | ----------------------------------------------------------------------------------------- |
+| **What**       | Wraps an async Action; returns `[state, formAction, isPending]`. Replaces `useFormState`. |
+| **Use when**   | Forms that return success/error state.                                                    |
+| **Instead of** | `isSubmitting` / `error` / `success` + `preventDefault` + manual `fetch`.                 |
 
 **Status: implemented correctly** on contact, diary create/edit, and the blog editor.
 
@@ -72,16 +72,16 @@ For package versions and remaining majors, see [PACKAGE_AND_CODE_AUDIT.md](./PAC
 - Diary: `src/app/diary/actions.ts` (`createDiaryAction`, `updateDiaryAction`, `deleteDiaryAction`); TinyMCE content is a hidden field; `redirect()` on success.
 - Blog: `src/app/blog/actions.ts` (`saveBlogAction`); content blocks JSON in a hidden field.
 
-Comment *submit* in `BlogComments.tsx` still uses `fetch` inside `startTransition` (likes already use `useOptimistic`).
+Comment _submit_ in `BlogComments.tsx` still uses `fetch` inside `startTransition` (likes already use `useOptimistic`).
 
 ---
 
 ### `useFormStatus` — pending state inside form children
 
-| | |
-|---|---|
-| **What** | Child of a `<form>` reads `{ pending }` from the nearest form. Must **not** be called in the same component that renders `<form>`. |
-| **Instead of** | Passing `isPending` down. |
+|                |                                                                                                                                    |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| **What**       | Child of a `<form>` reads `{ pending }` from the nearest form. Must **not** be called in the same component that renders `<form>`. |
+| **Instead of** | Passing `isPending` down.                                                                                                          |
 
 **Status: used correctly.** `ContactSubmitButton` and `ContactFields` call `useFormStatus` as form children. Diary and blog save buttons do the same.
 
@@ -89,10 +89,10 @@ Comment *submit* in `BlogComments.tsx` still uses `fetch` inside `startTransitio
 
 ### `useOptimistic` — instant UI, auto-revert on failure
 
-| | |
-|---|---|
+|          |                                                                                                     |
+| -------- | --------------------------------------------------------------------------------------------------- |
 | **What** | Predicted UI while an async update runs; React reverts if the transition fails or state catches up. |
-| **Rule** | Call the optimistic setter **inside** `startTransition` (or an Action). |
+| **Rule** | Call the optimistic setter **inside** `startTransition` (or an Action).                             |
 
 **Status: implemented correctly.**
 
@@ -134,9 +134,9 @@ const nextConfig = {
 
 ### `useEffectEvent` — non-reactive logic inside Effects
 
-| | |
-|---|---|
-| **What** | Event-like logic that always sees latest props/state **without** re-subscribing. |
+|                |                                                                                                              |
+| -------------- | ------------------------------------------------------------------------------------------------------------ |
+| **What**       | Event-like logic that always sees latest props/state **without** re-subscribing.                             |
 | **Instead of** | Refs for latest callbacks; omitting Effect deps; putting changing values in deps and tearing down intervals. |
 
 **Status: used correctly** in `BlogFilters` (debounced `router.push`) and `ChessLayout` (`flushPendingSave` from unmount, line-change, and debounce Effects). Clock / wifi / battery effects do not need it.
@@ -155,7 +155,11 @@ React 19 documents storing previous props/state and calling `setState` during re
 
 ```ts
 export const useMounted = () =>
-  useSyncExternalStore(emptySubscribe, () => true, () => false)
+  useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  )
 ```
 
 **Status: correct.** Used by Wallpapers, DeviceStatus, DisplayTime, BatteryStatus, WifiStatus, TinyMCEEditor. No `useState` + `useEffect(() => setMounted(true))`.
@@ -228,21 +232,21 @@ Layout dedup / incremental prefetch are framework-level; no app code required.
 
 ## 5. Replacement cheat sheet
 
-| Outdated / heavy pattern | Prefer | This app |
-|--------------------------|--------|----------|
-| `useEffect` + `fetch` + `useState` | SWR **or** Server Component | **SWR** on diaries, mails, news, photos, chess. Diary **detail/edit** are server-fetched. EtherScan fetch is on submit. |
-| `useEffect` syncing props → state | Derive during render, or `key={id}` | **Done** for DiaryCard, news images, wallpapers, TinyMCE theme, MoveAnnotationEditor. |
-| `useEffect` for auth redirect only | `proxy.ts` + server `auth()` | **Done.** Proxy is the gate; client redirects removed. |
-| Manual `isSubmitting` on forms | `useActionState` + `useFormStatus` | **Contact, diary, blog editor.** |
-| Optimistic UI by hand | `useOptimistic` | **Diary likes, comment likes, mails.** |
-| `useCallback` everywhere | React Compiler / only when needed | Chess still needs stable callbacks until Compiler. |
-| `forwardRef` | `ref` prop | **None left.** |
-| `useFormState` | `useActionState` | **`useActionState` on contact, diary, blog.** |
-| Sync `params` / `searchParams` | `await params` | **Done.** |
-| `middleware.ts` | `proxy.ts` | **Done.** |
-| Client page for static shell | Server Component chrome + `_components` islands | **Done.** Pages render `<main>` / headings / panel chrome. Do **not** use an empty `page.tsx` that only re-exports a client tree. |
-| `mounted` + `useEffect` | `useSyncExternalStore` | **`useMounted` done.** |
-| Wagmi / React Query / web3.js | viem + injected provider | **Done.** `useInjectedMetaMask` + SWR balances. Connect is explicit, not auto-prompt. |
+| Outdated / heavy pattern           | Prefer                                          | This app                                                                                                                          |
+| ---------------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `useEffect` + `fetch` + `useState` | SWR **or** Server Component                     | **SWR** on diaries, mails, news, photos, chess. Diary **detail/edit** are server-fetched. EtherScan fetch is on submit.           |
+| `useEffect` syncing props → state  | Derive during render, or `key={id}`             | **Done** for DiaryCard, news images, wallpapers, TinyMCE theme, MoveAnnotationEditor.                                             |
+| `useEffect` for auth redirect only | `proxy.ts` + server `auth()`                    | **Done.** Proxy is the gate; client redirects removed.                                                                            |
+| Manual `isSubmitting` on forms     | `useActionState` + `useFormStatus`              | **Contact, diary, blog editor.**                                                                                                  |
+| Optimistic UI by hand              | `useOptimistic`                                 | **Diary likes, comment likes, mails.**                                                                                            |
+| `useCallback` everywhere           | React Compiler / only when needed               | Chess still needs stable callbacks until Compiler.                                                                                |
+| `forwardRef`                       | `ref` prop                                      | **None left.**                                                                                                                    |
+| `useFormState`                     | `useActionState`                                | **`useActionState` on contact, diary, blog.**                                                                                     |
+| Sync `params` / `searchParams`     | `await params`                                  | **Done.**                                                                                                                         |
+| `middleware.ts`                    | `proxy.ts`                                      | **Done.**                                                                                                                         |
+| Client page for static shell       | Server Component chrome + `_components` islands | **Done.** Pages render `<main>` / headings / panel chrome. Do **not** use an empty `page.tsx` that only re-exports a client tree. |
+| `mounted` + `useEffect`            | `useSyncExternalStore`                          | **`useMounted` done.**                                                                                                            |
+| Wagmi / React Query / web3.js      | viem + injected provider                        | **Done.** `useInjectedMetaMask` + SWR balances. Connect is explicit, not auto-prompt.                                             |
 
 ---
 
@@ -254,6 +258,6 @@ Optional later (not required for the 19/16 programming model):
 2. `"use cache"` / `cacheTag` on the blog list
 3. `<Activity>` for Web3 tabs
 4. View Transitions on diary navigation
-5. Blog comment *submit* as a Server Action (likes already optimistic)
+5. Blog comment _submit_ as a Server Action (likes already optimistic)
 
 Do **not** adopt `use()` as a second data library next to SWR. Do **not** re-add wagmi or TanStack Query.

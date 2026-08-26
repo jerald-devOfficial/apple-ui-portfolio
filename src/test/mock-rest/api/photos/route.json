@@ -1,0 +1,33 @@
+[
+  {
+    "route": "/api/photos",
+    "method": "GET",
+    "status": 200,
+    "query": "",
+    "delay": 0,
+    "description": "Public photo gallery, newest capture first",
+    "responseBody": [
+      {
+        "_id": "65f000000000000000000601",
+        "title": "Harbour at dusk",
+        "description": "Shot on the way home.",
+        "imageUrl": "https://cdn.example.com/photos/harbour.jpg",
+        "imageKey": "photos/1714560000000-harbour.jpg",
+        "uploadedBy": "owner@example.com",
+        "isPublic": true,
+        "capturedAt": "2024-04-28T18:12:00.000Z",
+        "createdAt": "2024-05-01T09:00:00.000Z",
+        "updatedAt": "2024-05-01T09:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "route": "/api/photos",
+    "method": "POST",
+    "status": 401,
+    "query": "",
+    "delay": 0,
+    "description": "Uploads are admin-only",
+    "responseBody": { "error": "Unauthorized" }
+  }
+]

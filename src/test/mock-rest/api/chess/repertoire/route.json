@@ -1,0 +1,74 @@
+[
+  {
+    "route": "/api/chess/repertoire",
+    "method": "GET",
+    "status": 200,
+    "query": "",
+    "delay": 0,
+    "description": "Repertoire for the signed-in player",
+    "responseBody": {
+      "repertoire": {
+        "_id": "65f000000000000000000701",
+        "userId": "owner@example.com",
+        "sections": [
+          {
+            "_id": "section-white-e4",
+            "title": "1. e4 Openings",
+            "color": "white",
+            "parentMove": "1.e4",
+            "order": 0,
+            "lines": [
+              {
+                "_id": "line-italian",
+                "title": "Italian Game",
+                "rootFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+                "order": 0,
+                "pgn": "[Event \"Italian Game\"]\n\n1. e4 e5 *",
+                "tree": {
+                  "_id": "root",
+                  "san": "",
+                  "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+                  "variations": [],
+                  "mainLine": {
+                    "_id": "node-e4",
+                    "san": "e4",
+                    "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+                    "variations": [],
+                    "mainLine": {
+                      "_id": "node-e5",
+                      "san": "e5",
+                      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+                      "mainLine": null,
+                      "variations": []
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "createdAt": "2024-05-01T09:00:00.000Z",
+        "updatedAt": "2024-05-06T09:00:00.000Z"
+      },
+      "success": true
+    }
+  },
+  {
+    "route": "/api/chess/repertoire",
+    "method": "GET",
+    "status": 401,
+    "query": "simulate=anonymous",
+    "delay": 0,
+    "description": "Repertoire access requires a session",
+    "responseBody": { "msg": "Unauthorized" }
+  },
+  {
+    "route": "/api/chess/repertoire",
+    "method": "PATCH",
+    "status": 400,
+    "query": "",
+    "delay": 0,
+    "description": "Rejected update payload",
+    "responseBody": { "msg": "Invalid update payload" }
+  }
+]

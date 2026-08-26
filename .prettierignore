@@ -1,6 +1,12 @@
-# Ignore artifacts:
-build
-coverage
+# Prettier also reads .gitignore, so build output and node_modules are already
+# excluded. Everything below is committed but must not be reformatted.
+
+# Yarn's bundled release binary
+.yarn/
+
+# Generated
+next-env.d.ts
+yarn.lock
 
 # Ignore all HTML files:
 **/*.html

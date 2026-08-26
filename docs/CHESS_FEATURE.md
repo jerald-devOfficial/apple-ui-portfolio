@@ -26,12 +26,12 @@ An opening repertoire app (Chessable / Fritz style) integrated into the Apple UI
 
 ## Access & registration
 
-| Surface | File | Notes |
-|---------|------|-------|
-| Route | `/chess` | Auth-gated |
-| macOS dock | `src/components/layouts/index.tsx` | Visible when logged in |
-| iOS / iPadOS home | `src/app/page.tsx` | Visible when logged in |
-| Middleware | `src/proxy.ts` | Cookie-based session check |
+| Surface           | File                               | Notes                      |
+| ----------------- | ---------------------------------- | -------------------------- |
+| Route             | `/chess`                           | Auth-gated                 |
+| macOS dock        | `src/components/layouts/index.tsx` | Visible when logged in     |
+| iOS / iPadOS home | `src/app/page.tsx`                 | Visible when logged in     |
+| Middleware        | `src/proxy.ts`                     | Cookie-based session check |
 
 Icons: `public/images/icons/chess.png`, `macOS-chess.png`
 
@@ -57,13 +57,13 @@ Icons: `public/images/icons/chess.png`, `macOS-chess.png`
 
 ### API routes
 
-| Method | Route | Description |
-|--------|-------|-------------|
-| GET | `/api/chess/repertoire` | Fetch repertoire (auto-create if missing) |
-| POST | `/api/chess/repertoire` | Create repertoire |
-| PATCH | `/api/chess/repertoire` | Actions: `addSection`, `deleteSection`, `addLine`, `deleteLine`, `updateLineTree`, `renameSection`, `renameLine` |
-| POST | `/api/chess/repertoire/import` | Merge PGN into a line (400 on invalid PGN) |
-| GET | `/api/chess/repertoire/export/[lineId]?sectionId=` | Download `.pgn` |
+| Method | Route                                              | Description                                                                                                      |
+| ------ | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| GET    | `/api/chess/repertoire`                            | Fetch repertoire (auto-create if missing)                                                                        |
+| POST   | `/api/chess/repertoire`                            | Create repertoire                                                                                                |
+| PATCH  | `/api/chess/repertoire`                            | Actions: `addSection`, `deleteSection`, `addLine`, `deleteLine`, `updateLineTree`, `renameSection`, `renameLine` |
+| POST   | `/api/chess/repertoire/import`                     | Merge PGN into a line (400 on invalid PGN)                                                                       |
+| GET    | `/api/chess/repertoire/export/[lineId]?sectionId=` | Download `.pgn`                                                                                                  |
 
 All routes return **401** without a session.
 
@@ -79,11 +79,11 @@ src/app/chess/
 
 ### Responsive layout
 
-| Breakpoint | Layout |
-|------------|--------|
-| Mobile | Master-detail: repertoire list **or** board + notation |
-| Tablet+ | Sidebar + board + notation panel |
-| Desktop | Three-column layout |
+| Breakpoint | Layout                                                 |
+| ---------- | ------------------------------------------------------ |
+| Mobile     | Master-detail: repertoire list **or** board + notation |
+| Tablet+    | Sidebar + board + notation panel                       |
+| Desktop    | Three-column layout                                    |
 
 ## Usage
 

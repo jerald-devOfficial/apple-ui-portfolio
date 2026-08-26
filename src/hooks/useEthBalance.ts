@@ -1,46 +1,63 @@
+import { ethBalanceResponseSchema } from '@/contracts/etherscan'
+import { formatEthBalance, formatUsdBalance } from '@/lib/eth-format'
 import { fetchExchangeRateFromAPI } from '@/utils'
 import useSWR from 'swr'
 
 const fetchEthBalance = async (address: string) => {
-  const apiKey = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY
   const res = await fetch(
-    `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`
+    `/api/eth-balance?address=${encodeURIComponent(address)}`
   )
   const data = await res.json()
-  if (data.status === '1') {
-    // Convert from wei to ETH
-    return parseFloat(data.result) / 1e18
-  } else {
-    throw new Error('Failed to fetch balance')
-  }
-}
 
-const fetchUsdBalance = async (eth: number) => {
-  const ethToUsd = await fetchExchangeRateFromAPI()
-  return (eth * ethToUsd).toFixed(2)
+  if (!res.ok) {
+    throw new Error(
+      typeof data?.msg === 'string' ? data.msg : 'Failed to fetch balance'
+    )
+  }
+
+  const parsed = ethBalanceResponseSchema.safeParse(data)
+
+  if (!parsed.success) throw new Error('Unexpected balance response')
+
+  return parsed.data.eth
 }
 
 const useEthBalance = (address?: string) => {
-  const shouldFetch = Boolean(address)
   const {
     data: ethBalance,
-    error,
-    isLoading
-  } = useSWR(shouldFetch ? ['eth-balance', address] : null, () =>
+    error: balanceError,
+    isLoading: isLoadingBalance
+  } = useSWR(address ? ['eth-balance', address] : null, () =>
     fetchEthBalance(address!)
   )
 
-  // Use SWR for USD balance, only if ethBalance is available
-  const { data: usdBalance, isValidating: isLoadingUsd } = useSWR(
-    ethBalance ? ['eth-usd-balance', ethBalance] : null,
-    () => fetchUsdBalance(Number(ethBalance))
-  )
+  // The rate is address-independent, so it is keyed on its own and shared by
+  // every wallet panel rather than refetched whenever a balance changes. It is
+  // keyed on the address only so the two requests can run side by side.
+  const {
+    data: ethToUsd,
+    error: rateError,
+    isLoading: isLoadingRate
+  } = useSWR(address ? 'eth-usd-rate' : null, fetchExchangeRateFromAPI)
+
+  const hasBalance = ethBalance !== undefined
+  const hasRate = typeof ethToUsd === 'number'
+
+  /**
+   * SWR retries a rejected request indefinitely and turns `isLoading` back on
+   * for each attempt. Reporting that as loading would swap the panel back to a
+   * spinner every few seconds while an endpoint is down, so a request that has
+   * already failed counts as settled.
+   */
+  const isLoading =
+    (isLoadingBalance && !balanceError) || (isLoadingRate && !rateError)
 
   return {
-    balance: ethBalance ? ethBalance.toFixed(4) : null,
-    usdBalance,
-    isLoading: isLoading || isLoadingUsd,
-    error: error ? error.message : null
+    balance: hasBalance ? formatEthBalance(ethBalance) : null,
+    usdBalance:
+      hasBalance && hasRate ? formatUsdBalance(ethBalance * ethToUsd) : null,
+    isLoading,
+    error: balanceError instanceof Error ? balanceError.message : null
   }
 }
 

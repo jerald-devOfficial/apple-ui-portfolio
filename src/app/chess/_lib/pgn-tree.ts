@@ -97,7 +97,10 @@ const createEmptyRoot = (fen: string): IMoveNode => ({
   variations: []
 })
 
-export const parsePgnToTree = (pgn: string, rootFen?: string): PgnParseResult => {
+export const parsePgnToTree = (
+  pgn: string,
+  rootFen?: string
+): PgnParseResult => {
   try {
     const parsed = parse(pgn, { startRule: 'game' }) as {
       moves?: ParsedMove[]

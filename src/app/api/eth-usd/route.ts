@@ -3,7 +3,6 @@ import { NextResponse } from 'next/server'
 // GET /api/eth-usd
 export const GET = async () => {
   try {
-    console.log('Fetching ETH-USD price from CoinGecko')
     const cgRes = await fetch(
       'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd'
     )
@@ -22,7 +21,6 @@ export const GET = async () => {
         { status: 502 }
       )
     }
-    console.log('ETH-USD price:', data.ethereum.usd)
     return NextResponse.json({ usd: data.ethereum.usd })
   } catch (error) {
     console.error('Error fetching ETH-USD price:', error)

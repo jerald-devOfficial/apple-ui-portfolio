@@ -105,12 +105,9 @@ const BlogHeader = ({ blog, isAdmin }: BlogHeaderProps) => {
                 <span>By {authorName}</span>
                 <span>
                   {blog.createdAt
-                    ? formatDistanceToNow(
-                        new Date(blog.createdAt),
-                        {
-                          addSuffix: true
-                        }
-                      )
+                    ? formatDistanceToNow(new Date(blog.createdAt), {
+                        addSuffix: true
+                      })
                     : 'Recently'}
                 </span>
               </div>
@@ -202,12 +199,9 @@ const BlogHeader = ({ blog, isAdmin }: BlogHeaderProps) => {
               <span>•</span>
               <span>
                 {blog.createdAt
-                  ? formatDistanceToNow(
-                      new Date(blog.createdAt),
-                      {
-                        addSuffix: true
-                      }
-                    )
+                  ? formatDistanceToNow(new Date(blog.createdAt), {
+                      addSuffix: true
+                    })
                   : 'Recently'}
               </span>
               {blog.readTime && (

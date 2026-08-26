@@ -1,0 +1,9 @@
+{
+  "route": "/api/blog/:id/comments/:commentId/like",
+  "method": "POST",
+  "status": 200,
+  "query": "",
+  "delay": 0,
+  "description": "Toggling a comment like returns the new tally",
+  "responseBody": { "likes": 3, "liked": true }
+}

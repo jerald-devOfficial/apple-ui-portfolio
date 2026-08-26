@@ -1,0 +1,33 @@
+{
+  "route": "/api/diary/stats",
+  "method": "GET",
+  "status": 200,
+  "query": "",
+  "delay": 0,
+  "description": "Diary usage statistics for the signed-in author",
+  "responseBody": {
+    "totalEntries": 12,
+    "categories": [
+      { "name": "learning", "count": 7 },
+      { "name": "bug-fix", "count": 5 }
+    ],
+    "topTags": [{ "name": "testing", "count": 9 }],
+    "entriesByMonth": [{ "year": 2024, "month": 5, "count": 4 }],
+    "languages": [{ "name": "typescript", "count": 6 }],
+    "wordCountStats": {
+      "avgWordCount": 120.5,
+      "minWordCount": 18,
+      "maxWordCount": 640,
+      "totalWords": 1446
+    },
+    "recentActivity": [
+      {
+        "_id": "65f000000000000000000301",
+        "title": "Wiring up Vitest",
+        "updatedAt": "2024-05-01T10:00:00.000Z",
+        "category": "learning",
+        "tags": ["testing"]
+      }
+    ]
+  }
+}

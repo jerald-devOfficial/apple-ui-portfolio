@@ -6,12 +6,17 @@ const eslintConfig = [
   ...nextVitals,
   ...nextTs,
   {
+    // Flat config does not read .gitignore, so generated test artefacts have to
+    // be listed here as well or `eslint .` reports on the HTML coverage report.
     ignores: [
       '.next/**',
       'out/**',
       'build/**',
       'node_modules/**',
-      'scripts/**'
+      'scripts/**',
+      'coverage/**',
+      'playwright-report/**',
+      'test-results/**'
     ]
   }
 ]

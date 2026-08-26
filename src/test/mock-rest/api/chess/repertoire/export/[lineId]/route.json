@@ -1,0 +1,21 @@
+[
+  {
+    "route": "/api/chess/repertoire/export/:lineId",
+    "method": "GET",
+    "status": 200,
+    "query": "sectionId=section-white-e4",
+    "delay": 0,
+    "description": "PGN download — text, not JSON",
+    "contentType": "application/x-chess-pgn",
+    "responseBody": "[Event \"Italian Game\"]\n\n1. e4 e5 *"
+  },
+  {
+    "route": "/api/chess/repertoire/export/:lineId",
+    "method": "GET",
+    "status": 400,
+    "query": "",
+    "delay": 0,
+    "description": "sectionId is required",
+    "responseBody": { "msg": "sectionId required" }
+  }
+]

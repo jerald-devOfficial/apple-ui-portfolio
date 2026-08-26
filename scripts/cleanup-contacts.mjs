@@ -21,13 +21,17 @@ const TEST_CONTENT_PATTERN =
   /\b(automated test|dev environment|dev setup|delivery test|test email|test subject|hello from dev|hello from automated|testing email|debug script|hello world)\b/i
 const TEST_NAME_PATTERN =
   /^(test user|test email|dev setup test|jerald test|bot$|dev environment demo|cloud agent|test email from matt|demo user$)/i
-const GENERIC_TEST_MESSAGE =
-  /^(hello jerald|hello man|hi jerald|hey jerald)$/i
+const GENERIC_TEST_MESSAGE = /^(hello jerald|hello man|hi jerald|hey jerald)$/i
 const LOW_EFFORT_SUBJECT = /^(great|test|hi|hello|hey|asdf|xxx)$/i
 const LOW_EFFORT_MESSAGE = /^(i love you|test|hi+|hello+|asdf+|xxx+)$/i
 
-const contactSchema = new mongoose.Schema({}, { strict: false, collection: 'contacts' })
-const Contact = mongoose.models.ContactCleanup || mongoose.model('ContactCleanup', contactSchema)
+const contactSchema = new mongoose.Schema(
+  {},
+  { strict: false, collection: 'contacts' }
+)
+const Contact =
+  mongoose.models.ContactCleanup ||
+  mongoose.model('ContactCleanup', contactSchema)
 
 const buildContext = (mail) => {
   const email = (mail.email || '').trim().toLowerCase()
@@ -47,11 +51,15 @@ const buildContext = (mail) => {
 
 const CLASSIFICATION_RULES = [
   ({ email }) => !email?.includes('@') && 'invalid email format',
-  ({ domain }) => domain && TEST_EMAIL_DOMAINS.has(domain) && 'test/example email domain',
-  ({ email }) => email && !MailChecker.isValid(email) && 'disposable or blocklisted email',
+  ({ domain }) =>
+    domain && TEST_EMAIL_DOMAINS.has(domain) && 'test/example email domain',
+  ({ email }) =>
+    email && !MailChecker.isValid(email) && 'disposable or blocklisted email',
   ({ name }) => TEST_NAME_PATTERN.test(name) && 'test name',
-  ({ combined }) => TEST_CONTENT_PATTERN.test(combined) && 'test/dev message content',
-  ({ message }) => message.length > 0 && message.length < 10 && 'message too short',
+  ({ combined }) =>
+    TEST_CONTENT_PATTERN.test(combined) && 'test/dev message content',
+  ({ message }) =>
+    message.length > 0 && message.length < 10 && 'message too short',
   ({ message, subject }) =>
     (URL_PATTERN.test(message) || URL_PATTERN.test(subject)) && 'contains link',
   ({ name }) =>
@@ -61,7 +69,8 @@ const CLASSIFICATION_RULES = [
     LOW_EFFORT_MESSAGE.test(message) &&
     'low-effort spam',
   ({ message, subject }) =>
-    (GENERIC_TEST_MESSAGE.test(message) || GENERIC_TEST_MESSAGE.test(subject)) &&
+    (GENERIC_TEST_MESSAGE.test(message) ||
+      GENERIC_TEST_MESSAGE.test(subject)) &&
     'generic test message',
   ({ email }) => email === 'ace_glac.jerald@yahoo.com' && 'self-test email',
   ({ subject, message }) =>
@@ -87,7 +96,9 @@ for (const mail of all) {
   }
 }
 
-console.log(`\nTotal: ${all.length} | Delete: ${toDelete.length} | Keep: ${toKeep.length}\n`)
+console.log(
+  `\nTotal: ${all.length} | Delete: ${toDelete.length} | Keep: ${toKeep.length}\n`
+)
 
 if (toDelete.length) {
   console.log('--- TO DELETE ---')
@@ -101,7 +112,9 @@ if (toDelete.length) {
 if (toKeep.length) {
   console.log('\n--- KEEPING ---')
   for (const mail of toKeep) {
-    console.log(`- ${mail.fullName} <${mail.email}> | "${mail.subject}" | ${mail._id}`)
+    console.log(
+      `- ${mail.fullName} <${mail.email}> | "${mail.subject}" | ${mail._id}`
+    )
   }
 }
 

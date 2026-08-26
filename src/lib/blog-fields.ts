@@ -26,11 +26,14 @@ export const blogWriteSchema = z.object({
   status: z.enum(['draft', 'published', 'private']).default('draft')
 })
 
-export const blogUpdateSchema = blogWriteSchema.partial().strict().extend({
-  slug: z.string().trim().min(1).max(300).optional(),
-  mediaFiles: z.array(z.string()).max(50).optional(),
-  featured: z.boolean().optional()
-})
+export const blogUpdateSchema = blogWriteSchema
+  .partial()
+  .strict()
+  .extend({
+    slug: z.string().trim().min(1).max(300).optional(),
+    mediaFiles: z.array(z.string()).max(50).optional(),
+    featured: z.boolean().optional()
+  })
 
 export const slugFromTitle = (title: string) =>
   title

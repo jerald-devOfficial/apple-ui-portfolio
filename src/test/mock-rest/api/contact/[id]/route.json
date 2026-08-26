@@ -1,0 +1,40 @@
+[
+  {
+    "route": "/api/contact/:id",
+    "method": "PATCH",
+    "status": 200,
+    "query": "",
+    "delay": 0,
+    "description": "Marking a message as read returns the updated document",
+    "responseBody": {
+      "_id": "65f000000000000000000501",
+      "fullName": "Test Visitor",
+      "avatarColor": "a1b2c3/d4e5f6",
+      "email": "visitor@example.com",
+      "subject": "Saying hello",
+      "message": "This message is comfortably longer than ten characters.",
+      "read": true,
+      "createdAt": "2024-05-04T12:00:00.000Z",
+      "updatedAt": "2024-05-04T12:30:00.000Z"
+    }
+  },
+  {
+    "route": "/api/contact/:id",
+    "method": "DELETE",
+    "status": 200,
+    "query": "",
+    "delay": 0,
+    "description": "Deleting a message returns the removed document",
+    "responseBody": {
+      "_id": "65f000000000000000000501",
+      "fullName": "Test Visitor",
+      "avatarColor": "a1b2c3/d4e5f6",
+      "email": "visitor@example.com",
+      "subject": "Saying hello",
+      "message": "This message is comfortably longer than ten characters.",
+      "read": true,
+      "createdAt": "2024-05-04T12:00:00.000Z",
+      "updatedAt": "2024-05-04T12:30:00.000Z"
+    }
+  }
+]

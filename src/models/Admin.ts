@@ -1,14 +1,14 @@
-import mongoose, { Model, model, Schema } from 'mongoose';
+import mongoose, { Model, model, Schema } from 'mongoose'
 
 export interface IAdmin extends Document {
-  _id: string;
-  name: string;
-  email: string;
-  password: string;
-  createdAt: Date;
-  updatedAt: Date;
-  authType: string;
-  googleId: string;
+  _id: string
+  name: string
+  email: string
+  password: string
+  createdAt: Date
+  updatedAt: Date
+  authType: string
+  googleId: string
 }
 
 const adminSchema = new Schema(
@@ -16,23 +16,23 @@ const adminSchema = new Schema(
     name: {
       type: String,
       unique: true,
-      required: true,
+      required: true
     },
     email: {
       type: String,
       unique: true,
-      required: true,
+      required: true
     },
     authType: {
       type: String,
-      required: true,
+      required: true
     },
     googleId: {
-      type: String,
-    },
+      type: String
+    }
   },
   { timestamps: true }
-);
+)
 
 export const Admin = (mongoose.models.Admin ||
-  model('Admin', adminSchema)) as Model<IAdmin>;
+  model('Admin', adminSchema)) as Model<IAdmin>

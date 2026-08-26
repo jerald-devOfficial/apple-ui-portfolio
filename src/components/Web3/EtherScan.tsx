@@ -1,6 +1,11 @@
 'use client'
 
-import { hashShortener, toFixedFour } from '@/utils'
+import {
+  ethTransactionResponseSchema,
+  type EthTransaction
+} from '@/contracts/etherscan'
+import { formatEthBalance } from '@/lib/eth-format'
+import { hashShortener } from '@/utils'
 import { Inter } from 'next/font/google'
 import Image from 'next/image'
 import { FormEvent, useState } from 'react'
@@ -9,34 +14,19 @@ import { formatEther, hexToBigInt } from 'viem'
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
-type Transaction = {
-  blockHash?: string
-  from: string
-  to?: string | null
-  value: string
-  gas: string
-  gasPrice: string
-  hash: string
-  nonce: string
-  blockNumber?: string
-  transactionIndex?: string
-  input: string
-  v?: string
-  r: string
-  s: string
-}
-
 const formatTransactionValue = (value: string) => {
   try {
     if (!value || value === '0x') return '0'
-    return toFixedFour(formatEther(hexToBigInt(value as `0x${string}`)))
+    return formatEthBalance(
+      Number(formatEther(hexToBigInt(value as `0x${string}`)))
+    )
   } catch {
     return '0'
   }
 }
 
 const EtherScan = () => {
-  const [transaction, setTransaction] = useState<Transaction | null>(null)
+  const [transaction, setTransaction] = useState<EthTransaction | null>(null)
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
   const [transactionHash, setTransactionHash] = useState<string>('')
   const [isLoading, setIsLoading] = useState(false)
@@ -49,16 +39,18 @@ const EtherScan = () => {
     setIsSubmitted(true)
 
     try {
-      const apiKey = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY
       const response = await fetch(
-        `https://api.etherscan.io/api?module=proxy&action=eth_getTransactionByHash&txhash=${transactionHash}&apikey=${apiKey}`
+        `/api/eth-transaction?hash=${encodeURIComponent(transactionHash.trim())}`
       )
       const data = await response.json()
+      const parsed = ethTransactionResponseSchema.safeParse(data)
 
-      if (data.result) {
-        setTransaction(data.result)
+      if (parsed.success) {
+        setTransaction(parsed.data.transaction)
       } else {
-        setError('Transaction not found.')
+        setError(
+          typeof data?.msg === 'string' ? data.msg : 'Transaction not found.'
+        )
       }
     } catch (error) {
       console.error('Error fetching transaction:', error)
@@ -181,7 +173,7 @@ const EtherScan = () => {
                   <span>Value:</span>
                 </div>
                 <div className="flex flex-col flex-1 dark:text-white">
-                  <span>{hashShortener(transaction.blockHash ?? '', 10)}</span>
+                  <span>{hashShortener(transaction.hash ?? '', 10)}</span>
                   <span>{hashShortener(transaction.from ?? '', 10)}</span>
                   <span>{hashShortener(transaction.to ?? '', 10)}</span>
                   <span>{formatTransactionValue(transaction.value)} ETH</span>

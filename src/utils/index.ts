@@ -60,9 +60,21 @@ export const formatDate = (createdAt: Date) => {
   }
 }
 
-export async function fetchExchangeRateFromAPI() {
+/**
+ * Throws rather than returning `undefined` on failure: a missing rate has to
+ * reach SWR as an error, otherwise the wallet panels cannot tell "no price
+ * available" apart from a portfolio genuinely worth nothing.
+ */
+export async function fetchExchangeRateFromAPI(): Promise<number> {
   const res = await fetch('/api/eth-usd')
   const data = await res.json()
+
+  if (!res.ok || typeof data?.usd !== 'number') {
+    throw new Error(
+      typeof data?.msg === 'string' ? data.msg : 'Failed to fetch the ETH price'
+    )
+  }
+
   return data.usd
 }
 

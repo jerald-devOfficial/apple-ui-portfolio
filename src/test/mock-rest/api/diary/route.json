@@ -1,0 +1,46 @@
+[
+  {
+    "route": "/api/diary",
+    "method": "GET",
+    "status": 200,
+    "query": "",
+    "delay": 0,
+    "description": "Public diary list for anonymous visitors",
+    "responseBody": {
+      "diaries": [
+        {
+          "_id": "65f000000000000000000301",
+          "userId": "reader@example.com",
+          "title": "Wiring up Vitest",
+          "content": "<p>Started with the pure helpers.</p>",
+          "publicity": true,
+          "tags": ["testing", "learning"],
+          "category": "learning",
+          "codeSnippets": [],
+          "resources": [],
+          "status": "published",
+          "isFavorite": false,
+          "createdAt": "2024-05-01T10:00:00.000Z",
+          "updatedAt": "2024-05-01T10:00:00.000Z",
+          "wordCount": 6,
+          "liked": false
+        }
+      ],
+      "pagination": {
+        "currentPage": 1,
+        "totalPages": 1,
+        "totalItems": 1,
+        "itemsPerPage": 1
+      }
+    }
+  },
+  {
+    "route": "/api/diary",
+    "method": "GET",
+    "status": 500,
+    "query": "simulate=error",
+    "delay": 0,
+    "description": "Database failure envelope",
+    "responseBody": { "msg": "Database Error" }
+  }
+]

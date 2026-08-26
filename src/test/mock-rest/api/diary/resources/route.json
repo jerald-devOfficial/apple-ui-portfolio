@@ -1,0 +1,27 @@
+{
+  "route": "/api/diary/resources",
+  "method": "GET",
+  "status": 200,
+  "query": "",
+  "delay": 0,
+  "description": "Reference links collected across the author's diaries",
+  "responseBody": {
+    "resources": [
+      {
+        "diaryId": "65f000000000000000000301",
+        "diaryTitle": "Wiring up Vitest",
+        "url": "https://vitest.dev/",
+        "title": "Vitest docs",
+        "type": "documentation",
+        "createdAt": "2024-05-01T10:00:00.000Z"
+      }
+    ],
+    "types": ["documentation"],
+    "pagination": {
+      "currentPage": 1,
+      "totalPages": 1,
+      "totalItems": 1,
+      "itemsPerPage": 20
+    }
+  }
+}

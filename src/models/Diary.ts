@@ -35,7 +35,8 @@ export interface IDiary {
 
 // Document interface with Mongoose types (for database operations)
 export interface IDiaryDocument
-  extends Omit<IDiary, '_id' | 'createdAt' | 'updatedAt' | 'wordCount'>,
+  extends
+    Omit<IDiary, '_id' | 'createdAt' | 'updatedAt' | 'wordCount'>,
     Document {
   createdAt?: Date
   updatedAt?: Date

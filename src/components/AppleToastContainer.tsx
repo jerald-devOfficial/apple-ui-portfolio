@@ -14,9 +14,16 @@ const AppleToastIcon = ({ type }: IconProps) => {
 
   switch (type) {
     case 'success':
-      return <CheckCircleIcon className={`${iconClass} text-[#34C759]`} aria-hidden />
+      return (
+        <CheckCircleIcon
+          className={`${iconClass} text-[#34C759]`}
+          aria-hidden
+        />
+      )
     case 'error':
-      return <XCircleIcon className={`${iconClass} text-[#FF3B30]`} aria-hidden />
+      return (
+        <XCircleIcon className={`${iconClass} text-[#FF3B30]`} aria-hidden />
+      )
     case 'warning':
       return (
         <ExclamationTriangleIcon

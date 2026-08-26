@@ -257,7 +257,6 @@ export const skillCategories = [
   'Cloud & DevOps'
 ] as const
 
-
 export const projects = [
   {
     title: 'Messenger Application',

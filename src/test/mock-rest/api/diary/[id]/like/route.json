@@ -1,0 +1,20 @@
+[
+  {
+    "route": "/api/diary/:id/like",
+    "method": "POST",
+    "status": 200,
+    "query": "",
+    "delay": 0,
+    "description": "Toggling a diary like returns the new state",
+    "responseBody": { "liked": true }
+  },
+  {
+    "route": "/api/diary/:id/like",
+    "method": "POST",
+    "status": 401,
+    "query": "simulate=anonymous",
+    "delay": 0,
+    "description": "Liking requires a session",
+    "responseBody": { "error": "Please sign in to like diaries" }
+  }
+]

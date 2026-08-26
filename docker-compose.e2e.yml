@@ -1,0 +1,18 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: apple-ui-e2e-mongo
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    command: ['--quiet']
+    volumes:
+      - e2e-mongo-data:/data/db
+    healthcheck:
+      test: ['CMD', 'mongosh', '--quiet', '--eval', 'db.adminCommand("ping")']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  e2e-mongo-data:

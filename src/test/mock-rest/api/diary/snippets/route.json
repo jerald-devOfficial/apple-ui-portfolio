@@ -1,0 +1,29 @@
+{
+  "route": "/api/diary/snippets",
+  "method": "GET",
+  "status": 200,
+  "query": "",
+  "delay": 0,
+  "description": "Code snippets extracted from the author's diaries",
+  "responseBody": {
+    "snippets": [
+      {
+        "diaryId": "65f000000000000000000301",
+        "diaryTitle": "Wiring up Vitest",
+        "snippetId": "65f000000000000000000401",
+        "language": "typescript",
+        "code": "export const sum = (a: number, b: number) => a + b",
+        "description": "Extracted from content",
+        "createdAt": "2024-05-01T10:00:00.000Z",
+        "category": "learning"
+      }
+    ],
+    "languages": ["typescript"],
+    "pagination": {
+      "currentPage": 1,
+      "totalPages": 1,
+      "totalItems": 1,
+      "itemsPerPage": 20
+    }
+  }
+}

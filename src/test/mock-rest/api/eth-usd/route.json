@@ -1,0 +1,20 @@
+[
+  {
+    "route": "/api/eth-usd",
+    "method": "GET",
+    "status": 200,
+    "query": "",
+    "delay": 0,
+    "description": "CoinGecko ETH price proxy",
+    "responseBody": { "usd": 3421.55 }
+  },
+  {
+    "route": "/api/eth-usd",
+    "method": "GET",
+    "status": 502,
+    "query": "simulate=upstream-error",
+    "delay": 0,
+    "description": "CoinGecko returned a non-OK response",
+    "responseBody": { "msg": "Failed to fetch from CoinGecko", "status": 429 }
+  }
+]

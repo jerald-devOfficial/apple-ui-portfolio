@@ -37,7 +37,8 @@ export interface IRepertoire {
   updatedAt?: string
 }
 
-export interface IRepertoireDocument extends Omit<IRepertoire, '_id'>, Document {}
+export interface IRepertoireDocument
+  extends Omit<IRepertoire, '_id'>, Document {}
 
 const moveNodeSchema = new Schema<IMoveNode>(
   {
@@ -55,7 +56,10 @@ const repertoireLineSchema = new Schema<IRepertoireLine>(
   {
     title: { type: String, required: true, trim: true },
     eco: String,
-    rootFen: { type: String, default: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' },
+    rootFen: {
+      type: String,
+      default: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+    },
     tree: { type: moveNodeSchema, required: true },
     pgn: String,
     order: { type: Number, default: 0 }
@@ -88,9 +92,7 @@ const repertoireSchema = new Schema<IRepertoireDocument>(
 
 export const createRootNode = (fen?: string): IMoveNode => ({
   san: '',
-  fen:
-    fen ??
-    'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+  fen: fen ?? 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
   mainLine: null,
   variations: []
 })
@@ -187,6 +189,7 @@ export const createDefaultSections = (): IRepertoireSection[] => {
 }
 
 const Repertoire =
-  models?.Repertoire || model<IRepertoireDocument>('Repertoire', repertoireSchema)
+  models?.Repertoire ||
+  model<IRepertoireDocument>('Repertoire', repertoireSchema)
 
 export default Repertoire
