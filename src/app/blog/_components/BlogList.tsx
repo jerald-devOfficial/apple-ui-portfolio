@@ -156,12 +156,9 @@ const BlogCard = ({ blog, isAdmin }: BlogCardProps) => {
               <span className="mx-2">•</span>
               <span className="truncate">
                 {blog.createdAt
-                  ? formatDistanceToNow(
-                      new Date(blog.createdAt),
-                      {
-                        addSuffix: true
-                      }
-                    )
+                  ? formatDistanceToNow(new Date(blog.createdAt), {
+                      addSuffix: true
+                    })
                   : 'Recently'}
               </span>
             </div>

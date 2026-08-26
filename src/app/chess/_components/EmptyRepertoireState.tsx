@@ -1,6 +1,9 @@
 'use client'
 
-import { ArrowPathIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import {
+  ArrowPathIcon,
+  ExclamationTriangleIcon
+} from '@heroicons/react/24/outline'
 
 type EmptyRepertoireStateProps = {
   variant?: 'loading' | 'error'

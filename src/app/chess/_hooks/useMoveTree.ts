@@ -27,10 +27,13 @@ export const useMoveTree = (initialTree: IMoveNode | null) => {
     return getFenAtPath(tree, currentPath)
   }, [tree, currentPath])
 
-  const resetTree = useCallback((newTree: IMoveNode) => {
-    setTree(newTree)
-    setCurrentPath([])
-  }, [setTree])
+  const resetTree = useCallback(
+    (newTree: IMoveNode) => {
+      setTree(newTree)
+      setCurrentPath([])
+    },
+    [setTree]
+  )
 
   const selectPath = useCallback((path: MovePath) => {
     setCurrentPath(path)

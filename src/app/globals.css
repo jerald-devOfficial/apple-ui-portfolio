@@ -33,7 +33,9 @@ html {
   height: 100%;
   height: 100vh;
   height: 100dvh; /* Dynamic viewport height for better mobile support */
-  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  transition:
+    color 0.3s ease-in-out,
+    background-color 0.3s ease-in-out;
 }
 
 body {
@@ -75,9 +77,9 @@ html.dark body {
 
 /* Apply transition to all elements that change in dark mode */
 * {
-  transition-property: color, background-color, border-color, outline-color,
-    text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
-    backdrop-filter;
+  transition-property:
+    color, background-color, border-color, outline-color, text-decoration-color,
+    fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 0.15s;
 }
@@ -577,18 +579,21 @@ pre span:not([class]) + span.token.punctuation {
 /* Featured Diary Card */
 .featured-card {
   border-width: 2px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .dark .featured-card {
   border-color: rgba(59, 130, 246, 0.2);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2),
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.2),
     0 2px 4px -1px rgba(0, 0, 0, 0.1);
 }
 
 .featured-card:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 

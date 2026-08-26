@@ -24,7 +24,11 @@ export const isAllowedEmail = (email: string) => {
     return { valid: false, reason: 'Invalid email address.' }
   }
 
-  if (localPart.startsWith('.') || localPart.endsWith('.') || localPart.includes('..')) {
+  if (
+    localPart.startsWith('.') ||
+    localPart.endsWith('.') ||
+    localPart.includes('..')
+  ) {
     return { valid: false, reason: 'Invalid email address.' }
   }
 
@@ -41,7 +45,8 @@ export const isAllowedName = (name: string) => {
   if (!/^[\p{L}][\p{L}\p{M}'.\-\s]*[\p{L}\p{M}.]?$/u.test(trimmed)) {
     return {
       valid: false,
-      reason: 'Name may only contain letters, spaces, hyphens, apostrophes, or periods.'
+      reason:
+        'Name may only contain letters, spaces, hyphens, apostrophes, or periods.'
     }
   }
 
@@ -51,8 +56,15 @@ export const isAllowedName = (name: string) => {
     return { valid: false, reason: 'Please enter your full name.' }
   }
 
-  if (URL_PATTERN.test(trimmed) || DOMAIN_IN_TEXT_PATTERN.test(trimmed) || trimmed.includes('@')) {
-    return { valid: false, reason: 'Name cannot contain links or email addresses.' }
+  if (
+    URL_PATTERN.test(trimmed) ||
+    DOMAIN_IN_TEXT_PATTERN.test(trimmed) ||
+    trimmed.includes('@')
+  ) {
+    return {
+      valid: false,
+      reason: 'Name cannot contain links or email addresses.'
+    }
   }
 
   if (REPEATED_CHAR_PATTERN.test(trimmed)) {
@@ -109,5 +121,6 @@ export type ContactFormInput = z.infer<typeof contactFormSchema>
 
 export const isTurnstileConfigured = () =>
   Boolean(
-    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && process.env.TURNSTILE_SECRET_KEY
+    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY &&
+    process.env.TURNSTILE_SECRET_KEY
   )

@@ -10,7 +10,9 @@ export const verifyTurnstileToken = async (
   const secret = process.env.TURNSTILE_SECRET_KEY
 
   if (!secret) {
-    console.warn('contact: TURNSTILE_SECRET_KEY is not set — skipping verification')
+    console.warn(
+      'contact: TURNSTILE_SECRET_KEY is not set — skipping verification'
+    )
     return { success: true }
   }
 
@@ -35,7 +37,10 @@ export const verifyTurnstileToken = async (
     const data = (await response.json()) as TurnstileVerifyResponse
 
     if (!data.success) {
-      console.error('contact: turnstile verification failed', data['error-codes'])
+      console.error(
+        'contact: turnstile verification failed',
+        data['error-codes']
+      )
       return {
         success: false,
         error: 'Security verification failed. Please try again.'

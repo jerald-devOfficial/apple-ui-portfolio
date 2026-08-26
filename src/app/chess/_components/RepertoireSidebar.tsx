@@ -1,9 +1,6 @@
 'use client'
 
-import type {
-  IRepertoireLine,
-  IRepertoireSection
-} from '@/models/Repertoire'
+import type { IRepertoireLine, IRepertoireSection } from '@/models/Repertoire'
 import {
   ChevronDownIcon,
   PlusIcon,

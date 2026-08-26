@@ -12,7 +12,10 @@ const http = require('http')
 
 ;(async () => {
   const root = path.resolve(__dirname, '..')
-  const html = fs.readFileSync(path.join(root, 'public/resume/resume.html'), 'utf8')
+  const html = fs.readFileSync(
+    path.join(root, 'public/resume/resume.html'),
+    'utf8'
+  )
   const outPath = path.join(root, 'public/pdfs/updated-resume.pdf')
 
   const server = http.createServer((req, res) => {

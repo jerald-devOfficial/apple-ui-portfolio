@@ -32,8 +32,8 @@ const DiaryViewActions = ({ diary }: { diary: IDiary }) => {
     (session?.user?.role === 'admin' ||
       Boolean(
         session?.user?.email &&
-          adminEmail &&
-          session.user.email.toLowerCase() === adminEmail
+        adminEmail &&
+        session.user.email.toLowerCase() === adminEmail
       ))
 
   const canEditOrDelete = isOwner || isSiteOwner

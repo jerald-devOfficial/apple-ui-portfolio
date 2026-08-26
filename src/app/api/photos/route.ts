@@ -73,8 +73,12 @@ export const POST = async (req: NextRequest) => {
       return NextResponse.json({ error: message }, { status: 400 })
     }
 
-    const { title, description, isPublic, capturedAt: manualCapturedAtValue } =
-      validatedFields.data
+    const {
+      title,
+      description,
+      isPublic,
+      capturedAt: manualCapturedAtValue
+    } = validatedFields.data
 
     const validationError = validatePhotoFile(file)
     if (validationError) {

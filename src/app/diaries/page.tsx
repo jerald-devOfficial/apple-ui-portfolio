@@ -39,10 +39,7 @@ const DiariesPage = async () => {
           ) : null}
         </div>
 
-        <Diaries
-          isAuthenticated={isAuthenticated}
-          viewerEmail={viewerEmail}
-        />
+        <Diaries isAuthenticated={isAuthenticated} viewerEmail={viewerEmail} />
       </div>
     </main>
   )

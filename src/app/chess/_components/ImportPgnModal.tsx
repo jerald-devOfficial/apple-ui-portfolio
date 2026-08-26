@@ -57,7 +57,7 @@ const ImportPgnModal = ({
           <textarea
             value={pgn}
             onChange={(e) => setPgn(e.target.value)}
-            placeholder='Paste PGN here, e.g. 1. e4 e5 2. Nf3 Nc6 ...'
+            placeholder="Paste PGN here, e.g. 1. e4 e5 2. Nf3 Nc6 ..."
             rows={10}
             className="w-full rounded-lg border border-gray-200 dark:border-zinc-700 bg-stone-50 dark:bg-zinc-800 px-3 py-2 text-sm font-mono text-gray-900 dark:text-gray-100 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/40"
           />

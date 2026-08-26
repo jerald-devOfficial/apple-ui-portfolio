@@ -42,7 +42,12 @@ export const findNodeByPath = (
 export const getParentContext = (
   root: IMoveNode,
   path: MovePath
-): { parent: IMoveNode; parentPath: MovePath; isMain: boolean; varIndex?: number } | null => {
+): {
+  parent: IMoveNode
+  parentPath: MovePath
+  isMain: boolean
+  varIndex?: number
+} | null => {
   if (path.length === 0) return null
 
   const parentPath = path.slice(0, -1)
@@ -109,7 +114,10 @@ export const getPathToNode = (
   targetId: string,
   path: MovePath = []
 ): MovePath | null => {
-  if (root._id === targetId || (!root._id && path.length === 0 && targetId === 'root')) {
+  if (
+    root._id === targetId ||
+    (!root._id && path.length === 0 && targetId === 'root')
+  ) {
     return path
   }
 
@@ -250,10 +258,17 @@ export const getFenAtPath = (root: IMoveNode, path: MovePath): string => {
 }
 
 export const getMoveNumber = (path: MovePath): number => {
-  return Math.max(1, Math.ceil(path.filter((p) => p === 'main' || p.startsWith('var:')).length / 2) + 1)
+  return Math.max(
+    1,
+    Math.ceil(
+      path.filter((p) => p === 'main' || p.startsWith('var:')).length / 2
+    ) + 1
+  )
 }
 
 export const isWhiteToMoveFromPath = (path: MovePath): boolean => {
-  const moveCount = path.filter((p) => p === 'main' || p.startsWith('var:')).length
+  const moveCount = path.filter(
+    (p) => p === 'main' || p.startsWith('var:')
+  ).length
   return moveCount % 2 === 0
 }

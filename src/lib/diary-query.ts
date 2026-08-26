@@ -9,10 +9,7 @@ import { User } from '@/models/User'
 import dbConnect from '@/utils/db'
 import mongoose from 'mongoose'
 
-const serializeDiary = (
-  diary: mongoose.Document,
-  liked: boolean
-): IDiary => ({
+const serializeDiary = (diary: mongoose.Document, liked: boolean): IDiary => ({
   ...(JSON.parse(JSON.stringify(diary.toObject())) as IDiary),
   liked
 })
@@ -22,8 +19,9 @@ const getLikedStatus = async (diaryId: string, userEmail?: string) => {
 
   const user = await User.findOne({ email: userEmail }).select('likedDiaries')
   return (
-    user?.likedDiaries?.some((likedId) => String(likedId) === String(diaryId)) ??
-    false
+    user?.likedDiaries?.some(
+      (likedId) => String(likedId) === String(diaryId)
+    ) ?? false
   )
 }
 

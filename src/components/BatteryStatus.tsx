@@ -40,8 +40,7 @@ interface BatteryManager extends EventTarget {
 const BatteryStatus = () => {
   const [batteryPercentage, setBatteryPercentage] = useState(0)
   const mounted = useMounted()
-  const isIOS =
-    mounted && /iPad|iPhone|iPod/.test(navigator.userAgent)
+  const isIOS = mounted && /iPad|iPhone|iPod/.test(navigator.userAgent)
   useTheme()
 
   useEffect(() => {
