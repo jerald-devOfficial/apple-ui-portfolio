@@ -9,7 +9,36 @@
     "dev": "next dev -p 4000",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:unit": "vitest run --project unit",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:func": "tsx ./scripts/run-func-tests.ts",
+    "test:e2e": "tsx ./scripts/run-func-tests.ts",
+    "test:e2e:ui": "tsx ./scripts/run-func-tests.ts -- --ui",
+    "test:e2e:install": "playwright install chromium",
+    "validate": "yarn format:check && yarn lint && yarn typecheck && yarn test && yarn test:func && yarn build",
+    "seed:e2e": "tsx ./scripts/seed-e2e-user.ts",
+    "dev:kill": "npx --yes kill-port 4000",
+    "clean": "node -e \"require('fs').rmSync('.next',{recursive:true,force:true})\"",
+    "clean:test": "node -e \"['coverage','playwright-report','test-results','blob-report'].forEach((p)=>require('fs').rmSync(p,{recursive:true,force:true}))\"",
+    "clean:all": "node -e \"['.next','node_modules','coverage','playwright-report','test-results','blob-report'].forEach((p)=>require('fs').rmSync(p,{recursive:true,force:true}))\"",
+    "mongo:down": "docker compose -f docker-compose.e2e.yml down",
+    "mongo:reset": "docker compose -f docker-compose.e2e.yml down -v && docker compose -f docker-compose.e2e.yml up -d",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}": [
+      "prettier --write",
+      "eslint --fix --max-warnings=0"
+    ],
+    "*.{json,md,css,yml,yaml}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1088.0",
@@ -42,15 +71,35 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4.3.3",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.4",
+    "@types/jsdom": "^30",
     "@types/node": "^24",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.5",
+    "@vitest/coverage-v8": "^4.1.10",
+    "dotenv": "^17.4.2",
     "eslint": "^9.39.5",
     "eslint-config-next": "16.2.10",
+    "husky": "^9.1.7",
+    "jsdom": "^30.0.1",
+    "lint-staged": "^17.3.0",
+    "msw": "^2.15.0",
+    "playwright": "^1.62.1",
     "postcss": "^8.5.19",
+    "prettier": "^3.9.6",
     "tailwindcss": "^4.3.3",
-    "typescript": "^5.9.3"
+    "tsx": "^4.23.12",
+    "typescript": "^5.9.3",
+    "vite": "^8.2.1",
+    "vitest": "^4.1.10"
   },
   "packageManager": "yarn@4.5.3"
 }

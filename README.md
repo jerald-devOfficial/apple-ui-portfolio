@@ -16,17 +16,18 @@ bun dev
 
 3. **Setup .env file**
    ```js
-    MONGODB=
-    GOOGLE_CLIENT_ID=
-    GOOGLE_CLIENT_SECRET=
-    NEXTAUTH_SECRET=
-    NEXTAUTH_URL="http://localhost:3000"
-    NEXT_PUBLIC_APP_URL="http://localhost:3000"
+   MONGODB =
+     GOOGLE_CLIENT_ID =
+     GOOGLE_CLIENT_SECRET =
+     NEXTAUTH_SECRET =
+     NEXTAUTH_URL =
+       'http://localhost:3000'
+   NEXT_PUBLIC_APP_URL = 'http://localhost:3000'
 
-    NEXT_PUBLIC_NEWS_DATA_API_KEY='this is an api coming from newsdata.io'
+   NEXT_PUBLIC_NEWS_DATA_API_KEY = 'this is an api coming from newsdata.io'
 
-    NEXT_PUBLIC_INFURA_ID='https://mainnet.infura.io/v3/api-key'
-    NEXT_PUBLIC_METAMASK_ADDRESS='0xGetYourOwnMetaMaskAddress'
+   NEXT_PUBLIC_INFURA_ID = 'https://mainnet.infura.io/v3/api-key'
+   NEXT_PUBLIC_METAMASK_ADDRESS = '0xGetYourOwnMetaMaskAddress'
    ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -34,6 +35,34 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+
+## Quality gates
+
+Git hooks are installed by Husky on `yarn install` (via the `prepare` script).
+
+| Hook         | Runs                                                                             | Blocks when                                                                                    |
+| ------------ | -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `pre-commit` | `lint-staged` (Prettier + ESLint on staged files), `yarn typecheck`, `yarn test` | A staged file has an ESLint error or warning, types fail, or any unit test fails               |
+| `commit-msg` | `commitlint`                                                                     | The message is not a Conventional Commit (`feat(blog): …`) or the header exceeds 72 characters |
+| `pre-push`   | `yarn validate`                                                                  | Formatting, lint, types, unit tests, Playwright e2e, or `next build` fail                      |
+
+Prettier and ESLint auto-fix what they can, and the fixes are added to the
+commit. Anything they cannot fix aborts the commit with the working tree
+restored.
+
+`yarn validate` chains everything and is what CI should run:
+
+```bash
+yarn format:check && yarn lint && yarn typecheck && yarn test && yarn test:func && yarn build
+```
+
+The e2e and build steps live on `pre-push` rather than `pre-commit` so that
+committing stays quick; nothing broken can still reach the remote. To bypass a
+hook in an emergency, use `git commit --no-verify` — CI runs `yarn validate`
+regardless.
+
+See [`requirements/TESTING_ARCHITECTURE.md`](requirements/TESTING_ARCHITECTURE.md)
+and [`e2e/README.md`](e2e/README.md) for the testing stack itself.
 
 ## Learn More
 
@@ -61,10 +90,10 @@ This portfolio uses custom app icons on the **home screen** (iOS / iPadOS) and *
 
 ### File naming
 
-| Platform | Path | Used in |
-|----------|------|---------|
-| iOS & iPadOS | `public/images/icons/{name}.png` | Home screen grid (`src/app/page.tsx`) |
-| macOS | `public/images/icons/macOS-{name}.png` | Dock (`src/components/layouts/index.tsx`) |
+| Platform     | Path                                   | Used in                                   |
+| ------------ | -------------------------------------- | ----------------------------------------- |
+| iOS & iPadOS | `public/images/icons/{name}.png`       | Home screen grid (`src/app/page.tsx`)     |
+| macOS        | `public/images/icons/macOS-{name}.png` | Dock (`src/components/layouts/index.tsx`) |
 
 Examples: `chess.png` + `macOS-chess.png`, `resume.png` + `macOS-resume.png`.
 
@@ -74,22 +103,22 @@ Both outputs are **512×512px PNG** with a **transparent background** (RGBA).
 
 #### iOS & iPadOS (`{name}.png`)
 
-| Property | Value |
-|----------|-------|
-| Canvas | 512×512px |
-| Icon body | Full bleed (fills canvas) |
-| Corner radius | **120px** |
-| Background | Transparent outside the squircle |
+| Property      | Value                            |
+| ------------- | -------------------------------- |
+| Canvas        | 512×512px                        |
+| Icon body     | Full bleed (fills canvas)        |
+| Corner radius | **120px**                        |
+| Background    | Transparent outside the squircle |
 
 #### macOS (`macOS-{name}.png`)
 
-| Property | Value |
-|----------|-------|
-| Canvas | 512×512px |
-| Icon body | **412×412px**, centered |
-| Padding | **50px** transparent gap on all sides |
+| Property      | Value                                  |
+| ------------- | -------------------------------------- |
+| Canvas        | 512×512px                              |
+| Icon body     | **412×412px**, centered                |
+| Padding       | **50px** transparent gap on all sides  |
 | Corner radius | **96px** (applied to the 412×412 body) |
-| Background | Transparent outside the icon |
+| Background    | Transparent outside the icon           |
 
 The macOS icon is intentionally smaller inside the canvas so the dock has breathing room around the squircle, matching Apple’s macOS icon grid.
 
@@ -114,11 +143,11 @@ The macOS icon is intentionally smaller inside the canvas so the dock has breath
 
 ### Script architecture
 
-| File | Purpose |
-|------|---------|
-| `scripts/generate-app-icons.mjs` | Shared library — `ICON_SPECS` + `generateAppIcons()` |
-| `scripts/generate-icon.mjs` | CLI entry point — `node scripts/generate-icon.mjs <name>` |
-| `scripts/{name}-icon-base.png` | Source artwork (not committed if generated ad-hoc) |
+| File                             | Purpose                                                   |
+| -------------------------------- | --------------------------------------------------------- |
+| `scripts/generate-app-icons.mjs` | Shared library — `ICON_SPECS` + `generateAppIcons()`      |
+| `scripts/generate-icon.mjs`      | CLI entry point — `node scripts/generate-icon.mjs <name>` |
+| `scripts/{name}-icon-base.png`   | Source artwork (not committed if generated ad-hoc)        |
 
 ### Adding a new icon (checklist)
 
@@ -135,7 +164,7 @@ See also: `.cursor/rules/icon-create.mdc` for AI-assisted icon creation in Curso
 
 ## Feature documentation
 
-| Feature | Doc |
-|---------|-----|
+| Feature          | Doc                                              |
+| ---------------- | ------------------------------------------------ |
 | Chess repertoire | [`docs/CHESS_FEATURE.md`](docs/CHESS_FEATURE.md) |
-| Blog | [`docs/BLOG_FEATURE.md`](docs/BLOG_FEATURE.md) |
+| Blog             | [`docs/BLOG_FEATURE.md`](docs/BLOG_FEATURE.md)   |
