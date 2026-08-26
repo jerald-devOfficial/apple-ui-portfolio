@@ -1,0 +1,33 @@
+[
+  {
+    "route": "/api/eth-balance",
+    "method": "GET",
+    "status": 400,
+    "query": "address=not-an-address",
+    "delay": 0,
+    "description": "Address that is not a 20-byte hex string",
+    "responseBody": { "msg": "A valid Ethereum address is required" }
+  },
+  {
+    "route": "/api/eth-balance",
+    "method": "GET",
+    "status": 502,
+    "query": "simulate=upstream-error",
+    "delay": 0,
+    "description": "Etherscan rejected the request (rate limit or bad key)",
+    "responseBody": { "msg": "Failed to fetch balance from Etherscan" }
+  },
+  {
+    "route": "/api/eth-balance",
+    "method": "GET",
+    "status": 200,
+    "query": "",
+    "delay": 0,
+    "description": "Etherscan balance proxy, dust balance",
+    "responseBody": {
+      "address": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+      "wei": "6739061868000",
+      "eth": 0.000006739061868
+    }
+  }
+]

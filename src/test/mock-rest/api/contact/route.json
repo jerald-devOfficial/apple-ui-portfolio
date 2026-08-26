@@ -1,0 +1,52 @@
+[
+  {
+    "route": "/api/contact",
+    "method": "POST",
+    "status": 200,
+    "query": "",
+    "delay": 0,
+    "description": "Accepted contact submission",
+    "responseBody": {
+      "msg": ["Message sent successfully"],
+      "success": true,
+      "emailSent": true
+    }
+  },
+  {
+    "route": "/api/contact",
+    "method": "POST",
+    "status": 400,
+    "query": "simulate=invalid",
+    "delay": 0,
+    "description": "Validation failures are returned as a message list",
+    "responseBody": {
+      "msg": [
+        "Message must be at least 10 characters",
+        "Name must be larger than 2 characters"
+      ],
+      "success": false
+    }
+  },
+  {
+    "route": "/api/contact",
+    "method": "GET",
+    "status": 200,
+    "query": "",
+    "delay": 0,
+    "description": "Admin inbox listing",
+    "responseBody": [
+      {
+        "_id": "65f000000000000000000501",
+        "fullName": "Test Visitor",
+        "avatarColor": "a1b2c3/d4e5f6",
+        "email": "visitor@example.com",
+        "subject": "Saying hello",
+        "message": "This message is comfortably longer than ten characters.",
+        "read": false,
+        "date": "2024-05-04T12:00:00.000Z",
+        "createdAt": "2024-05-04T12:00:00.000Z",
+        "updatedAt": "2024-05-04T12:00:00.000Z"
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "route": "/api/blog/:id/comments",
+    "method": "GET",
+    "status": 200,
+    "query": "",
+    "delay": 0,
+    "description": "Comment thread with one level of replies",
+    "responseBody": [
+      {
+        "_id": "65f000000000000000000201",
+        "blogId": "65f000000000000000000101",
+        "userId": "65f000000000000000000002",
+        "content": "This helped me set up my own harness.",
+        "parentId": null,
+        "author": {
+          "name": "Reader",
+          "email": "reader@example.com",
+          "avatar": "https://cdn.example.com/avatars/reader.png"
+        },
+        "likes": 2,
+        "likedBy": ["65f000000000000000000003"],
+        "createdAt": "2024-05-03T09:00:00.000Z",
+        "replies": [
+          {
+            "_id": "65f000000000000000000202",
+            "blogId": "65f000000000000000000101",
+            "userId": "65f000000000000000000001",
+            "content": "Glad it was useful.",
+            "parentId": "65f000000000000000000201",
+            "author": { "name": "Jerald Baroro", "email": "owner@example.com" },
+            "likes": 0,
+            "likedBy": [],
+            "createdAt": "2024-05-03T10:00:00.000Z"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "route": "/api/blog/:id/comments",
+    "method": "POST",
+    "status": 401,
+    "query": "",
+    "delay": 0,
+    "description": "Commenting requires a session",
+    "responseBody": { "error": "Please sign in to comment" }
+  }
+]

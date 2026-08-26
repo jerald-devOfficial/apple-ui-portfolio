@@ -1,0 +1,34 @@
+[
+  {
+    "route": "/api/eth-transaction",
+    "method": "GET",
+    "status": 404,
+    "query": "simulate=unknown-hash",
+    "delay": 0,
+    "description": "Hash the node has no record of",
+    "responseBody": { "msg": "Transaction not found" }
+  },
+  {
+    "route": "/api/eth-transaction",
+    "method": "GET",
+    "status": 200,
+    "query": "",
+    "delay": 0,
+    "description": "Etherscan eth_getTransactionByHash proxy",
+    "responseBody": {
+      "transaction": {
+        "hash": "0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060",
+        "from": "0x5df9b87991262f6ba471f09758cde1c0fc1de734",
+        "to": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+        "value": "0x2386f26fc10000",
+        "gas": "0x5208",
+        "gasPrice": "0x4a817c800",
+        "nonce": "0x2",
+        "input": "0x",
+        "blockHash": "0x1d59ff54b1eb26b013ce3cb5fc9dab3705b415a67127a003c3e61eb445bb8df2",
+        "blockNumber": "0x5daf3b",
+        "transactionIndex": "0x41"
+      }
+    }
+  }
+]

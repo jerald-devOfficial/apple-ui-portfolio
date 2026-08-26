@@ -1,0 +1,59 @@
+[
+  {
+    "route": "/api/blog/:id",
+    "method": "GET",
+    "status": 200,
+    "query": "",
+    "delay": 0,
+    "description": "Single published blog",
+    "responseBody": {
+      "_id": "65f000000000000000000101",
+      "userId": "65f000000000000000000001",
+      "title": "Shipping a testing harness",
+      "slug": "shipping-a-testing-harness",
+      "summary": "How the Vitest and Playwright layers fit together.",
+      "content": "<p>Layered tests keep feedback fast.</p>",
+      "contentBlocks": [
+        {
+          "id": "block-1",
+          "type": "code",
+          "content": "yarn test",
+          "order": 0,
+          "metadata": { "language": "bash" }
+        }
+      ],
+      "tags": ["testing", "next"],
+      "category": "technology",
+      "status": "published",
+      "featured": true,
+      "author": {
+        "id": "65f000000000000000000001",
+        "name": "Jerald Baroro",
+        "email": "owner@example.com"
+      },
+      "views": 129,
+      "readTime": 3,
+      "commentCount": 1,
+      "createdAt": "2024-05-01T10:00:00.000Z",
+      "updatedAt": "2024-05-02T08:00:00.000Z"
+    }
+  },
+  {
+    "route": "/api/blog/:id",
+    "method": "PATCH",
+    "status": 403,
+    "query": "",
+    "delay": 0,
+    "description": "Non-admin sessions cannot edit a blog",
+    "responseBody": { "error": "Admin access required" }
+  },
+  {
+    "route": "/api/blog/:id",
+    "method": "DELETE",
+    "status": 200,
+    "query": "",
+    "delay": 0,
+    "description": "Admin deletes a blog",
+    "responseBody": { "message": "Blog deleted successfully" }
+  }
+]

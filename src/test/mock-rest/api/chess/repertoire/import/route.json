@@ -1,0 +1,9 @@
+{
+  "route": "/api/chess/repertoire/import",
+  "method": "POST",
+  "status": 400,
+  "query": "",
+  "delay": 0,
+  "description": "PGN that produced no moves is rejected",
+  "responseBody": { "msg": "Could not parse PGN" }
+}
