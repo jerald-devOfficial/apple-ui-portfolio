@@ -1,5 +1,5 @@
 import { ethTransactionSchema, ethTxHashSchema } from '@/contracts/etherscan'
-import { buildEtherscanUrl, unwrapEtherscanProxyResult } from '@/lib/etherscan'
+import { fetchEtherscanJson, unwrapEtherscanProxyResult } from '@/lib/etherscan'
 import { NextResponse } from 'next/server'
 
 // GET /api/eth-transaction?hash=0x…
@@ -16,14 +16,13 @@ export const GET = async (req: Request) => {
   }
 
   try {
-    const res = await fetch(
-      buildEtherscanUrl({
+    const result = unwrapEtherscanProxyResult(
+      await fetchEtherscanJson({
         module: 'proxy',
         action: 'eth_getTransactionByHash',
         txhash: hash.data
       })
     )
-    const result = unwrapEtherscanProxyResult(await res.json())
 
     if (!result) {
       return NextResponse.json(

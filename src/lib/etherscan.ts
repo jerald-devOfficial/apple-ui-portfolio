@@ -18,11 +18,37 @@ export const buildEtherscanUrl = (params: Record<string, string>) => {
     url.searchParams.set(key, value)
   }
 
-  const apiKey = process.env.ETHERSCAN_API_KEY
+  const apiKey = getEtherscanApiKey()
 
   if (apiKey) url.searchParams.set('apikey', apiKey)
 
   return url.toString()
+}
+
+/**
+ * Server-only. Prefers `ETHERSCAN_API_KEY` (never shipped to the client) and
+ * falls back to the old public name so a deploy that only renamed the code
+ * still has a key.
+ */
+export const getEtherscanApiKey = () =>
+  process.env.ETHERSCAN_API_KEY ||
+  process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY ||
+  ''
+
+export const fetchEtherscanJson = async (params: Record<string, string>) => {
+  const res = await fetch(buildEtherscanUrl(params), {
+    cache: 'no-store',
+    headers: {
+      Accept: 'application/json',
+      'User-Agent': 'jeraldbaroro.xyz eth-proxy'
+    }
+  })
+
+  if (!res.ok) {
+    throw new Error(`Etherscan HTTP ${res.status}`)
+  }
+
+  return res.json() as Promise<EtherscanEnvelope>
 }
 
 type EtherscanEnvelope = {

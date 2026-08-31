@@ -1,5 +1,5 @@
 import { ethAddressSchema } from '@/contracts/etherscan'
-import { buildEtherscanUrl, unwrapEtherscanResult } from '@/lib/etherscan'
+import { fetchEtherscanJson, unwrapEtherscanResult } from '@/lib/etherscan'
 import { NextResponse } from 'next/server'
 import { formatEther } from 'viem'
 
@@ -17,16 +17,14 @@ export const GET = async (req: Request) => {
   }
 
   try {
-    const res = await fetch(
-      buildEtherscanUrl({
+    const wei = unwrapEtherscanResult(
+      await fetchEtherscanJson({
         module: 'account',
         action: 'balance',
         address: address.data,
         tag: 'latest'
-      }),
-      { next: { revalidate: 15 } }
+      })
     )
-    const wei = unwrapEtherscanResult(await res.json())
 
     return NextResponse.json({
       address: address.data,

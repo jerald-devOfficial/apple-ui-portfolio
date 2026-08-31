@@ -1,9 +1,18 @@
 import {
   buildEtherscanUrl,
+  fetchEtherscanJson,
   unwrapEtherscanProxyResult,
   unwrapEtherscanResult
 } from '@/lib/etherscan'
-import { describe, expect, it } from 'vitest'
+import { mswServer } from '@/test/msw/nodeServer'
+import { HttpResponse, http } from 'msw'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+
+const ETHERSCAN = 'https://api.etherscan.io/v2/api'
+
+afterEach(() => {
+  vi.unstubAllEnvs()
+})
 
 describe('buildEtherscanUrl', () => {
   it('targets the V2 endpoint with the mainnet chain id', () => {
@@ -87,5 +96,41 @@ describe('unwrapEtherscanProxyResult', () => {
     expect(() =>
       unwrapEtherscanProxyResult({ error: { message: 'invalid argument 0' } })
     ).toThrow('invalid argument 0')
+  })
+})
+
+describe('Etherscan API key', () => {
+  it('sends the server key and ignores the leftover public name', () => {
+    vi.stubEnv('ETHERSCAN_API_KEY', 'server-key')
+    vi.stubEnv('NEXT_PUBLIC_ETHERSCAN_API_KEY', 'public-key')
+
+    const url = new URL(
+      buildEtherscanUrl({ module: 'account', action: 'balance' })
+    )
+
+    expect(url.searchParams.get('apikey')).toBe('server-key')
+  })
+
+  it('still attaches a key after the public env name was the only one set', () => {
+    vi.stubEnv('ETHERSCAN_API_KEY', '')
+    vi.stubEnv('NEXT_PUBLIC_ETHERSCAN_API_KEY', 'public-key')
+
+    const url = new URL(
+      buildEtherscanUrl({ module: 'account', action: 'balance' })
+    )
+
+    expect(url.searchParams.get('apikey')).toBe('public-key')
+  })
+})
+
+describe('fetchEtherscanJson', () => {
+  it('throws on a non-OK HTTP status instead of parsing HTML as JSON', async () => {
+    mswServer.use(
+      http.get(ETHERSCAN, () => new HttpResponse('forbidden', { status: 403 }))
+    )
+
+    await expect(
+      fetchEtherscanJson({ module: 'account', action: 'balance' })
+    ).rejects.toThrow('Etherscan HTTP 403')
   })
 })
