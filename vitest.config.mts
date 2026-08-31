@@ -18,12 +18,11 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'html'],
       /**
-       * Without `all`, v8 only counts files some test imported, so untested
-       * modules vanish from the denominator and the percentage reads far
-       * higher than it is. `skipFull` then keeps the table down to the files
-       * that still need work.
+       * Vitest 4 dropped `coverage.all`. `include` is what pulls untested
+       * files into the denominator so the percentage is not only the modules
+       * a test imported. `skipFull` keeps the table down to files that still
+       * need work.
        */
-      all: true,
       skipFull: true,
       include: ['src/**/*.{ts,tsx}'],
       exclude: [

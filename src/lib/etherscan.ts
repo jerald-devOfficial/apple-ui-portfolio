@@ -25,15 +25,8 @@ export const buildEtherscanUrl = (params: Record<string, string>) => {
   return url.toString()
 }
 
-/**
- * Server-only. Prefers `ETHERSCAN_API_KEY` (never shipped to the client) and
- * falls back to the old public name so a deploy that only renamed the code
- * still has a key.
- */
-export const getEtherscanApiKey = () =>
-  process.env.ETHERSCAN_API_KEY ||
-  process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY ||
-  ''
+/** Server-only. Reads `ETHERSCAN_API_KEY`; the leftover public name is ignored. */
+export const getEtherscanApiKey = () => process.env.ETHERSCAN_API_KEY ?? ''
 
 export const fetchEtherscanJson = async (params: Record<string, string>) => {
   const res = await fetch(buildEtherscanUrl(params), {

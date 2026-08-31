@@ -111,7 +111,7 @@ describe('Etherscan API key', () => {
     expect(url.searchParams.get('apikey')).toBe('server-key')
   })
 
-  it('still attaches a key after the public env name was the only one set', () => {
+  it('does not fall back to the leftover public env name', () => {
     vi.stubEnv('ETHERSCAN_API_KEY', '')
     vi.stubEnv('NEXT_PUBLIC_ETHERSCAN_API_KEY', 'public-key')
 
@@ -119,7 +119,7 @@ describe('Etherscan API key', () => {
       buildEtherscanUrl({ module: 'account', action: 'balance' })
     )
 
-    expect(url.searchParams.get('apikey')).toBe('public-key')
+    expect(url.searchParams.get('apikey')).toBeNull()
   })
 })
 
