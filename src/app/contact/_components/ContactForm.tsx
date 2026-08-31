@@ -16,8 +16,6 @@ import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile'
 import { useActionState, useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 
-const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
-
 const notifyContactResult = (state: ContactActionState) => {
   if (!state.msg?.length) return
 
@@ -43,6 +41,7 @@ const ContactForm = () => {
   const notifiedActionRef = useRef('')
   const [turnstileToken, setTurnstileToken] = useState('')
   const { msg, resetKey, success, emailSent } = state ?? initialContactState
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
 
   useEffect(() => {
     if (!msg?.length) return
