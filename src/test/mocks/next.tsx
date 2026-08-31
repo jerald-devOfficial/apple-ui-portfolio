@@ -9,7 +9,7 @@
  * )
  * ```
  */
-import type { AnchorHTMLAttributes, ReactNode } from 'react'
+import type { AnchorHTMLAttributes, CSSProperties, ReactNode } from 'react'
 import { vi } from 'vitest'
 
 export const routerMock = {
@@ -65,4 +65,35 @@ export const nextLinkMock = () => ({
       {children}
     </a>
   )
+})
+
+type ImageProps = {
+  alt?: string
+  src: string
+  fill?: boolean
+  priority?: boolean
+  sizes?: string
+  quality?: number
+  width?: number
+  height?: number
+  className?: string
+  style?: CSSProperties
+}
+
+export const nextImageMock = () => ({
+  default: (props: ImageProps) => {
+    const { alt = '', src, width, height, className, style } = props
+
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        alt={alt}
+        src={typeof src === 'string' ? src : ''}
+        width={width}
+        height={height}
+        className={className}
+        style={style}
+      />
+    )
+  }
 })

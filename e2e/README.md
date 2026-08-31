@@ -56,13 +56,13 @@ Chromium, so the form would stay blocked on a missing token.
 
 ## Specs
 
-| Spec                   | Tier                                                                         |
-| ---------------------- | ---------------------------------------------------------------------------- |
-| `smoke.spec.ts`        | Shell renders, no uncaught errors                                            |
-| `public-pages.spec.ts` | `/privacy`, `/terms`, `/portfolio`, `/blog`, `/diaries`, `/contact`, `/web3` |
-| `public-api.spec.ts`   | `/api/diary`, `/api/blog` + 401s for guarded reads                           |
-| `auth-guard.spec.ts`   | `src/proxy.ts` redirects for `/chess`, `/mails`, `/diary`                    |
-| `contact.spec.ts`      | Contact validation with Turnstile test keys                                  |
+| Spec                   | Tier                                                                                                                        |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `smoke.spec.ts`        | Shell renders, no uncaught errors                                                                                           |
+| `public-pages.spec.ts` | `/privacy`, `/terms`, `/portfolio` (Skills default + scroll reset), `/blog`, `/diaries`, `/contact`, `/web3`, resume prompt |
+| `public-api.spec.ts`   | `/api/diary`, `/api/blog` + 401s for guarded reads                                                                          |
+| `auth-guard.spec.ts`   | `src/proxy.ts` redirects for `/chess`, `/mails`, `/diary` (signed-out). Authenticated admin cases live in Vitest.           |
+| `contact.spec.ts`      | Contact validation with Turnstile test keys                                                                                 |
 
 ## Deliberately not covered here
 
