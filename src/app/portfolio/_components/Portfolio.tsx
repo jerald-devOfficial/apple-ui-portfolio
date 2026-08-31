@@ -25,8 +25,12 @@ import {
 } from '@heroicons/react/24/solid'
 import { useState } from 'react'
 
+const SKILLS_CATEGORY = 0
+
 const Portfolio = () => {
-  const [activeCategory, setActiveCategory] = useState<number | null>(null)
+  const [activeCategory, setActiveCategory] = useState<number | null>(
+    SKILLS_CATEGORY
+  )
 
   const icons = [
     {
@@ -165,7 +169,11 @@ const Portfolio = () => {
         </div>
         <hr className="border-[0.3px] border-gray-300 dark:border-zinc-700 border-solid sm:order-1 md:hidden" />
         {activeCategory !== null ? (
-          <div className="flex flex-col py-5 sm:py-10 px-4 sm:px-12 gap-y-5 sm:gap-y-10 relative overflow-y-auto h-full w-full md:flex-1 bg-white/95 dark:bg-zinc-800/95">
+          <div
+            key={activeCategory}
+            data-testid="portfolio-showcase"
+            className="flex flex-col py-5 sm:py-10 px-4 sm:px-12 gap-y-5 sm:gap-y-10 relative overflow-y-auto h-full w-full md:flex-1 bg-white/95 dark:bg-zinc-800/95"
+          >
             {activeCategory === 0 &&
               skillCategories.map((category) => (
                 <div key={category} className="flex flex-col gap-y-4">

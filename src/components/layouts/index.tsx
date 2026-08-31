@@ -2,6 +2,7 @@
 
 import DeviceStatus from '@/components/DeviceStatus'
 import DisplayTime from '@/components/DisplayTime'
+import ResumeDockItem from '@/components/ResumeDockItem'
 import ThemeToggle from '@/components/ThemeToggle'
 import { isAdminRole } from '@/lib/admin'
 import { signIn, signOut, useSession } from 'next-auth/react'
@@ -9,6 +10,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
+
+interface DockItemType {
+  name: string
+  title: string
+  img: string
+  path?: string
+  click?: () => void
+}
 
 const ResponsiveUI = ({
   children
@@ -117,12 +126,11 @@ const ResponsiveUI = ({
   ]
 
   // Group 2: Documents & Files
-  const dockGroup2 = [
+  const dockGroup2: DockItemType[] = [
     {
       name: 'resume',
-      title: 'Download Resume',
-      img: '/images/icons/macOS-resume.png',
-      path: '/pdfs/updated-resume.pdf'
+      title: 'Resume',
+      img: '/images/icons/macOS-resume.png'
     }
   ]
 
@@ -248,13 +256,13 @@ const ResponsiveUI = ({
       {children}
 
       {/* Mobile Footer/Dock */}
-      <footer className='flex w-full xs:w-[unset] xs:gap-x-[30px] sm:gap-x-4 py-5 px-5 sm:px-7 sm:py-4 before:absolute before:content-[""] before:bg-[#BFBFBF70]/44 before:backdrop-blur-[50px] before:-z-10 bg-white/20 dark:bg-black/20 hover:bg-white/30 dark:hover:bg-black/30 rounded-none xs:rounded-[40px] sm:rounded-[30px] before:content items-center justify-around xs:justify-center my-0 xs:my-3 sm:my-4 xl:hidden'>
+      <footer className='flex w-full xs:w-[unset] xs:gap-x-7.5 sm:gap-x-4 py-5 px-5 sm:px-7 sm:py-4 before:absolute before:content-[""] before:bg-[#BFBFBF70]/44 before:backdrop-blur-[50px] before:-z-10 bg-white/20 dark:bg-black/20 hover:bg-white/30 dark:hover:bg-black/30 rounded-none xs:rounded-[40px] sm:rounded-[30px] before:content items-center justify-around xs:justify-center my-0 xs:my-3 sm:my-4 xl:hidden'>
         {dock.map((item) =>
           item.click ? (
             <button
               onClick={item.click}
               key={item.name}
-              className="relative xs:h-[60px] xs:w-[60px] h-10 w-10"
+              className="relative xs:h-15 xs:w-15 h-10 w-10"
             >
               <Image
                 alt={item.name}
@@ -266,7 +274,7 @@ const ResponsiveUI = ({
             </button>
           ) : (
             <Link href={`${item.path}`} key={item.name} className="block">
-              <div className="relative xs:h-[60px] xs:w-[60px] h-10 w-10">
+              <div className="relative xs:h-15 xs:w-15 h-10 w-10">
                 <Image
                   alt={item.name}
                   src={item.img}
@@ -315,16 +323,6 @@ const ResponsiveUI = ({
   )
 }
 
-// Define the dock item type
-interface DockItemType {
-  name: string
-  title: string
-  img: string
-  path?: string
-  click?: () => void
-}
-
-// Extract dock item to a separate component to avoid repetition
 const DockItem = ({
   item,
   pathname
@@ -338,7 +336,7 @@ const DockItem = ({
     return (
       <button
         onClick={item.click}
-        className="flex flex-col items-center justify-center h-[60px] group cursor-pointer relative"
+        className="flex flex-col items-center justify-center h-15 group cursor-pointer relative"
       >
         <span className="hidden -top-9 absolute left-1/2 transform -translate-x-1/2 px-2 py-1 bg-white/80 dark:bg-zinc-800/90 text-gray-800 dark:text-white text-xs font-medium rounded-md shadow-lg backdrop-blur-sm border border-white/20 dark:border-zinc-700/50 whitespace-nowrap group-hover:block opacity-0 group-hover:opacity-100 z-10">
           {item.title}
@@ -359,33 +357,8 @@ const DockItem = ({
     )
   }
 
-  if (item.name === 'resume' && item.path) {
-    return (
-      <Link
-        href={item.path}
-        target={'_blank'}
-        download
-        className="flex flex-col items-center justify-center h-[60px] group cursor-pointer relative"
-      >
-        <span className="hidden -top-9 absolute left-1/2 transform -translate-x-1/2 px-2 py-1 bg-white/80 dark:bg-zinc-800/90 text-gray-800 dark:text-white text-xs font-medium rounded-md shadow-lg backdrop-blur-sm border border-white/20 dark:border-zinc-700/50 whitespace-nowrap group-hover:block opacity-0 group-hover:opacity-100 z-10">
-          {item.title}
-        </span>
-        <Image
-          alt={item.name}
-          src={item.img}
-          height={50}
-          width={50}
-          className="transition-all transform-gpu group-hover:scale-150 drop-shadow-none group-hover:drop-shadow-md"
-          style={{
-            transition: 'all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)',
-            transformOrigin: 'bottom'
-          }}
-        />
-        {isActive && (
-          <span className="h-1 w-1 bg-blue-500 dark:bg-blue-400 rounded-full" />
-        )}
-      </Link>
-    )
+  if (item.name === 'resume') {
+    return <ResumeDockItem img={item.img} />
   }
 
   // Only render Link if path exists
@@ -393,7 +366,7 @@ const DockItem = ({
     return (
       <Link
         href={item.path}
-        className="flex flex-col items-center justify-center h-[60px] group cursor-pointer relative"
+        className="flex flex-col items-center justify-center h-15 group cursor-pointer relative"
       >
         <span className="hidden -top-9 absolute left-1/2 transform -translate-x-1/2 px-2 py-1 bg-white/80 dark:bg-zinc-800/90 text-gray-800 dark:text-white text-xs font-medium rounded-md shadow-lg backdrop-blur-sm border border-white/20 dark:border-zinc-700/50 whitespace-nowrap group-hover:block opacity-0 group-hover:opacity-100 z-10">
           {item.title}
@@ -418,7 +391,7 @@ const DockItem = ({
 
   // Fallback for items without path or click handler
   return (
-    <div className="flex flex-col items-center justify-center h-[60px] group cursor-pointer relative">
+    <div className="flex flex-col items-center justify-center h-15 group cursor-pointer relative">
       <span className="hidden -top-9 absolute left-1/2 transform -translate-x-1/2 px-2 py-1 bg-white/80 dark:bg-zinc-800/90 text-gray-800 dark:text-white text-xs font-medium rounded-md shadow-lg backdrop-blur-sm border border-white/20 dark:border-zinc-700/50 whitespace-nowrap group-hover:block opacity-0 group-hover:opacity-100 z-10">
         {item.title}
       </span>

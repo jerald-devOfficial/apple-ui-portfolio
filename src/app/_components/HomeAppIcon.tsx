@@ -1,3 +1,4 @@
+import ResumeHomeIcon from '@/app/_components/ResumeHomeIcon'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -12,11 +13,14 @@ type HomeAppIconProps = {
 const HomeAppIcon = ({ name, img, href, size, download }: HomeAppIconProps) => {
   const isMobile = size === 'mobile'
 
+  if (download) {
+    return <ResumeHomeIcon name={name} img={img} size={size} />
+  }
+
   return (
     <Link
       href={href}
       className={`grid place-items-center w-full ${isMobile ? 'gap-y-1.5' : 'gap-y-2'}`}
-      {...(download ? { target: '_blank', download: true } : {})}
     >
       <div className={isMobile ? undefined : 'block'}>
         <div

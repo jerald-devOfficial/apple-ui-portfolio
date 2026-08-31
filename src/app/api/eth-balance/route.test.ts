@@ -30,6 +30,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.restoreAllMocks()
+  vi.unstubAllEnvs()
 })
 
 describe('GET /api/eth-balance', () => {
@@ -102,5 +103,29 @@ describe('GET /api/eth-balance', () => {
     )
 
     expect(JSON.stringify(await res.json())).not.toContain('Invalid API Key')
+  })
+
+  it('reports a non-OK Etherscan HTTP status as a bad gateway', async () => {
+    mswServer.use(
+      http.get(ETHERSCAN, () => new HttpResponse('forbidden', { status: 403 }))
+    )
+
+    const res = await GET(
+      buildAppRouteRequest(`/api/eth-balance?address=${ADDRESS}`)
+    )
+
+    expect(res.status).toBe(502)
+    await expect(res.json()).resolves.toEqual({
+      msg: 'Failed to fetch balance from Etherscan'
+    })
+  })
+
+  it('forwards the server API key on the upstream request', async () => {
+    vi.stubEnv('ETHERSCAN_API_KEY', 'server-key')
+    const requests = respondWith({ status: '1', result: '0' })
+
+    await GET(buildAppRouteRequest(`/api/eth-balance?address=${ADDRESS}`))
+
+    expect(requests[0].searchParams.get('apikey')).toBe('server-key')
   })
 })

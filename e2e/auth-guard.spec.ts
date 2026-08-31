@@ -1,6 +1,9 @@
 import { expect, test } from '@playwright/test'
 
-/** Routes guarded by `src/proxy.ts` for signed-out visitors. */
+/** Routes guarded by `src/proxy.ts` for signed-out visitors.
+ * Authenticated admin access to /chess and /mails is covered in
+ * `src/proxy.test.ts` and `src/lib/route-guard.test.ts`.
+ */
 const guardedRoutes = [
   '/chess',
   '/mails',

@@ -1,3 +1,4 @@
+import ContactForm from '@/app/contact/_components/ContactForm'
 import type { ContactActionState } from '@/app/contact/state'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -22,12 +23,6 @@ vi.mock('react-toastify', () => ({ toast }))
 vi.mock('@marsidev/react-turnstile', async () =>
   (await import('@/test/mocks/turnstile')).turnstileMock()
 )
-
-const loadContactForm = async () => {
-  vi.resetModules()
-  const imported = await import('@/app/contact/_components/ContactForm')
-  return imported.default
-}
 
 const fillRequiredFields = async (user: ReturnType<typeof userEvent.setup>) => {
   await user.type(
@@ -65,9 +60,7 @@ describe('ContactForm without Turnstile configured', () => {
     vi.stubEnv('NEXT_PUBLIC_TURNSTILE_SITE_KEY', '')
   })
 
-  it('renders every message field', async () => {
-    const ContactForm = await loadContactForm()
-
+  it('renders every message field', () => {
     render(<ContactForm />)
 
     expect(
@@ -81,16 +74,13 @@ describe('ContactForm without Turnstile configured', () => {
     ).toBeRequired()
   })
 
-  it('omits the security check widget', async () => {
-    const ContactForm = await loadContactForm()
-
+  it('omits the security check widget', () => {
     render(<ContactForm />)
 
     expect(screen.queryByTestId('turnstile-stub')).not.toBeInTheDocument()
   })
 
   it('reports a successful submission', async () => {
-    const ContactForm = await loadContactForm()
     const user = userEvent.setup()
 
     render(<ContactForm />)
@@ -110,7 +100,6 @@ describe('ContactForm without Turnstile configured', () => {
       resetKey: 0
     })
 
-    const ContactForm = await loadContactForm()
     const user = userEvent.setup()
 
     render(<ContactForm />)
@@ -132,7 +121,6 @@ describe('ContactForm without Turnstile configured', () => {
       resetKey: 1
     })
 
-    const ContactForm = await loadContactForm()
     const user = userEvent.setup()
 
     render(<ContactForm />)
@@ -149,16 +137,13 @@ describe('ContactForm with Turnstile configured', () => {
     vi.stubEnv('NEXT_PUBLIC_TURNSTILE_SITE_KEY', '1x00000000000000000000AA')
   })
 
-  it('renders the widget', async () => {
-    const ContactForm = await loadContactForm()
-
+  it('renders the widget', () => {
     render(<ContactForm />)
 
     expect(screen.getByTestId('turnstile-stub')).toBeInTheDocument()
   })
 
   it('blocks submission until the security check passes', async () => {
-    const ContactForm = await loadContactForm()
     const user = userEvent.setup()
 
     render(<ContactForm />)
@@ -172,7 +157,6 @@ describe('ContactForm with Turnstile configured', () => {
   })
 
   it('submits the token once the widget resolves', async () => {
-    const ContactForm = await loadContactForm()
     const user = userEvent.setup()
 
     render(<ContactForm />)
@@ -189,7 +173,6 @@ describe('ContactForm with Turnstile configured', () => {
   })
 
   it('blocks submission again after the token expires', async () => {
-    const ContactForm = await loadContactForm()
     const user = userEvent.setup()
 
     render(<ContactForm />)

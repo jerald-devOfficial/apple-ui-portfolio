@@ -53,4 +53,50 @@ test.describe('public pages', () => {
     expect(response?.status()).toBeLessThan(400)
     await expect(page.locator('main')).toBeVisible()
   })
+
+  test('/portfolio opens on Skills', async ({ page }) => {
+    await page.goto('/portfolio')
+
+    await expect(
+      page.getByRole('heading', { name: 'Skills', exact: true })
+    ).toBeVisible()
+    await expect(page.getByText('Nothing to see here.')).toHaveCount(0)
+  })
+
+  test('/portfolio resets showcase scroll when switching sections', async ({
+    page
+  }) => {
+    await page.goto('/portfolio')
+
+    const panel = page.getByTestId('portfolio-showcase')
+    await expect(panel).toBeVisible()
+
+    const scrolled = await panel.evaluate((element) => {
+      element.scrollTop = element.scrollHeight
+      return element.scrollTop
+    })
+    expect(scrolled).toBeGreaterThan(0)
+
+    await page.getByRole('button', { name: 'Projects' }).click()
+
+    await expect(
+      page.getByRole('heading', { name: 'Projects', exact: true })
+    ).toBeVisible()
+    await expect(panel).toHaveJSProperty('scrollTop', 0)
+  })
+
+  test('resume dock icon asks before downloading', async ({ page }) => {
+    await page.goto('/')
+
+    await page.getByRole('button', { name: 'Resume' }).click()
+
+    const dialog = page.getByRole('dialog', { name: 'Resume' })
+    await expect(dialog).toBeVisible()
+    await expect(
+      dialog.getByRole('link', { name: 'Download PDF' })
+    ).toHaveAttribute('href', '/pdfs/updated-resume.pdf')
+    await expect(
+      dialog.getByRole('link', { name: 'View in browser' })
+    ).toHaveAttribute('href', '/resume/resume.html')
+  })
 })
