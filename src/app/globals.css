@@ -765,6 +765,106 @@ pre span:not([class]) + span.token.punctuation {
   color: rgb(156, 163, 175);
 }
 
+/* Blog prose tables */
+.prose .table-wrapper,
+[class*='prose'] .table-wrapper {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.prose table,
+.prose table.blog-table,
+[class*='prose'] table,
+[class*='prose'] table.blog-table,
+.mce-content-body table,
+.mce-content-body table.blog-table {
+  display: table !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  border-collapse: collapse !important;
+  margin: 0 !important;
+  table-layout: auto !important;
+  border: 1px solid rgb(209, 213, 219) !important;
+  box-shadow: none !important;
+}
+
+.prose thead,
+[class*='prose'] thead,
+.mce-content-body thead {
+  display: table-header-group !important;
+}
+
+.prose tbody,
+[class*='prose'] tbody,
+.mce-content-body tbody {
+  display: table-row-group !important;
+}
+
+.prose tr,
+[class*='prose'] tr,
+.mce-content-body tr {
+  display: table-row !important;
+}
+
+.prose th,
+.prose td,
+.prose table.blog-table th,
+.prose table.blog-table td,
+[class*='prose'] th,
+[class*='prose'] td,
+[class*='prose'] table.blog-table th,
+[class*='prose'] table.blog-table td,
+.mce-content-body th,
+.mce-content-body td,
+.mce-content-body table.blog-table th,
+.mce-content-body table.blog-table td {
+  display: table-cell !important;
+  max-width: none !important;
+  vertical-align: top !important;
+  border: 1px solid rgb(209, 213, 219) !important;
+  padding: 0.625rem 0.875rem !important;
+  text-align: left !important;
+  word-wrap: normal !important;
+  overflow-wrap: normal !important;
+  white-space: normal !important;
+  background-color: transparent;
+}
+
+.prose th,
+[class*='prose'] th,
+.mce-content-body th,
+.prose table.blog-table th,
+[class*='prose'] table.blog-table th {
+  font-weight: 600 !important;
+  background-color: rgb(249, 250, 251) !important;
+}
+
+.dark .prose table,
+.dark .prose table.blog-table,
+.dark [class*='prose'] table,
+.dark [class*='prose'] table.blog-table {
+  border-color: rgb(75, 85, 99) !important;
+}
+
+.dark .prose th,
+.dark .prose td,
+.dark .prose table.blog-table th,
+.dark .prose table.blog-table td,
+.dark [class*='prose'] th,
+.dark [class*='prose'] td,
+.dark [class*='prose'] table.blog-table th,
+.dark [class*='prose'] table.blog-table td {
+  border-color: rgb(75, 85, 99) !important;
+}
+
+.dark .prose th,
+.dark [class*='prose'] th,
+.dark .prose table.blog-table th,
+.dark [class*='prose'] table.blog-table th {
+  background-color: rgb(31, 41, 55) !important;
+}
+
 /* Line clamp utilities for text truncation */
 .line-clamp-1 {
   overflow: hidden;
